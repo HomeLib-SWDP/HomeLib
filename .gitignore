@@ -7,3 +7,10 @@ ENV/
 __pycache__/
 *.py[cod]
 *$py.class
+
+# CA Certificates
+certs/
+ca.pem
+
+# sqldetails
+sql_details.py
