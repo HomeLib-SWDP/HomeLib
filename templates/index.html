@@ -4,10 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | HOMELIB</title>
-    <link rel="stylesheet" href="frontend/css/index.css">
+    <link rel="stylesheet" href="../static/css/index.css">
 </head>
 <body>
-    
+    <main>
+        <section class="login-section">
+            <div class="left-side">
+                <img src="../static/images/wp14066116.jpg" class="login-img">
+            </div>
+
+            <div class="right-side">
+                <div class="login-container">
+                    <img src="../static/images/logo.png" class="logo">
+                    <h1>Login</h1>
+                    <form action="../templates/explore.html" method="POST">
+                    <div>
+                        <input type="email" id="email" name="email" required placeholder="Email Address">
+                    </div>
+                    <div>
+                        <input type="password" id="password" name="password" required placeholder="Password">
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <button type="submit">Login</button>
+                    <div class="need-account">
+                        <p>Don't have an account?<a href="#">Sign up</a></p>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
 
 
 
@@ -16,6 +44,6 @@
 
 
 
-    <script src=""></script>
+    <script src="login.js"></script>
 </body>
 </html>
