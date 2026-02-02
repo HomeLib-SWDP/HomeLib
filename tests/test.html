@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Open Library API Test</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    #results { margin-top: 1.5rem; }
+    .book { border: 1px solid #ddd; padding: 1rem; margin: 0.8rem 0; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Open Library Search Test</h1>
+  
+  <input type="text" id="query" placeholder="e.g. Dune, Mark Twain, Agatha Christie" style="padding: 0.6rem; width: 300px;">
+  <button onclick="search()">Search</button>
+  
+  <div id="results"></div>
+
+  <script>
+    async function search() {
+      const q = document.getElementById('query').value.trim();
+      if (!q) return alert("Enter something to search for");
+
+      const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=6`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network error: " + response.status);
+        
+        const data = await response.json();
+        
+        const container = document.getElementById('results');
+        container.innerHTML = `<p>Found ${data.num_found} results. Showing first ${data.docs.length}:</p>`;
+
+        data.docs.forEach(book => {
+          const div = document.createElement('div');
+          div.className = 'book';
+          div.innerHTML = `
+            <strong>${book.title || 'No title'}</strong><br>
+            ${book.author_name ? 'By ' + book.author_name.join(', ') : 'Unknown author'}<br>
+            ${book.first_publish_year ? 'First published: ' + book.first_publish_year : ''}
+            ${book.cover_i ? `<br><img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" style="max-width:120px; margin-top:0.5rem;">` : ''}
+          `;
+          container.appendChild(div);
+        });
+
+        if (data.docs.length === 0) {
+          container.innerHTML += '<p>No books found for this query.</p>';
+        }
+      } catch (err) {
+        document.getElementById('results').innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
