@@ -1,0 +1,122 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+body{
+    height: 100vh;
+    width: 100%;
+    background-color: #B58DB6;
+}
+main{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-section{
+    height: 36em;
+    width: 65em;
+    border-radius: 15px;
+    background-color: #ffffff;
+    box-shadow: 0em 1em 2em rgba(0,0,0,0.25), 0em .8em .8em rgba(0,0,0,0.22);
+    display: flex;
+}
+.left-side{
+    width: 50%;
+    height: 36em;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    
+}
+.right-side{
+    width: 50%;
+    height: 36em;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    display: flex;
+    justify-content: center;
+    
+}
+.login-img{
+    height: 36em;
+    width: 100%;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    position: relative;
+
+}
+.logo{
+    width: 14em;
+}
+.login-container{
+    height: 20em;
+    width: 21em;
+    text-align: center;
+}
+.login-container h1{
+    text-align: center;
+    margin-top: 0.5em;
+    font-size: 2em;
+}
+#email{
+    width: 25em;
+    height: 2em;
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+    margin-top: 2em;
+    background: none;
+}
+#username{
+    width: 25em;
+    height: 2em;
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+    margin-top: 2em;
+    background: none;
+}
+#confirmPassword{
+    width: 25em;
+    height: 2em;
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+    margin-top: 2em;
+    background: none;
+}
+#password{
+    width: 25em;
+    height: 2em;
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+    margin-top: 2em;
+    background: none;
+}
+form button{
+    margin-top: 2em;
+    font-size: 1.1em;
+    padding: 0.5em 7em;
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+    border: none;
+    background-color: #B58DB6;
+    color: white;
+    cursor: pointer;  
+    transition: .2s ease-in-out; 
+}
+form button:hover{
+    background-color: #7a5c7a;
+}
+.need-account{
+    margin-top: 1em;
+}
+.need-account p a{
+    margin-left: .4em;
+}
+

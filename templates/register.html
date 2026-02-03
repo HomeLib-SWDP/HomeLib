@@ -4,10 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | HOMELIB</title>
-    <link rel="stylesheet" href="frontend/css/register.css">
+    <link rel="stylesheet" href="../static/css/register.css">
 </head>
 <body>
-    
+    <main>
+        <section class="login-section">
+            <div class="left-side">
+                <img src="../static/images/wp14066116.jpg" class="login-img">
+            </div>
+
+            <div class="right-side">
+                <div class="login-container">
+                    <img src="../static/images/logo.png" class="logo">
+                    <h1>Register</h1>
+                    <form action="../templates/explore.html" method="POST">
+                    <div>
+                        <input type="email" id="email" name="email" required placeholder="Email Address">
+                    </div>
+                    <div>
+                        <input type="username" id="username" name="username" required placeholder="Username">
+                    </div>
+                    <div>
+                        <input type="password" id="password" name="password" required placeholder="Password">
+                    </div>
+                    <div>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm Password">
+                    </div>
+                    <button type="submit">Register</button>
+                    <div class="need-account">
+                        <p>Already have an account?<a href="../templates/index.html">Login</a></p>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
 
 
 
