@@ -1,5 +1,5 @@
 import mysql.connector
-import backend.sqldetails as sqldetails
+import sqldetails as sqldetails
 
 cert_path = 'certs/ca.pem'
 

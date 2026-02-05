@@ -13,4 +13,4 @@ certs/
 ca.pem
 
 # sqldetails
-backend/sqldetails.py
+sqldetails.py
