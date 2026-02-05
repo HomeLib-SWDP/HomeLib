@@ -40,7 +40,7 @@ def test_add_book():
         booktitle ="Testing Avian Connection",
         author ="test author",
         publishdate= "2/5/26",
-        isbn ="000-0000000000",
+        isbn ="000-111111",
         username = "test user",
         cover_id = "OLID222"
       
