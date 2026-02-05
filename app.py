@@ -6,27 +6,27 @@ app = Flask(__name__)
 
 app.register_blueprint(books_bp, url_prefix = '/api/books')
 
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html')
 
-@app.route('/')
+@app.route('/explore')
 def explore():
     return render_template('explore.html')
 
-@app.route('/')
+@app.route('/library')
 def library():
     return render_template('library.html')
 
-@app.route('/')
+@app.route('/lists')
 def lists():
     return render_template('lists.html')
 
-@app.route('/')
+@app.route('/loan')
 def loan():
     return render_template('loan.html')
 
-@app.route('/')
+@app.route('/register')
 def register():
     return render_template('register.html')
 
