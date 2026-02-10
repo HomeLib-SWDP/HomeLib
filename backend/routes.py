@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.models.books import Book, add_book
+from backend.models.books import Book, add_book, get_books
 
 books_bp = Blueprint('books', __name__)
 
@@ -20,3 +20,6 @@ def add_manual_book():
         return jsonify({"message" : f"'{new_book.title}' added successfully!"}), 201
     return jsonify({"Error": "failed to save book"}), 500
 
+@books_bp.route('/api/get_library', methods=['GET'])
+def get_library():
+    library = get_books()
