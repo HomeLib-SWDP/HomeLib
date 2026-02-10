@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual Book Entry | HomeLib</title>
+    <link rel="stylesheet" href="/static/css/library.css">
+</head>
+<body>
+
+<h1>Add a Book Manually</h1>
+
+<form id="manualBookForm">
+
+    <label>Title</label>
+    <input type="text" name="title" required>
+
+    <label>Author</label>
+    <input type="text" name="author" required>
+
+    <label>ISBN</label>
+    <input type="text" name="isbn">
+
+    <label>Cover ID (optional)</label>
+    <input type="text" name="cover_id">
+
+    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="book_id" value="">
+
+    <button type="submit">Add Book</button>
+</form>
+
+<p id="message"></p>
+
+<script>
+document.getElementById("manualBookForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    const data = Object.fromEntries(formData.entries());
+
+    const response = await fetch("/books/api/books", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    document.getElementById("message").innerText =
+        response.ok ? result.message : result.Error;
+});
+</script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from backend.models.books import Book, add_book
 
 books_bp = Blueprint('books', __name__)
