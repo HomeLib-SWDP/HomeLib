@@ -8,6 +8,16 @@ class Book:
         self.booktitle = booktitle
         self.author = author
         self.isbn = isbn
+    
+    def to_dict(self):
+        return {
+            "booktitle": self.booktitle,
+            "isbn": self.isbn,
+            "publishdate": self.publishdate,
+            "cover_id": self.cover_id,
+            "author": self.author,
+            "username": self.username
+        }
 
 
 def add_book(book):
@@ -50,7 +60,8 @@ def get_books():
                 username = "test"
             )
             library.append(new_book)
-            return library
+
+        return library
     except Exception as e:
         print(f"Error: {e}")
         return False
