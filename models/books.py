@@ -1,4 +1,4 @@
-from backend.utils.sqldb import connect_to_sql, disconnect_from_sql
+from utils.sqldb import connect_to_sql, disconnect_from_sql
 
 class Book:
     def __init__(self, booktitle, author, isbn = None, cover_id = None, publishdate = None, username = None):

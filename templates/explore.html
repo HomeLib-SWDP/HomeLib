@@ -1,24 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explore | HOMELIB</title>
-    <link rel="stylesheet" href="frontend/css/explore.css">
+  <meta charset="UTF-8">
+  <title>Open Library API Test</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    #results { margin-top: 1.5rem; }
+    .book { border: 1px solid #ddd; padding: 1rem; margin: 0.8rem 0; border-radius: 6px; }
+    .search-controls { margin-bottom: 1rem; }
+    select, input, button { padding: 0.6rem; margin-right: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .category-input { display: inline-block; margin-right: 1rem; vertical-align: top; }
+    .category-input label { display: block; font-size: 0.9em; margin-bottom: 0.2rem; }
+    .category-input input[type="text"] { width: 150px; }
+    .category-input input[type="number"] { width: 80px; }
+    #pagination-controls { text-align: center; margin-top: 1rem; }
+    .languages { font-size: 0.8em; color: #888; font-style: italic; }
+    .subjects { font-size: 0.8em; color: #666; }
+    .editions { font-size: 0.8em; color: #999; }
+  </style>
 </head>
 <body>
-    
+  <h1>Open Library Search Test</h1>
+  <div class="search-controls">
+    <div class="category-input">
+      <label>Title</label>
+      <input type="text" id="titleQuery" placeholder="e.g. Dune">
+    </div>
+    <div class="category-input">
+      <label>Author</label>
+      <input type="text" id="authorQuery" placeholder="e.g. Frank Herbert">
+    </div>
+    <div class="category-input">
+      <label>ISBN</label>
+      <input type="text" id="isbnQuery" placeholder="e.g. 9780743273565">
+    </div>
+    <div class="category-input">
+      <label>Publisher</label>
+      <input type="text" id="publisherQuery" placeholder="e.g. Chilton">
+    </div>
+    <div class="category-input">
+      <label>Subject</label>
+      <input type="text" id="subjectQuery" placeholder="e.g. Science Fiction">
+    </div>
+    <div class="category-input">
+      <label>Year</label>
+      <input type="number" id="yearQuery" placeholder="e.g. 1965" min="0" max="2100">
+    </div>
+    <select id="language">
+      <option value="">All Languages</option>
+      <option value="eng">English</option>
+      <option value="fre">French</option>
+      <option value="spa">Spanish</option>
+      <option value="deu">German</option>
+      <option value="ita">Italian</option>
+      <option value="jpn">Japanese</option>
+      <option value="chi">Chinese</option>
+    </select>
+    <select id="subjectFilter">
+      <option value="">All Subjects</option>
+      <option value="fiction">Fiction</option>
+      <option value="mystery">Mystery</option>
+      <option value="science fiction">Science Fiction</option>
+      <option value="fantasy">Fantasy</option>
+      <option value="biography">Biography</option>
+      <option value="history">History</option>
+    </select>
+    <input type="number" id="yearMin" placeholder="Year Min" min="0" max="2100" style="width:80px;">
+    <input type="number" id="yearMax" placeholder="Year Max" min="0" max="2100" style="width:80px;">
+    <button onclick="search()">Search</button>
+  </div>
+  <div id="results"></div>
+  <div id="pagination-controls">
+    <button id="loadMore" onclick="loadMore()" style="display:none;">Load More</button>
+  </div>
 
-
-
-
-
-
-
-
-
-
-
-    <script src=""></script>
+  <script src="../static/js/explore.js"></script>
 </body>
 </html>
