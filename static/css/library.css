@@ -34,3 +34,22 @@ main{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
 }
+.list-items li{
+    list-style-type: none; 
+    padding-left: 2em;
+}
+.list-items a{
+    text-decoration: none;
+    color: rgb(129, 129, 129);
+    font-size: .95em;
+}
+
+.list-items i {
+    font-size: 1.2em;
+    padding-right: 1.2em;
+    padding-left: 1em;
+}
+
+.list-items ul li{
+    padding: 1em;
+}
