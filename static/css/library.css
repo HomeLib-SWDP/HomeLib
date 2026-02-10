@@ -40,16 +40,16 @@ main{
 }
 .list-items a{
     text-decoration: none;
-    color: rgb(129, 129, 129);
+    color: rgb(160, 160, 160);
     font-size: .95em;
 }
 
 .list-items i {
     font-size: 1.2em;
-    padding-right: 1.2em;
+    padding-right: 1.5em;
     padding-left: 1em;
 }
 
 .list-items ul li{
-    padding: 1em;
+    padding: 1.5em;
 }
