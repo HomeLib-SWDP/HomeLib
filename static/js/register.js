@@ -1,52 +1,49 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
-
-// config
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",           
-  projectId:"",
-  storage: "",
-  Bucket: "",
+
+  apiKey: "AIzaSyAvMDcDz-yh4BpTpkb5_-M41EbMLw6xmh0",
+
+  authDomain: "homelib-caef7.firebaseapp.com",
+
+  projectId: "homelib-caef7",
+
+  storageBucket: "homelib-caef7.firebasestorage.app",
+
+  messagingSenderId: "935710501303",
+
+  appId: "1:935710501303:web:3b400acaaaee116fcd2032",
+
+  measurementId: "G-RPQN19H629"
+
 };
 
 // intiialzing firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// getting required elements
 const emailId = document.getElementById('email');
 const password = document.getElementById('password');
+
 const needAccount = document.getElementById('needAccount');
 
 
-//getting value and authentication
-const emailValue = emailId.value;
-const passwordValue = password.value;
+needAccount.addEventListener('submit', (regsterEvent) => {
+  regsterEvent.preventDefault();
 
+  //getting value and authentication
+  const emailValue = emailId.value;
+  const passwordValue = password.value;
 
-function registerUser(emailValue, passwordValue) {
-    createUserWithEmailAndPassword(auth, emailValue, passwordValue)
-    if (userCredential) { //if login is successful
-    const user = userCredential.user; //get user info
-    alert('Registering...please login');
-    window.location.href = 'login.html'; //redirect to home page
-  }
-    else {  
-    alert('Incorrect credentials. Please try again.'); 
-  } 
-}
+  createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+  .then((userCredential) => {
+  const user = userCredential.user; //get user info
+  alert('Registering...please login');
+  window.location.href = 'login.html'; //redirect to home page
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert ('Error loggin in: ' + errorMessage);
+  });
+ 
+});
 
-needAccount.addEventListener('click', (registerEvent) => {
-    registerEvent.preventDefault();
-    registerUser(emailValue, passwordValue);
-}
-);
-
-/*async function sendLoginRequest(emailValue, passwordValue) {
-  const response = await fetch('/login', {
-    method: 'POST',
-    headers: { 'content-type': ''}
-
-*/
