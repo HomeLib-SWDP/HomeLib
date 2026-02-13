@@ -41,7 +41,7 @@ main{
 .list-items a{
     text-decoration: none;
     color: rgb(160, 160, 160);
-    font-size: .95em;
+    font-size: 1.0em;
 }
 
 .list-items i {
