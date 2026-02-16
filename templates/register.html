@@ -4,49 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | HOMELIB</title>
-    <link rel="stylesheet" href="../static/css/register.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 </head>
 <body>
     <main>
         <section class="login-section">
             <div class="left-side">
-                <img src="../static/images/wp14066116.jpg" class="login-img">
+                <img src="{{ url_for('static', filename='images/wp14066116.jpg') }}" class="login-img">
             </div>
 
             <div class="right-side">
                 <div class="login-container">
-                    <img src="../static/images/logo.png" class="logo">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo">
                     <h1>Register</h1>
-                    <form action="../templates/explore.html" method="POST">
-                    <div>
-                        <input type="email" id="email" name="email" required placeholder="Email Address">
-                    </div>
-                    <div>
-                        <input type="username" id="username" name="username" required placeholder="Username">
-                    </div>
-                    <div>
-                        <input type="password" id="password" name="password" required placeholder="Password">
-                    </div>
-                    <div>
-                        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm Password">
-                    </div>
-                    <button type="submit">Register</button>
-                    <div class="need-account">
-                        <p>Already have an account?<a href="/index">Login</a></p>
-                    </div>
+                    
+                    <form action="{{ url_for('register') }}" method="POST">
+                        <div>
+                            <input type="email" id="email" name="email" required placeholder="Email Address">
+                        </div>
+                        <div>
+                            <input type="text" id="username" name="username" required placeholder="Username">
+                        </div>
+                        <div>
+                            <input type="password" id="password" name="password" required placeholder="Password">
+                        </div>
+                        <div>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm Password">
+                        </div>
+                        <button type="submit">Register</button>
+                        <div class="need-account">
+                            <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+                        </div>
                     </form>
                 </div>
             </div>
         </section>
     </main>
 
-
-
-
-
-
-
-    <script src=""></script>
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
 </body>
 </html>
