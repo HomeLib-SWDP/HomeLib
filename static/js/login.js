@@ -43,7 +43,7 @@ loginForm.addEventListener('submit', (loginEvent) => {
   const userid = localStorage.getItem('userid'); // to use when we want to create user sessions
   //console.log('User id:', userid);  test for checking user id 
   alert('Welcome!' + ' ' + emailValue);
-  window.location.href = 'home.html'; //redirect to home page
+  window.location.href = 'explore'; //redirect to home page
   })
   .catch((error) => {
     const errorCode = error.code;

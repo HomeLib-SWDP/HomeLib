@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.register_blueprint(books_bp, url_prefix = '/api/books')
 
 @app.route('/')
-def home():
+def index():
     return redirect(url_for('login'))
 
 @app.route('/login')
@@ -17,6 +17,10 @@ def login():
 @app.route('/explore')
 def explore():
     return render_template('explore.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 @app.route('/library')
 def library():
