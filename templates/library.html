@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library | HOMELIB</title>
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/library.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    
 </head>
 <body>
     <main>
@@ -26,7 +32,173 @@
 
         </section>
         <section class="main-content">
+            <div class="title">
+                <p class="title-text">My Library</p>
+                <hr>
+            </div>
+            <div class="shelves">
+                <div class="shelves-container">
+                    <button><span class="read-value shelf">10</span> Read</button>
+                    <button><span class="reading-value shelf">10</span> Reading</button>
+                    <button><span class="want-to-read-value shelf">10</span> Want to Read</button>
+                    <button>Add Shelf</button>
+                </div>
+                <hr>
+            </div>
+            <div class="search-books">
+                <div class="search-books-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input placeholder="Search books..."> 
+                    <select class="shelves-sort">
+                        <option>All Shelves</option>
+                        <option></option>
+                        <option></option>
+                    </select>
+                    <select class="sort-by">
+                        <option> Sort by</option>
+                        <option></option>
+                        <option></option>
+                    </select>
+                </div>
+                
+                <hr>
+            </div>
+
+           <div class="book-container">
+                <div class="book-grid">
+
+                    <div class="book-card">
+                        <div class="book-img">
+                            <img src="{{ url_for('static', filename='images/0000000002-M.jpg') }}">
+                        </div>
+                        <div class="book-details">
+                            <div class="book-title">Mog the forgetful cat</div>
+                            <div class="book-author">Judith Kerr</div>
+
+                            <div class="rating" aria-label="Rating: 5 stars">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                            <span class="shelf-tag">Finished</span>
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            <img src="{{ url_for('static', filename='images/0000000003-M.jpg') }}">
+                        </div>
+                        <div class="book-details">
+                            <div class="book-title">The Cat in the Hat</div>
+                            <div class="book-author">Dr. Seuss</div>
+
+                            <div class="rating" aria-label="Rating: 5 stars">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                            <span class="shelf-tag">Reading</span>
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            <img src="{{ url_for('static', filename='images/0000000004-M.jpg') }}">
+                        </div>
+                        <div class="book-details">
+                            <div class="book-title">Fox in Socks</div>
+                            <div class="book-author">Dr. Seuss</div>
+
+                            <div class="rating" aria-label="Rating: 5 stars">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                            <span class="shelf-tag">Finished</span>
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            <img src="{{ url_for('static', filename='images/0000000005-M.jpg') }}">
+                        </div>
+                        <div class="book-details">
+                            <div class="book-title">The Hedgehog's Balloon</div>
+                            <div class="book-author">Judith Kerr</div>
+
+                            <div class="rating" aria-label="Rating: 5 stars">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                            <span class="shelf-tag">Want to Read</span>
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            
+                        </div>
+                        <div class="book-details">
+                            
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-img">
+                            
+                        </div>
+                        <div class="book-details">
+                            
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            
+                        </div>
+                        <div class="book-details">
+                            
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            
+                        </div>
+                        <div class="book-details">
+                            
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            
+                        </div>
+                        <div class="book-details">
+                            
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            
+                        </div>
+                        <div class="book-details">
+                            
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            
+                        </div>
+                        <div class="book-details">
+                            
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-img">
+                            
+                        </div>
+                        <div class="book-details">
+                            
+                        </div>
+                    </div>
+                    
+
+                    
+
+                </div>
+            </div>
+
+        </section>
+
             </section>
+
     </main>
 
     <script src="{{ url_for('static', filename='js/library.js') }}"></script>
