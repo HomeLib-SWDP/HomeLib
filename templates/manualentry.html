@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual Book Entry | HomeLib</title>
-    <link rel="stylesheet" href="/static/css/library.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/library.css') }}">
 </head>
 <body>
 
 <h1>Add a Book Manually</h1>
 
 <form id="manualBookForm">
-
     <label>Title</label>
     <input type="text" name="title" required>
 
@@ -36,10 +36,10 @@ document.getElementById("manualBookForm").addEventListener("submit", async funct
     e.preventDefault();
 
     const formData = new FormData(this);
-
     const data = Object.fromEntries(formData.entries());
 
-    const response = await fetch("/books/api/books", {
+    // Ensure the fetch URL matches your Flask Blueprint or Route
+    const response = await fetch("{{ url_for('add_book_api') }}", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -49,7 +49,7 @@ document.getElementById("manualBookForm").addEventListener("submit", async funct
 
     const result = await response.json();
     document.getElementById("message").innerText =
-        response.ok ? result.message : result.Error;
+        response.ok ? result.message : (result.Error || "An error occurred");
 });
 </script>
 

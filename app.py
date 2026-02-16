@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from routes import books_bp
 import os
 
@@ -6,9 +6,13 @@ app = Flask(__name__)
 
 app.register_blueprint(books_bp, url_prefix = '/api/books')
 
-@app.route('/index')
-def index():
-    return render_template('index.html')
+@app.route('/')
+def home():
+    return redirect(url_for('login'))
+
+@app.route('/login')
+def login():
+    return render_template('index.html') 
 
 @app.route('/explore')
 def explore():
@@ -29,7 +33,6 @@ def loan():
 @app.route('/register')
 def register():
     return render_template('register.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
