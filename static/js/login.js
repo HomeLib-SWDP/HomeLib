@@ -20,6 +20,7 @@ const firebaseConfig = {
 
 };
 
+
 // intiialzing firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -28,6 +29,17 @@ const auth = getAuth(app);
 const emailId = document.getElementById('email');
 const password = document.getElementById('password');
 const loginForm = document.getElementById('loginForm');
+
+sendIdtoFlask = (userId) => {
+  fetch('/user_id_post', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ user_id: userId }) //converting to json format
+  })
+
+};
 
 loginForm.addEventListener('submit', (loginEvent) => {
   loginEvent.preventDefault();
@@ -39,8 +51,11 @@ loginForm.addEventListener('submit', (loginEvent) => {
   signInWithEmailAndPassword(auth, emailValue, passwordValue)
   .then((userCredential) => {
   const user = userCredential.user; //get user info 
-  localStorage.setItem('userid', user.uid);
-  const userid = localStorage.getItem('userid'); // to use when we want to create user sessions
+
+  userId = user.uid; // getting user id firebase
+
+  sendIdtoFlask(userId); //function to send to backend
+  
   //console.log('User id:', userid);  test for checking user id 
   alert('Welcome!' + ' ' + emailValue);
   window.location.href = 'explore'; //redirect to home page
