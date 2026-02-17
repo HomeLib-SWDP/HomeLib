@@ -21,3 +21,15 @@ def add_manual_book():
         return jsonify({"message" : f"'{new_book.title}' added successfully!"}), 201
     return jsonify({"Error": "failed to save book"}), 500
 
+@books_bp.route('/user_id_post', methods=['POST'])
+def sent_user_id():
+    data = request.json
+    user_id = data.get('user_id')
+    session['user_id'] = user_id #storing user id in flask session
+    return jsonify({"message" : "User id stored in session"}) , 200
+    
+
+@books_bp.route('/user_id_get', methods=['GET'])
+def get_user_id():
+    user_id = session.get('user_id')
+    return jsonify({"user_id": user_id})
