@@ -10,11 +10,12 @@ def add_manual_book():
     data = request.json
 
     new_book = Book(
-        booktitle = data.get('booktitle'),
-        author = data.get('author'),
-        isbn = data.get('isbn'),
+        booktitle = request.form.get('title'),
+        author = request.form.gett('author'),
+        isbn = request.form.get('isbn'),
         cover_id = data.get('cover_id'),
-        username = data.get('username') 
+        publish_date = data.form.get('publish_date'),
+        username = request.form.get('username')
     )
 
     if add_book(new_book):

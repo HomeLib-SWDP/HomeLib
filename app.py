@@ -38,5 +38,9 @@ def loan():
 def register():
     return render_template('register.html')
 
+@app.route('/manualentry')
+def manualentry():
+    return render_template('manualentry.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
