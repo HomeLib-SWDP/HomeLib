@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, request, url_for, session, jsonify
 from routes import books_bp
 import os
 
@@ -41,6 +41,20 @@ def register():
 @app.route('/manualentry')
 def manualentry():
     return render_template('manualentry.html')
+
+@app.route('/user_id_post', methods=['POST'])
+def sent_user_id():
+    data = request.json
+    user_id = data.get('user_id')
+    session['user_id'] = user_id #storing user id in flask session
+    return jsonify({"message" : "User id stored in session"}) , 200
+    
+
+@app.route('/user_id_get', methods=['GET'])
+def get_user_id():
+    user_id = session.get('user_id')
+    return jsonify({"user_id": user_id})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
