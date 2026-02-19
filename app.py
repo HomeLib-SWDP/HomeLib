@@ -55,6 +55,9 @@ def get_user_id():
 def remove_session():
     session.pop('user_id', None)
     
+@app.route('/manualentry')
+def manualentry():
+    return render_template('manualentry.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
