@@ -18,6 +18,8 @@
                 <div class="login-container">
                     <img class="logo" src="{{ url_for('static', filename='images/logo.png') }}" title="Graphic by Md Rubel Miah from Vecteezy.com">
                     <h1>Register</h1>
+                    <form id="registerForm">
+
                     
                     <form action="{{ url_for('register') }}" method="POST">
                         <div>
@@ -42,6 +44,6 @@
         </section>
     </main>
 
-    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+     <script src="../static/js/register.js" type="module"></script>
 </body>
 </html>
