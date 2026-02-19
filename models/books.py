@@ -29,8 +29,36 @@ def add_book(book):
         disconnect_from_sql(cnx)
 
 
+# Get's the user's personal library
+def get_books():
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    
+    library = []
+    try:
+        query = "SELECT * FROM `test_book_info`"
+        cursor.execute(query)
+        data = cursor.fetchall()
+        
+        for book in data:
+            new_book = Book(
+                booktitle = book[2],
+                isbn = book[3],
+                publishdate = book[4],
+                cover_id = book[5],
+                author = book[6],
+                username = "test"
+            )
+            library.append(new_book)
 
-
+        return library
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+        print(library[0].booktitle)
 
 
 def test_add_book():
