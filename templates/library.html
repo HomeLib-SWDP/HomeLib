@@ -49,7 +49,8 @@
             <div class="search-books">
                 <div class="search-books-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input placeholder="Search books..."> 
+                    <input placeholder="Search books..." id="search">
+                    <div id="suggestions" class="suggestions"></div>
                     <select class="shelves-sort">
                         <option>All Shelves</option>
                         <option></option>
@@ -66,9 +67,9 @@
             </div>
 
            <div class="book-container">
-                <div class="book-grid">
+                <div class="book-grid" id="displayLib">
 
-                    <div class="book-card">
+                    <!-- <div class="book-card">
                         <div class="book-img">
                             <img src="{{ url_for('static', filename='images/0000000002-M.jpg') }}">
                         </div>
@@ -188,11 +189,7 @@
                         <div class="book-details">
                             
                         </div>
-                    </div>
-                    
-
-                    
-
+                    </div> -->
                 </div>
             </div>
 

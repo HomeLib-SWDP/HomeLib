@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.books import Book, add_book
+from models.books import Book, add_book, get_books
 
 books_bp = Blueprint('books', __name__)
 
@@ -21,4 +21,10 @@ def add_manual_book():
     if add_book(new_book):
         return jsonify({"message" : f"'{new_book.booktitle}' added successfully!"}), 201
     return jsonify({"Error": "failed to save book"}), 500
+
+@books_bp.route('/get_library', methods=['GET'])
+def get_library():
+    library = get_books()
+    library_dicts = [book.to_dict() for book in library]
+    return jsonify(library_dicts)
 
