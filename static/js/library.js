@@ -22,6 +22,7 @@ async function getLibrary()
         filteredLibrary = currentLibrary;
 
         console.log(currentLibrary)
+        displayBooks();
     }
     catch(err)
     {
@@ -46,6 +47,8 @@ async function setupAutoComplete(inputId, suggestionsId)
         if(query.length === 0)
         {
             suggestionsBox.style.display = "none";
+            filteredLibrary = currentLibrary;
+            displayBooks();
             return;
         }
 
@@ -81,6 +84,7 @@ async function setupAutoComplete(inputId, suggestionsId)
         }
         );
         suggestionsBox.style.display = "block";
+        displayBooks();
     });
 
     document.addEventListener("click", function (e) {
@@ -98,21 +102,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function displayChosenBook(bookName)
 {
-    console.log("Display")
     console.log(bookName)
-    console.log(currentLibrary);
-    for(book of currentLibrary)
+    for(book of filteredLibrary)
     {
         if(book.booktitle === bookName)
         {
-            const div = document.getElementById("displayLib");
-            const title = document.createElement("h4");
-            title.textContent = book.booktitle;
-            const author = document.createElement("h6");
-            author.textContent = book.author
-
-            div.appendChild(title);
-            div.appendChild(author);
+            filteredLibrary = [];
+            filteredLibrary.push(book);
+            displayBooks();
+            return;
         }
+    }
+}
+
+async function displayBooks()
+{
+    const libraryDiv = document.getElementById("displayLib")
+    libraryDiv.innerHTML = "";
+    for(const book of filteredLibrary)
+    {
+        const card = document.createElement("div");
+        card.classList.add("book-card");
+
+        const imgDiv = document.createElement("div");
+        imgDiv.classList.add("book-img");
+        const img = document.createElement("img")
+        img.src = "https://covers.openlibrary.org/b/id/" + book.cover_id + "-M.jpg"
+        imgDiv.appendChild(img);
+        card.appendChild(imgDiv);
+
+        const detailsDiv = document.createElement("div");
+        detailsDiv.classList.add("book-details");
+        const title = document.createElement("div")
+        title.classList.add("book-title");
+        title.textContent = book.booktitle;
+        const author = document.createElement("div");
+        author.classList.add("book-author");
+        author.textContent = book.author;
+        const rating = document.createElement("div");
+        rating.classList.add("rating");
+        rating.ariaLabel = "Rating: 5 stars"
+        rating.textContent = "⭐⭐⭐⭐⭐"
+
+        const finish = document.createElement("span");
+        finish.classList.add("shelf-tag");
+        finish.textContent = "finish";
+
+        detailsDiv.appendChild(title);
+        detailsDiv.appendChild(author);
+        detailsDiv.appendChild(rating);
+        detailsDiv.appendChild(finish);
+
+        card.appendChild(detailsDiv);
+        libraryDiv.appendChild(card);
     }
 }

@@ -9,6 +9,17 @@ class Book:
         self.author = author
         self.isbn = isbn
 
+    # Helps with turning the sql data into a json
+    def to_dict(self):
+        return {
+            "booktitle": self.booktitle,
+            "isbn": self.isbn,
+            "publishdate": self.publishdate,
+            "cover_id": self.cover_id,
+            "author": self.author,
+            "username": self.username
+        }
+
 
 def add_book(book):
     cnx = connect_to_sql()
