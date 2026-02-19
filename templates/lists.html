@@ -6,12 +6,17 @@
     <title>Lists | HOMELIB</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/lists.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <main>
         <section class="left-task-bar">
             <div>
-                <img class="logo" src="{{ url_for('static', filename='images/logo.png') }}">
+                <img class="logo" src="{{ url_for('static', filename='images/logo.png') }}" title="Graphic by Md Rubel Miah from Vecteezy.com">
             </div>
 
             <div class="list-items">
@@ -25,8 +30,27 @@
             </div>
         </section>
 
+        
         <section class="main-content">
-            </section>
+            <div class="title">
+                <p class="title-text">My Lists</p>
+                <hr>
+            </div>
+            <div class="search-books">
+                <div class="search-books-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input placeholder="Search books..."> 
+                    <button class="create-btn"><i class="fa-solid fa-plus"></i> Create New List</button>
+                </div>
+                
+                <hr>
+            </div>
+
+
+
+
+
+        </section>
     </main>
 
     <script src="{{ url_for('static', filename='js/lists.js') }}"></script>
