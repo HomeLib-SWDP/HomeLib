@@ -14,3 +14,6 @@ ca.pem
 
 # sqldetails
 sqldetails.py
+
+#env file
+.env
