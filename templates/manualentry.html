@@ -10,7 +10,7 @@
 
 <h1>Add a Book Manually</h1>
 
-<form id="manualBookForm">
+<form id="manualBookForm" action="{{ url_for('books.add_manual_book') }}">
     <label>Title</label>
     <input type="text" name="title" required>
 
@@ -23,7 +23,10 @@
     <label>Cover ID (optional)</label>
     <input type="text" name="cover_id">
 
-    <input type="hidden" name="user_id" value="1">
+        <label>Publish Date (optional)</label>
+    <input type="text" name="publish_date">
+
+    <input type="hidden" id="username" name="username" value="">
     <input type="hidden" name="book_id" value="">
 
     <button type="submit">Add Book</button>
@@ -31,27 +34,7 @@
 
 <p id="message"></p>
 
-<script>
-document.getElementById("manualBookForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-
-    // Ensure the fetch URL matches your Flask Blueprint or Route
-    const response = await fetch("{{ url_for('add_book_api') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
-
-    const result = await response.json();
-    document.getElementById("message").innerText =
-        response.ok ? result.message : (result.Error || "An error occurred");
-});
-</script>
+<script type="module" src="{{ url_for('static', filename='js/books.js') }}"></script>
 
 </body>
 </html>
