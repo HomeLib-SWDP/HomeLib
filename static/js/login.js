@@ -30,7 +30,7 @@ const emailId = document.getElementById('email');
 const password = document.getElementById('password');
 const loginForm = document.getElementById('loginForm');
 
-sendIdtoFlask = (userId) => {
+const sendIdtoFlask = (userId) => {
   fetch('/user_id_post', {
     method: 'POST',
     headers: {
@@ -52,13 +52,13 @@ loginForm.addEventListener('submit', (loginEvent) => {
   .then((userCredential) => {
   const user = userCredential.user; //get user info 
 
-  userId = user.uid; // getting user id firebase
+  const userId = user.uid; // gett user id from firebase
 
-  sendIdtoFlask(userId); //function to send to backend
+  sendIdtoFlask(userId); //function to send to flask middleware
   
   //console.log('User id:', userid);  test for checking user id 
   alert('Welcome!' + ' ' + emailValue);
-  window.location.href = 'explore'; //redirect to home page
+  window.location.href = 'explore'; //redirect to explore page
   })
   .catch((error) => {
     const errorCode = error.code;
