@@ -24,10 +24,13 @@ main{
     margin-right: 1em;
 }
 .main-content{
-    height: 95vh;
+    height: 95%;
     width: 98em;
     border-radius: 15px;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 .logo{
     width: 16em;
@@ -118,14 +121,14 @@ hr{
     margin-left: .8em;
 }
 .book-container{
-    height: 71.6vh;
+    height: 74.6vh;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     background-color: #e6edf575;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-y: auto;
+    
 }
 .book-grid{
     width: 70%;
