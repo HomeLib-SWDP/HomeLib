@@ -26,15 +26,34 @@ def add_book(book):
     cursor = cnx.cursor()
 
     try:
-        query = "INSERT INTO `user-book-info` (username, booktitle, isbn, author, publishdate,  cover_id) VALUES(%s,%s,%s,%s,%s,%s)"
+        query = """
+            INSERT INTO `user_books` (username, booktitle, isbn, author, publishdate,  cover_id) VALUES(%s,%s,%s,%s,%s,%s)
+        """
         values = (book.username, book.booktitle, book.isbn, book.author, book.publishdate, book.cover_id)
 
         cursor.execute(query, values)
         cnx.commit()
-        return True
+        
+        new_id = cursor.lastrowid
+        print(f"DEBUG: Book is inserted correctly. lib_id is {new_id}")
+        return new_id
+    
     except Exception as e:
-        print(f"Error: {e}")
-        return False
+        if "Duplicate entry" in str(e) or "unique_user_book" in str(e):
+            cursor.execute("""
+                SELECT lib_id FROM `user_books`
+                WHERE username = %s AND isbn = %s
+            """, (book.username, book.isbn))
+            result = cursor.fetchone()
+            if result:
+                existing_id = result[0]
+                print(f"DEBUG: book exists already. existing lib_id = {existing_id}")
+                return existing_id
+            else:
+                return None
+        else:
+            print(f"Error: {e}")
+            return None
     finally:
         cursor.close()
         disconnect_from_sql(cnx)
@@ -47,7 +66,7 @@ def get_books():
     
     library = []
     try:
-        query = "SELECT * FROM `test_book_info`"
+        query = "SELECT * FROM `user_books`"
         cursor.execute(query)
         data = cursor.fetchall()
         
@@ -96,6 +115,54 @@ def test_add_book():
     else:
         print("FAILED: Check your connection settings or SQL syntax.")
 
+def create_shelf(username, name, description=None):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    try:
+        query = "INSERT INTO `shelves` (username, name, description) VALUES (%s, %s, %s)"
+        cursor.execute(query, (username, name, description))
+        cnx.commit()
+        return cursor.lastrowid
+    except Exception as e:
+        if "Duplicate entry" in str(e):
+            cursor.execute("""
+                SELECT id FROM `shelves`
+                WHERE username = %s AND name = %s
+            """, (username, name))
+            result = cursor.fetchone()
+            return result[0] if result else None
+        else:
+            print(f"Create shelf error: {e}")
+            return None
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+
+def add_book_to_shelf(user_book_id, shelf_id):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    try:
+        query = "INSERT INTO `shelf_books` (user_book_id, shelf_id) VALUES (%s, %s)"
+        cursor.execute(query, (user_book_id, shelf_id))
+        cnx.commit()
+        return True
+    except Exception as e:
+        print(e)
+        return False
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+
+def get_user_shelves(username):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor(dictionary=True)
+    try:
+        query = "SELECT id, name, description, created_at FROM `shelves` WHERE username = %s ORDER BY created_at DESC"
+        cursor.execute(query, (username,))
+        return cursor.fetchall()
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+        
 if __name__ == "__main__":
     test_add_book()
-

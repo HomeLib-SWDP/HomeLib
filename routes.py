@@ -1,5 +1,5 @@
-from flask import Blueprint, request, jsonify
-from models.books import Book, add_book, get_books
+from flask import Blueprint, request, jsonify, session
+from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves
 
 books_bp = Blueprint('books', __name__)
 
@@ -28,3 +28,30 @@ def get_library():
     library_dicts = [book.to_dict() for book in library]
     return jsonify(library_dicts)
 
+@books_bp.route('/shelves', methods=['POST'])
+def create_new_shelf():
+    data = request.get_json()
+    username = session.get('username') or data.get('username')
+    if not username or not data.get('name'):
+        return jsonify({"success": False, "message": "Missing username or shelf name"}), 400
+    shelf_id = create_shelf(username, data['name'], data.get('description'))
+    if shelf_id:
+        return jsonify({"success": True, "shelf_id": shelf_id, "message": "Shelf created successfully"}), 201
+    return jsonify({"success": False, "message": "Failed to create shelf"}), 500
+
+@books_bp.route('/shelves/add-book', methods=['POST'])
+def add_to_shelf():
+    data = request.get_json()
+    if not data.get('user_book_id') or not data.get('shelf_id'):
+        return jsonify({"success": False, "message": "Missing book ID or shelf ID"}), 400
+    if add_book_to_shelf(data['user_book_id'], data['shelf_id']):
+        return jsonify({"success": True, "message": "Book added to shelf"}), 201
+    return jsonify({"success": False, "message": "Failed to add book to shelf"}), 500
+
+@books_bp.route('/shelves/my', methods=['GET'])
+def get_my_shelves():
+    username = session.get('username')
+    if not username: 
+        return jsonify({"success": False, "message": "Not logged in"}), 401
+    shelves = get_user_shelves(username)
+    return jsonify({"success": True, "shelves": shelves})
