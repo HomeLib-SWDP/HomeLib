@@ -141,7 +141,7 @@ function loadMore() {
 function renderBooks(booksArray, container) {
     booksArray.forEach(book => {
         const div = document.createElement('div');
-        div.className = 'book-card'; // CSS handles the layout now!
+        div.className = 'book-card'; 
         
         div.innerHTML = `
             <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
@@ -195,7 +195,7 @@ async function loadSection(apiUrl, containerId) {
 
 
 window.addEventListener('DOMContentLoaded', () => {
-    
+
     const popularUrl = `https://openlibrary.org/search.json?q=first_publish_year:2020+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i`;
     loadSection(popularUrl, 'popular-books');
 
