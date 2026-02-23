@@ -56,7 +56,7 @@ loginForm.addEventListener('submit', (loginEvent) => {
 
   sendIdtoFlask(userId); //function to send to backend
   
-  //console.log('User id:', userid);  test for checking user id 
+  //console.log('User id:', userId); 
   alert('Welcome!' + ' ' + emailValue);
   window.location.href = 'explore'; //redirect to home page
   })

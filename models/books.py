@@ -13,7 +13,7 @@ class Book:
 def add_book(book):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
-
+    
     try:
         query = "INSERT INTO `user-book-info` (username, booktitle, isbn, author, publishdate,  cover_id) VALUES(%s,%s,%s,%s,%s,%s)"
         values = (book.username, book.booktitle, book.isbn, book.author, book.publishdate, book.cover_id)
