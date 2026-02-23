@@ -46,7 +46,9 @@ def sent_user_id():
     data = request.json
     user_id = data.get('user_id')
     session['user_id'] = user_id #storing user id in flask session
+    return jsonify({"message" : "User id stored in session"}) , 200
     
+
 @app.route('/user_id_get', methods=['GET'])
 def get_user_id():
     user_id = session.get('user_id')
