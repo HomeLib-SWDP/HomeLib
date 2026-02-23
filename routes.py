@@ -3,10 +3,13 @@ from models.books import Book, add_book, get_books, create_shelf, add_book_to_sh
 
 books_bp = Blueprint('books', __name__)
 
-@books_bp.route('/api/books', methods=['POST'])
+@books_bp.route('/add_manual_book', methods=['POST'])
 
 
 def add_manual_book():
+    
+    current_user = session.get('user_id')
+   
     data = request.json
 
     new_book = Book(
@@ -15,12 +18,15 @@ def add_manual_book():
         isbn = data.get('isbn'),
         cover_id = data.get('cover_id'),
         publishdate = data.get('publish_date'),
-        username = data.get('username')
+        username=current_user
     )
 
-    if add_book(new_book):
-        return jsonify({"message" : f"'{new_book.booktitle}' added successfully!"}), 201
-    return jsonify({"Error": "failed to save book"}), 500
+    book_id = add_book(new_book)
+
+    if book_id:
+        return jsonify({"message": "Book added successfully!"}), 200
+    else:
+        return jsonify({"Error": "Failed to add book. It might already exist."}), 400
 
 @books_bp.route('/get_library', methods=['GET'])
 def get_library():
