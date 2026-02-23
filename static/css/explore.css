@@ -28,6 +28,8 @@ main{
     width: 98em;
     border-radius: 15px;
     background-color: white;
+    overflow-y: auto; 
+    overflow-x: hidden;
 }
 .logo{
     width: 16em;
@@ -108,12 +110,6 @@ hr{
 
 
 
-
-
-
-
-
-
 .search-bar {
     width: 100%;
     margin-bottom: 2rem;
@@ -157,4 +153,51 @@ hr{
 .card p {
     font-size: 0.9rem;
     color: #555;
+}
+.explore-section {
+    padding-left: 4em; 
+    padding-right: 4em; 
+    padding-top: 2em;  
+}
+
+.scroll-row {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;      
+    overflow-y: hidden;     
+    padding-bottom: 15px;   
+    scroll-snap-type: x mandatory; 
+}
+
+.scroll-row::-webkit-scrollbar {
+    height: 8px;
+}
+.scroll-row::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+
+.book-card {
+    flex: 0 0 calc((100% - 80px) / 5); 
+    scroll-snap-align: start;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-5px); /* Little hover hop effect */
+}
+
+
+.book-cover {
+    width: 100%;
+    aspect-ratio: 2 / 3; 
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
