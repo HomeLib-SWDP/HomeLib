@@ -4,9 +4,9 @@ let currentLang = '';
 let currentSubject = '';
 let currentYearMin = '';
 let currentYearMax = '';
-
+ /*
 document.getElementById('subjectFilter').addEventListener('change', (e) => { 
-    currentSubject = e.target.value; 
+  currentSubject = e.target.value; 
 });
 
 document.getElementById('yearMin').addEventListener('input', (e) => { 
@@ -135,3 +135,75 @@ async function search(offset = 0) {
 function loadMore() {
     search(currentOffset + 6);
 }
+
+*/
+
+function renderBooks(booksArray, container) {
+    booksArray.forEach(book => {
+        const div = document.createElement('div');
+        div.className = 'book-card'; 
+        
+        div.innerHTML = `
+            <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
+            <div class="book-info" style="font-size: 0.9rem; padding-top: 5px;">
+                <strong style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${book.title}">${book.title || 'No title'}</strong>
+                <span style="color: #555;">${book.author_name ? book.author_name[0] : 'Unknown'}</span>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+
+async function loadSection(apiUrl, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return; 
+
+    
+    container.className = 'scroll-row';
+    container.innerHTML = '<p>Loading books...</p>'; 
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Network Error");
+        
+        const data = await response.json();
+        container.innerHTML = ''; 
+        
+        if (data.docs && data.docs.length > 0) {
+            
+            //dont use books with no coverid
+            const booksWithCovers = data.docs.filter(book => book.cover_i !== undefined);
+            
+            //grab 10 books from the list that filtered out ones missing covers
+            const finalTenBooks = booksWithCovers.slice(0, 10);
+            
+            if(finalTenBooks.length > 0) {
+                renderBooks(finalTenBooks, container); 
+            } else {
+                container.innerHTML = '<p>No books with covers found for this section.</p>';
+            }
+
+        } else {
+            container.innerHTML = '<p>No books found for this section.</p>';
+        }
+
+    } catch (err) {
+        container.innerHTML = `<p style="color:red">Error loading section.</p>`;
+    }
+}
+
+
+window.addEventListener('DOMContentLoaded', () => {
+
+    const popularUrl = `https://openlibrary.org/search.json?q=first_publish_year:2020+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i`;
+    loadSection(popularUrl, 'popular-books');
+
+
+    const newReleasesUrl = `https://openlibrary.org/search.json?q=first_publish_year:[2025 TO 2026]+subject:fiction&sort=editions&limit=25&fields=title,author_name,cover_i`;
+    loadSection(newReleasesUrl, 'new-books');
+
+    const fantasyUrl = `https://openlibrary.org/search.json?q=subject:fantasy+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i`;
+    loadSection(fantasyUrl, 'fantasy-books');
+
+});

@@ -38,7 +38,7 @@
             <div class="search-books">
                 <div class="search-books-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input placeholder="Search books, authors, or lists..."> 
+                    <input id="searchInput" placeholder="Search books, authors, or lists...">
                     <button class="create-btn"><i class="fa-solid fa-plus"></i> Add New Book</button>
                 </div>
                 
@@ -49,7 +49,7 @@
             <h1>Explore Books</h1>
             
             <div class="explore-section">
-                <h2>Popular in 2025</h2>
+                <h2>Popular Since 2020</h2>
                 <div id="popular-books" class="book-grid"></div>
             </div>
         
@@ -67,6 +67,6 @@
         
     </main>
 
-    <script src="{{ url_for('static', filename='js/explore.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/explore.js') }}?v=2"></script>
 </body>
 </html>

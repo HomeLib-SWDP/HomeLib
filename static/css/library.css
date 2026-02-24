@@ -128,11 +128,17 @@ hr{
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
+
+    overflow-y: auto;          
+    align-items: flex-start;   
+    padding-top: 2em;          
 }
+    
+
 .book-grid{
     width: 70%;
-    height: 90%;
+    height: auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);     
     gap: 40px;
