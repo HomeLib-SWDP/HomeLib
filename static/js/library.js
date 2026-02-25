@@ -66,94 +66,54 @@ async function setupAutoComplete(inputId, suggestionsId)
 
         filteredLibrary = matches;
         
-        matches.forEach(item =>
-        {
-            const value = typeof item === "object" ? item.booktitle : item;
-            const author = typeof item === "object" ? item.author : item;
+        const coverUrl = book.cover_i 
+            ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` 
+            : 'https://placehold.co/150x200?text=No+Cover';
 
-            const div = document.createElement("div")
-            div.textContent = value + " by: " + author;
-
-            div.addEventListener("click", function () {
-                input.value = value;
-                suggestionsBox.style.display = "none";
-                displayChosenBook(value);
-            });
-
-            suggestionsBox.appendChild(div)
-        }
-        );
-        suggestionsBox.style.display = "block";
-        displayBooks();
+        //should follow what i did in explore, kept the star rating and the tag
+        div.innerHTML = `
+            <img src="${coverUrl}" alt="cover" class="book-cover" loading="lazy">
+            <div class="book-info" style="font-size: 0.9rem; padding-top: 5px;">
+                <strong class="book-title" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${book.title}">
+                    ${book.title || 'No title'}
+                </strong>
+                <span class="book-author" style="color: #6b7280;">${book.author ||'Unknown'}</span>
+                <div class="rating" style="color: #fbbf24; margin-top: 4px;">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+                <div class="shelf-tag">My Library</div>
+            </div>
+        `;
+        container.appendChild(div);
     });
-
-    document.addEventListener("click", function (e) {
-        if (!e.target.closest(".autocomplete-wrapper")) {
-            suggestionsBox.style.display = "none";
-        }
-    });
-
-    console.log("Auto Complete setup!")
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    setupAutoComplete("search", "suggestions");
+async function loadSection(apiUrl, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Network Error");
+        
+        const data = await response.json();
+        
+        //make sure theres acutally an array of boojs being returned and if not state that lib empty
+        if (Array.isArray(data) && data.length > 0) {
+            renderBooks(data, container); 
+        } else {
+            container.innerHTML = '<p style="padding: 2em;">Your library is empty.</p>';
+        }
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = `<p style="color:red; padding: 2em;">Error loading books.</p>`;
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    loadSection('/api/books/get_library', 'displayLib');
 });
-
-async function displayChosenBook(bookName)
-{
-    console.log(bookName)
-    for(book of filteredLibrary)
-    {
-        if(book.booktitle === bookName)
-        {
-            filteredLibrary = [];
-            filteredLibrary.push(book);
-            displayBooks();
-            return;
-        }
-    }
-}
-
-async function displayBooks()
-{
-    const libraryDiv = document.getElementById("displayLib")
-    libraryDiv.innerHTML = "";
-    for(const book of filteredLibrary)
-    {
-        const card = document.createElement("div");
-        card.classList.add("book-card");
-
-        const imgDiv = document.createElement("div");
-        imgDiv.classList.add("book-img");
-        const img = document.createElement("img")
-        img.src = "https://covers.openlibrary.org/b/id/" + book.cover_id + "-M.jpg"
-        imgDiv.appendChild(img);
-        card.appendChild(imgDiv);
-
-        const detailsDiv = document.createElement("div");
-        detailsDiv.classList.add("book-details");
-        const title = document.createElement("div")
-        title.classList.add("book-title");
-        title.textContent = book.booktitle;
-        const author = document.createElement("div");
-        author.classList.add("book-author");
-        author.textContent = book.author;
-        const rating = document.createElement("div");
-        rating.classList.add("rating");
-        rating.ariaLabel = "Rating: 5 stars"
-        rating.textContent = "⭐⭐⭐⭐⭐"
-
-        const finish = document.createElement("span");
-        finish.classList.add("shelf-tag");
-        finish.textContent = "finish";
-
-        detailsDiv.appendChild(title);
-        detailsDiv.appendChild(author);
-        detailsDiv.appendChild(rating);
-        detailsDiv.appendChild(finish);
-
-        card.appendChild(detailsDiv);
-        libraryDiv.appendChild(card);
-    }
-}
