@@ -207,3 +207,69 @@ window.addEventListener('DOMContentLoaded', () => {
     loadSection(fantasyUrl, 'fantasy-books');
 
 });
+
+var bookSuggestions = [];
+
+async function searchBooks(searchInput, suggestions)
+{
+    const input = document.getElementById(searchInput);
+    const suggestionsBox = document.getElementById(suggestions);
+
+    input.addEventListener("input", debounce (async function (){
+        const query = this.value.trim().toLowerCase();
+        suggestionsBox.innerHTML = "";
+
+        if(query.length === 0)
+        {
+            suggestionsBox.style.display = "none";
+            bookSuggestions = [];
+            return;
+        }
+
+        const url = `https://openlibrary.org/search.json?q=${query}`;
+        const container = document.getElementById('results');
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network error: " + response.status);
+
+        const data = await response.json();
+
+        const books = data.docs;
+        console.log(books);
+        
+        books.forEach(book =>{
+            
+            const title = book.title;
+            const author = book.author_name;
+            const div = document.createElement("div")
+            div.textContent = title + " by: " + author;
+
+            suggestionsBox.appendChild(div)
+        }) 
+        
+        suggestionsBox.style.display = "block";
+    }, 400));
+
+    document.addEventListener("click", function (e) {
+        if (!e.target.closest(".autocomplete-wrapper")) {
+            suggestionsBox.style.display = "none";
+        }
+    });
+}
+
+// This is here purely to reduce lag, so that we aren't getting a million API calls per input
+function debounce(func, delay) {
+    let timeoutId;
+
+    return function (...args) {
+        clearTimeout(timeoutId);
+
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    searchBooks("searchInput", "suggestions");
+});
