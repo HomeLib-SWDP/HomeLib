@@ -282,7 +282,8 @@ async function searchBooks(searchInput, suggestions)
             console.log(document.getElementById("search-sect"));
             const searchSection = document.getElementById("search-sect");
             searchSection.className = 'scroll-row';
-            renderBooks(books, searchSection);
+
+            renderBooks(booksToShow, searchSection);
         }
 
         console.log(books)
@@ -328,11 +329,12 @@ function scoreBook(book, query)
 
     return score;
 }
+
 async function handleSaveBook(book){
     const savedBook = {
         title: book.title,
         author: (book.author_name && book.author_name.length > 0) ? book.author_name[0] : 'Unknown',
-        isbn: book.isbn ? book.isbn[0] : Unknown, 
+        isbn: book.isbn ? book.isbn[0] : 'Unknown', 
         cover_id: book.cover_i,
         publish_date: book.first_publish_year || 'Unknown'
     };

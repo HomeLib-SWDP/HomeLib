@@ -48,7 +48,7 @@ registerForm.addEventListener('submit', (regsterEvent) => {
   .then((userCredential) => {
   const user = userCredential.user; //get user info
   alert('Registering...please login');
-  window.location.href = 'index.html'; //redirect to login page
+  window.location.href = '/'; //redirect to login page
   })
   .catch((error) => {
     const errorCode = error.code;

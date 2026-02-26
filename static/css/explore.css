@@ -39,6 +39,13 @@ main{
 .list-items li{
     list-style-type: none; 
     padding-left: 2em;
+    transition: .1s ease-in;
+}
+.list-items li:hover{
+    transform: scale(1.1);
+}
+.list-items li:active{
+    transform: scale(1.0);
 }
 .list-items a{
     text-decoration: none;
@@ -54,6 +61,11 @@ main{
 
 .list-items ul li{
     padding: 1.5em;
+}
+.title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .title .title-text{
     font-size: 2.2em;
@@ -179,9 +191,10 @@ hr{
 
 
 .book-card {
-    flex: 0 0 calc((100% - 80px) / 5); 
-    scroll-snap-align: start;
     
+    flex: 0 0 auto; 
+    width: 150px; 
+    scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -189,8 +202,16 @@ hr{
     transition: transform 0.2s ease;
 }
 
+.book-cover {
+    width: 150px;      
+    height: 225px;      
+    object-fit: cover;  
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
 .book-card:hover {
-    transform: translateY(-5px); /* Little hover hop effect */
+    transform: translateY(-5px);
 }
 
 
@@ -200,6 +221,15 @@ hr{
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 4em;
+    cursor: pointer;
+    transform: translateY(-5px); /
 }
 
 

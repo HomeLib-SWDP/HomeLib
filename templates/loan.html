@@ -21,6 +21,7 @@
 
             <div class="list-items">
                 <ul>
+                    <a class="explore-item" href="{{ url_for('profile') }}"><li> <i class="fa-regular fa-circle-user"></i> Profile</li></a>
                     <a class="explore-item" href="{{ url_for('explore') }}"><li> <i class="fa-solid fa-magnifying-glass"></i> Explore</li></a>
                     <a class="dashboard-item" href="{{ url_for('dashboard') }}"><li> <i class="fa-solid fa-gauge"></i> Dashboard</li></a>
                     <a class="library-item" href="{{ url_for('library') }}"><li> <i class="fa-solid fa-book"></i> Library</li></a>
@@ -33,8 +34,10 @@
         <section class="main-content">
             <div class="title">
                 <p class="title-text">My Loans</p>
-                <hr>
+                <a href="{{ url_for('profile') }}"><img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}"></a>
+                
             </div>
+            <hr>
 
             <div class="search-books">
                 <div class="search-books-container">
