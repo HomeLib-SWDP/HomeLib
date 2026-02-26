@@ -76,13 +76,13 @@ hr{
 .profile-img {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 100px;
     object-fit: cover;
     margin-right: 4em;
     cursor: pointer;
 }
 .profile-main{
-    height: 92.5%;
+    height: calc(94vh - 7.5vh);
     width: 100%;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -93,7 +93,7 @@ hr{
 }
 .profile-top{
     height: 16em;
-    width: 80em;
+    width: 86%;
     background-color: #daa1db49;
     margin-bottom: 1em;
     border-radius: 15px;
@@ -101,20 +101,20 @@ hr{
     align-items: start;
     justify-content: space-between;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 6px 6px rgba(0, 0, 0, 0.08);
-    
-
 }
 .profile-bottom{
-    height: 36em;
-    width: 80em;
+    height: 30em;
+    width: 86%;
     border-radius: 15px;
     background-color: #daa1db49;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 6px 6px rgba(0, 0, 0, 0.08);
 }
 .profile-img-change{
-    width: 10em;
+    width: 150px;
+    height: 150px;
     border-radius: 100px;
-    background-size: contain;
+    margin-left: 3em
+    
 }
 .profile-img-div{
     margin-left: 3em;
