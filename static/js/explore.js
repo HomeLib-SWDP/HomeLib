@@ -148,9 +148,24 @@ function renderBooks(booksArray, container) {
             <div class="book-info" style="font-size: 0.9rem; padding-top: 5px;">
                 <strong style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${book.title}">${book.title || 'No title'}</strong>
                 <span style="color: #555;">${book.author_name ? book.author_name[0] : 'Unknown'}</span>
+                <button type="button" class ="add-btn" style="margin-top: 8px; width: fit-content;">
+                    Add to library
+                </button>
             </div>
         `;
+
+        const btn = div.querySelector( '.add-btn');
+        
+        btn.addEventListener('click', ( )=> {
+            handleSaveBook(book);
+        })
+
+        //console.table(book);
+
         container.appendChild(div);
+
+
+
     });
 }
 
@@ -196,14 +211,14 @@ async function loadSection(apiUrl, containerId) {
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    const popularUrl = `https://openlibrary.org/search.json?q=first_publish_year:2020+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i`;
+    const popularUrl = `https://openlibrary.org/search.json?q=first_publish_year:2020+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
     loadSection(popularUrl, 'popular-books');
 
 
-    const newReleasesUrl = `https://openlibrary.org/search.json?q=first_publish_year:[2025 TO 2026]+subject:fiction&sort=editions&limit=25&fields=title,author_name,cover_i`;
+    const newReleasesUrl = `https://openlibrary.org/search.json?q=first_publish_year:[2025 TO 2026]+subject:fiction&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
     loadSection(newReleasesUrl, 'new-books');
 
-    const fantasyUrl = `https://openlibrary.org/search.json?q=subject:fantasy+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i`;
+    const fantasyUrl = `https://openlibrary.org/search.json?q=subject:fantasy+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
     loadSection(fantasyUrl, 'fantasy-books');
 
 });
@@ -313,3 +328,31 @@ function scoreBook(book, query)
 
     return score;
 }
+async function handleSaveBook(book){
+    const savedBook = {
+        title: book.title,
+        author: (book.author_name && book.author_name.length > 0) ? book.author_name[0] : 'Unknown',
+        isbn: book.isbn ? book.isbn[0] : Unknown, 
+        cover_id: book.cover_i,
+        publish_date: book.first_publish_year || 'Unknown'
+    };
+
+    //console.table(savedBook);
+    console.log("saving book: ", savedBook);
+
+    try{
+        const response = await fetch('/api/books/add_manual_book', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(savedBook)
+        })
+         if(response.ok){
+            alert(`Book Saved: "${book.title}"`)
+        } else{
+            alert(`book not saved`)
+        }
+    } catch(err){
+        alert('save failed.')
+    }
+
+};

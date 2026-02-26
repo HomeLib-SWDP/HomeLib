@@ -29,9 +29,9 @@ def dashboard():
 def library():
     return render_template('library.html')
 
-@app.route('/lists')
-def lists():
-    return render_template('lists.html')
+@app.route('/stats')
+def stats():
+    return render_template('stats.html')
 
 @app.route('/loan')
 def loan():
