@@ -1,72 +1,58 @@
+let allBooks = []; 
 
-const API_BASE_URL = "http://127.0.0.1:5000";
-
-var currentLibrary = [];
-var filteredLibrary = [];
-
-async function getLibrary()
-{   
-    try
-    {
-        const response = await fetch(`/api/books/get_library`);
-
-        if(!response.ok)
-            throw new Error(`Error! ${response.status}`)
-
-        const data = await response.json()
-
-        for(const book of data)
-        {
-            currentLibrary.push(book)
+async function loadLibrary() {
+    const container = document.getElementById('displayLib');
+    try {
+        const response = await fetch('/api/books/get_library');
+        if (!response.ok) throw new Error("Network Error");
+        
+        allBooks = await response.json();
+        
+        if (allBooks.length > 0) {
+            renderBooks(allBooks, container); 
+        } else {
+            container.innerHTML = '<p style="padding: 2em;">Your library is empty.</p>';
         }
-
-        filteredLibrary = currentLibrary;
-
-        console.log(currentLibrary)
-        renderBooks();
-    }
-    catch(err)
-    {
-        console.error("Error fetching library: ", err)
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = `<p style="color:red; padding: 2em;">Error loading books.</p>`;
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  getLibrary();
+
+function filterAndSortBooks() {
+    const searchTerm = document.getElementById('search').value.toLowerCase();
+    const sortBy = document.querySelector('.sort-by').value;
+    const container = document.getElementById('displayLib');
+
+    
+    let filtered = allBooks.filter(book => {
+        const title = (book.title || "").toLowerCase();
+        const author = (book.author || "").toLowerCase();
+        return title.includes(searchTerm) || author.includes(searchTerm);
+    });
+
+    //need to add mor filters prop
+    filtered.sort((a, b) => {
+        if (sortBy === "old") return (a.year || 0) - (b.year || 0);
+        if (sortBy === "new") return (b.year || 0) - (a.year || 0);
+        if (sortBy === "subject") return (a.subject || "").localeCompare(b.subject || "");
+        return a.title.localeCompare(b.title); // Default: Title A-Z
+    });
+
+    renderBooks(filtered, container);
+}
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    loadLibrary();
+
+ 
+    document.getElementById('search').addEventListener('input', filterAndSortBooks);
+    
+    document.querySelector('.sort-by').addEventListener('change', filterAndSortBooks);
 });
 
-async function setupAutoComplete(inputId, suggestionsId)
-{
-    const input = document.getElementById(inputId);
-    const suggestionsBox = document.getElementById(suggestionsId);
-
-    input.addEventListener("input", function (){
-        const query = this.value.trim().toLowerCase();
-
-        suggestionsBox.innerHTML = "";
-
-        if(query.length === 0)
-        {
-            suggestionsBox.style.display = "none";
-            filteredLibrary = currentLibrary;
-            displayBooks();
-            return;
-        }
-
-        const matches = currentLibrary.filter(item => {
-            const value = typeof item === "object" ? item.booktitle : item;
-            const author = typeof item === "object" ? item.author : item;
-            return value.toLowerCase().includes(query) || author.toLowerCase().includes(query);
-        })
-
-        if(matches.length === 0)
-        {
-            suggestionsBox.style.display = "none";
-            return;
-        }
-
-        filteredLibrary = matches
-})}
 
 function renderBooks(booksArray, container) {
     container.innerHTML = ''; 
