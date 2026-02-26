@@ -30,9 +30,16 @@ def add_manual_book():
 
 @books_bp.route('/get_library', methods=['GET'])
 def get_library():
-    library = get_books()
-    library_dicts = [book.to_dict() for book in library]
-    return jsonify(library_dicts)
+    try:
+        user_id = session.get('user_id')
+        books_data = get_books(user_id)
+        return jsonify(books_data), 200
+
+    except Exception as e:
+        print(f"Route Error: {e}")
+        return jsonify({"error": "Failed to load library"}), 500
+
+
 
 @books_bp.route('/shelves', methods=['POST'])
 def create_new_shelf():
@@ -45,6 +52,8 @@ def create_new_shelf():
         return jsonify({"success": True, "shelf_id": shelf_id, "message": "Shelf created successfully"}), 201
     return jsonify({"success": False, "message": "Failed to create shelf"}), 500
 
+
+
 @books_bp.route('/shelves/add-book', methods=['POST'])
 def add_to_shelf():
     data = request.get_json()
@@ -53,6 +62,8 @@ def add_to_shelf():
     if add_book_to_shelf(data['user_book_id'], data['shelf_id']):
         return jsonify({"success": True, "message": "Book added to shelf"}), 201
     return jsonify({"success": False, "message": "Failed to add book to shelf"}), 500
+
+
 
 @books_bp.route('/shelves/my', methods=['GET'])
 def get_my_shelves():
