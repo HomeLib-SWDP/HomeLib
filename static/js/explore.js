@@ -223,6 +223,93 @@ window.addEventListener('DOMContentLoaded', () => {
 
 });
 
+var bookSuggestions = [];
+
+async function searchBooks(searchInput, suggestions)
+{
+    const input = document.getElementById(searchInput);
+    const suggestionsBox = document.getElementById(suggestions);
+    const regExplore = document.getElementById("regular-explore");
+    const searchSection = document.getElementById("search-sect");
+
+    input.addEventListener("input", debounce (async function (){
+        searchSection.innerHTML = "";
+        const query = this.value.trim().toLowerCase();
+        suggestionsBox.innerHTML = "";
+        if(query == "" || query.length < 3)
+        {
+            regExplore.style.display = "block";
+            return;
+        }
+
+        if(query.length === 0)
+        {
+            suggestionsBox.style.display = "none";
+            bookSuggestions = [];
+            return;
+        }
+
+        const url = `https://openlibrary.org/search.json?q=${query}`;
+        const container = document.getElementById('results');
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network error: " + response.status);
+
+        const data = await response.json();
+
+        bookSuggestions = data.docs;
+        let books = [];
+
+        if(bookSuggestions.length > 0)
+        {
+            regExplore.style.display = "none";
+            if(bookSuggestions.length > 30)
+            {
+                books = bookSuggestions.slice(0, 30);
+            }
+            console.log(books);
+            console.log(document.getElementById("search-sect"));
+            const searchSection = document.getElementById("search-sect");
+            searchSection.className = 'scroll-row';
+            renderBooks(books, searchSection);
+        }
+        
+        // books.forEach(book =>{
+            
+        //     const title = book.title;
+        //     const author = book.author_name;
+        //     const div = document.createElement("div")
+        //     div.textContent = title + " by: " + author;
+
+        //     suggestionsBox.appendChild(div)
+        // }) 
+        
+        suggestionsBox.style.display = "block";
+    }, 400));
+
+    document.addEventListener("click", function (e) {
+        if (!e.target.closest(".autocomplete-wrapper")) {
+            suggestionsBox.style.display = "none";
+        }
+    });
+}
+
+// This is here purely to reduce lag, so that we aren't getting a million API calls per input
+function debounce(func, delay) {
+    let timeoutId;
+
+    return function (...args) {
+        clearTimeout(timeoutId);
+
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    searchBooks("searchInput", "suggestions");
+});
 async function handleSaveBook(book){
     const savedBook = {
         title: book.title,

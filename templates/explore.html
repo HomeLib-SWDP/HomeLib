@@ -39,6 +39,7 @@
                 <div class="search-books-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input id="searchInput" placeholder="Search books, authors, or lists...">
+                    <div id="suggestions" class="suggestions"></div>
                     <button class="create-btn"><i class="fa-solid fa-plus"></i> Add New Book</button>
                 </div>
                 
@@ -48,20 +49,28 @@
 
             <h1>Explore Books</h1>
             
-            <div class="explore-section">
-                <h2>Popular Since 2020</h2>
-                <div id="popular-books" class="book-grid"></div>
+            <div id="search-container">
+                <div class="explore-section">
+                    <div id="search-sect" class="book-grid"></div>
+                </div>
             </div>
+            <div id="regular-explore">
+                <div class="explore-section">
+                    <h2>Popular Since 2020</h2>
+                    <div id="popular-books" class="book-grid"></div>
+                </div>
         
-            <div class="explore-section">
-                <h2>New Releases</h2>
-                <div id="new-books" class="book-grid"></div>
-            </div>
+                <div class="explore-section">
+                    <h2>New Releases</h2>
+                    <div id="new-books" class="book-grid"></div>
+                </div>
         
-            <div class="explore-section">
-                <h2>Fantasy</h2>
-                <div id="fantasy-books" class="book-grid"></div>
+                <div class="explore-section">
+                    <h2>Fantasy</h2>
+                    <div id="fantasy-books" class="book-grid"></div>
+                </div>
             </div>
+            
         
         </section>
         

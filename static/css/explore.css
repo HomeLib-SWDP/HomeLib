@@ -201,3 +201,74 @@ hr{
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+
+.search-books-container{
+    padding: 1.4em;
+    padding-left: 4em;
+    position: relative;
+    background-color: #e6edf575;
+}
+.search-books-container input{
+    width: 30em;
+    padding: .4em;
+    font-size: 1.1em;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid rgb(204, 204, 204);
+    padding-left: 2.4em;
+    color: rgb(160, 160, 160);
+}
+.search-books-container i{
+    position: absolute;
+    z-index: 2;
+    left: 74px;
+    top: 32px;
+    font-size: 1.2em;
+    color: rgb(160, 160, 160);
+}
+.search-books-container select{
+    width: 10em;
+    padding: .36em;
+    font-size: 1.1em;
+    border-radius: 5px;
+    border: 1px solid rgb(204, 204, 204);
+    color: rgb(160, 160, 160);
+    margin-left: .8em;
+}
+.book-container{
+    height: 74.6vh;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    background-color: #e6edf575;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    overflow-y: auto;          
+    align-items: flex-start;   
+    padding-top: 2em;          
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
+    background: white;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+}
+
+.suggestions div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestions div:hover {
+    background-color: #f0f0f0;
+}
