@@ -260,20 +260,17 @@ async function searchBooks(searchInput, suggestions)
         bookSuggestions = data.docs;
         let books = [];
 
-        if(bookSuggestions.length > 0)
-        {
+        const booksWithCovers = data.docs.filter(book => book.cover_i != null);
+
+        if (booksWithCovers.length > 0) {
             regExplore.style.display = "none";
-            if(bookSuggestions.length > 30)
-            {
-                books = bookSuggestions.slice(0, 30);
-            }
-            console.log(books);
-            console.log(document.getElementById("search-sect"));
+            const booksToShow = booksWithCovers.slice(0, 30);
+    
             const searchSection = document.getElementById("search-sect");
             searchSection.className = 'scroll-row';
-            renderBooks(books, searchSection);
+
+            renderBooks(booksToShow, searchSection);
         }
-        
         // books.forEach(book =>{
             
         //     const title = book.title;
@@ -310,11 +307,13 @@ function debounce(func, delay) {
 document.addEventListener("DOMContentLoaded", function () {
     searchBooks("searchInput", "suggestions");
 });
+
+
 async function handleSaveBook(book){
     const savedBook = {
         title: book.title,
         author: (book.author_name && book.author_name.length > 0) ? book.author_name[0] : 'Unknown',
-        isbn: book.isbn ? book.isbn[0] : Unknown, 
+        isbn: book.isbn ? book.isbn[0] : 'Unknown', 
         cover_id: book.cover_i,
         publish_date: book.first_publish_year || 'Unknown'
     };

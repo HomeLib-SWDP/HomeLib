@@ -179,9 +179,10 @@ hr{
 
 
 .book-card {
-    flex: 0 0 calc((100% - 80px) / 5); 
-    scroll-snap-align: start;
     
+    flex: 0 0 auto; 
+    width: 150px; 
+    scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -189,17 +190,16 @@ hr{
     transition: transform 0.2s ease;
 }
 
-.book-card:hover {
-    transform: translateY(-5px); /* Little hover hop effect */
-}
-
-
 .book-cover {
-    width: 100%;
-    aspect-ratio: 2 / 3; 
-    object-fit: cover;
+    width: 150px;      
+    height: 225px;      
+    object-fit: cover;  
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.book-card:hover {
+    transform: translateY(-5px); /
 }
 
 
