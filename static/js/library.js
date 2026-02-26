@@ -1,3 +1,4 @@
+
 const API_BASE_URL = "http://127.0.0.1:5000";
 
 var currentLibrary = [];
@@ -7,7 +8,7 @@ async function getLibrary()
 {   
     try
     {
-        const response = await fetch(`${API_BASE_URL}/api/books/get_library`);
+        const response = await fetch(`/api/books/get_library`);
 
         if(!response.ok)
             throw new Error(`Error! ${response.status}`)
@@ -22,7 +23,7 @@ async function getLibrary()
         filteredLibrary = currentLibrary;
 
         console.log(currentLibrary)
-        displayBooks();
+        renderBooks();
     }
     catch(err)
     {
@@ -64,7 +65,15 @@ async function setupAutoComplete(inputId, suggestionsId)
             return;
         }
 
-        filteredLibrary = matches;
+        filteredLibrary = matches
+})}
+
+function renderBooks(booksArray, container) {
+    container.innerHTML = ''; 
+    
+    booksArray.forEach(book => {
+        const div = document.createElement('div');
+        div.className = 'book-card'; 
         
         const coverUrl = book.cover_i 
             ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` 
