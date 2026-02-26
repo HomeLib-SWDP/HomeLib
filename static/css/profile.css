@@ -81,3 +81,100 @@ hr{
     margin-right: 4em;
     cursor: pointer;
 }
+.profile-main{
+    height: 92.5%;
+    width: 100%;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.profile-top{
+    height: 16em;
+    width: 80em;
+    background-color: #daa1db49;
+    margin-bottom: 1em;
+    border-radius: 15px;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 6px 6px rgba(0, 0, 0, 0.08);
+    
+
+}
+.profile-bottom{
+    height: 36em;
+    width: 80em;
+    border-radius: 15px;
+    background-color: #daa1db49;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 6px 6px rgba(0, 0, 0, 0.08);
+}
+.profile-img-change{
+    width: 10em;
+    border-radius: 100px;
+    background-size: contain;
+}
+.profile-img-div{
+    margin-left: 3em;
+    align-self: center;
+}
+.profile-top-content{
+    height: 14em;
+    width: 50em;
+    align-self: center;
+    margin-right: 4em;
+    margin-top: 3em;
+}
+.edit-profile-btn button{
+    margin-left: 7em;
+    margin: 1em .3em;
+    padding: .2em .8em;
+    font-size: 1em;
+    border: none;
+    background-color: rgba(195, 209, 241, 0.404);
+    color: rgb(95, 109, 155);
+    border-radius: 5px;
+    transition: .1s ease-in;
+    cursor: pointer;
+    margin-right: 2em;
+    align-self: flex-start;
+}
+.edit-profile-btn button:hover{
+    background-color: rgb(195, 209, 241);
+}
+.edit-profile-btn button:active{
+    background-color: rgba(195, 209, 241, 0.404);
+}
+.profile-name{
+    font-size: 3em;
+}
+.profile-username{
+    display: inline;
+    font-size: 1.2em;
+}
+.profile-date-joined{
+    display: inline;
+    font-size: 1.2em;
+}
+.profile-desc{
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+}
+.profile-from{
+    display: inline;
+    font-size: 1.2em;
+}
+.profile-book-count{
+    display: inline;
+    font-size: 1.2em;
+}
+.profile-shelves-count{
+    display: inline;
+    font-size: 1.2em;
+}
+.fa-location-crosshairs{
+    padding-right: 1.4em;
+}
