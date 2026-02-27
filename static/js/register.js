@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 const firebaseConfig = {
 
@@ -22,6 +23,7 @@ const firebaseConfig = {
 // intiialzing firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 const emailId = document.getElementById('email');
 const username = document.getElementById('username');
@@ -30,8 +32,8 @@ const registerForm = document.getElementById('registerForm');
 const confirmPassword = document.getElementById('confirmPassword');
 
 
-registerForm.addEventListener('submit', (regsterEvent) => {
-  regsterEvent.preventDefault();
+registerForm.addEventListener('submit', async (registerEvent) => {
+  registerEvent.preventDefault();
 
   //getting value and authentication
   const emailValue = emailId.value;
@@ -43,17 +45,24 @@ registerForm.addEventListener('submit', (regsterEvent) => {
     alert("Passwords do not match");
     return;
   }
-  
-  createUserWithEmailAndPassword(auth, emailValue, passwordValue, usernameValue)
-  .then((userCredential) => {
+  const userCredential = await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
   const user = userCredential.user; //get user info
+
+  try{
+    await setDoc(doc(db, "users", user.uid), {
+      userName: usernameValue,
+      email: emailValue,
+      password: passwordValue,
+      creationDate: new Date().toISOString()
+    });
+
+
   alert('Registering...please login');
-  window.location.href = 'index.html'; //redirect to login page
-  })
-  .catch((error) => {
+  window.location.href = '/'; //redirect to login page
+
+  } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
-    alert ('Error registering: ' + errorMessage);
-  });
- 
+    alert("Error: " + errorMessage);
+  }
 });

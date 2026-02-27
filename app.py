@@ -46,16 +46,42 @@ def sent_user_id():
     data = request.json
     user_id = data.get('user_id')
     session['user_id'] = user_id #storing user id in flask session
-    return jsonify({"message" : "User id stored in session"}) , 200
+    return jsonify({"message" : "User id stored"})
     
 
 @app.route('/user_id_get', methods=['GET'])
 def get_user_id():
     user_id = session.get('user_id')
-   
+    return jsonify({"user_id": user_id}), 200
+
 @app.route('/removesession')
 def remove_session():
     session.pop('user_id', None)
+
+@app.route('/user_info_post', methods=['POST'])
+def store_user_info():
+    data = request.json
+    userName = data.get('userName')
+    email = data.get('email')
+    password = data.get('password')
+    accountCreationDate = data.get('accountCreationDate')
+
+    session ['user_info'] = {
+        "email": email,
+        "password": password,
+        "userName": userName,
+        "accountCreationDate": accountCreationDate
+    }
+   # print (session['user_info'])
+    return jsonify(session['user_info'])
+
+
+@app.route('/user_info_get', methods = ['GET'])
+def retrive_user_info ():
+    user_info = session.get('user_info')
+    #print (user_info)
+    return jsonify(user_info)
+
     
 @app.route('/manualentry')
 def manualentry():
