@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf
+#from models.loans import createLoan
 
 books_bp = Blueprint('books', __name__)
 
@@ -71,6 +72,23 @@ def get_my_shelves():
     
     shelves = get_user_shelves(user_id)
     return jsonify({"success": True, "shelves": shelves})
+
+
+#@books_bp.route('/make-loan', methods = ['POST'])
+#def create_new_loan():
+   # data = request.get_json()
+   # borrowedate = data.get('borrowedDate')
+      #returningdate = data.get('returningDate')
+       #user_book_id = data.get('user_book_id')
+      # borrowerName = data.get('borrowerName')
+       #newLoan = createLoan(borrowedate, returningdate, user_book_id, borrowerName)
+
+    
+#@books_bp.route('/display_user_loans', methods = ['GET'])
+#def display_loans():
+  #  data = request.get_json()
+  #  userId = data.get('user_id')
+
 
 @books_bp.route('/shelves/<int:shelf_id>', methods=['PUT'])
 def edit_shelf(shelf_id):

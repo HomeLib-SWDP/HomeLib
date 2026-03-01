@@ -257,29 +257,36 @@ async function searchBooks(searchInput, suggestions)
 
         const data = await response.json();
 
-        bookSuggestions = data.docs;
+        bookSuggestions = data.docs.map(book => ({
+            book, score: scoreBook(book, query)
+        })).filter((item => item.score > 0))
+        .sort((a, b) => b.score - a.score)
+        .map(item => item.book);
+
         let books = [];
 
-        const booksWithCovers = data.docs.filter(book => book.cover_i != null);
 
-        if (booksWithCovers.length > 0) {
+        if(bookSuggestions.length > 0)
+        {
             regExplore.style.display = "none";
-            const booksToShow = booksWithCovers.slice(0, 30);
-    
+            // slices the array if there are more than 30 entries
+            if(bookSuggestions.length > 30)
+            {
+                books = bookSuggestions.slice(0, 30);
+            }
+            else
+            {
+                books = bookSuggestions;
+            }
+            console.log(books);
+            console.log(document.getElementById("search-sect"));
             const searchSection = document.getElementById("search-sect");
             searchSection.className = 'scroll-row';
 
-            renderBooks(booksToShow, searchSection);
+            renderBooks(books, searchSection);
         }
-        // books.forEach(book =>{
-            
-        //     const title = book.title;
-        //     const author = book.author_name;
-        //     const div = document.createElement("div")
-        //     div.textContent = title + " by: " + author;
 
-        //     suggestionsBox.appendChild(div)
-        // }) 
+        console.log(books)
         
         suggestionsBox.style.display = "block";
     }, 400));
@@ -308,6 +315,20 @@ document.addEventListener("DOMContentLoaded", function () {
     searchBooks("searchInput", "suggestions");
 });
 
+// Adds a scoring method to further sort by relevance (to the inputted query)
+function scoreBook(book, query)
+{
+    let score = 0;
+    const q = query.toLowerCase();
+
+    if (book.title?.toLowerCase().startsWith(q)) score += 5;
+    if (book.title?.toLowerCase().includes(q)) score += 3;
+    if (book.title?.toLowerCase() === q) score += 9;    // Exact matches should be scored highest
+    if (book.author_name?.some(a => a.toLowerCase().includes(q))) score += 8;
+    if (book.author_name?.some(a => a.toLowerCase() === q)) score += 10;    // exact authors should take priority
+
+    return score;
+}
 
 async function handleSaveBook(book){
     const savedBook = {
