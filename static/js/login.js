@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -24,6 +25,7 @@ const firebaseConfig = {
 // intiialzing firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 // getting required elements
 const emailId = document.getElementById('email');
@@ -41,30 +43,61 @@ const sendIdtoFlask = (userId) => {
 
 };
 
-loginForm.addEventListener('submit', (loginEvent) => {
+const storeUserInfo = (userName, email, password, accountCreationDate) => {
+   fetch('/user_info_post', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ userName, email, password, accountCreationDate }) 
+  })
+}
+
+loginForm.addEventListener('submit', async (loginEvent) => {
   loginEvent.preventDefault();
 
   //getting value and authentication
   const emailValue = emailId.value;
   const passwordValue = password.value;
 
-  signInWithEmailAndPassword(auth, emailValue, passwordValue)
-  .then((userCredential) => {
+  const userCredential = await signInWithEmailAndPassword(auth, emailValue, passwordValue);
   const user = userCredential.user; //get user info 
 
   const userId = user.uid; // gett user id from firebase
 
   sendIdtoFlask(userId); //function to send to flask middleware
-  
-  //console.log('User id:', userId); 
-  alert('Welcome!' + ' ' + emailValue);
+
+try {
+ 
+  const docRef = doc(db, "users", userId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    const userName = data.userName;
+    const email = data.email;
+    const password = data.password;
+    const creationDate = data.creationDate;
+
+    storeUserInfo(userName, email, password,  creationDate); //sending user profile info to flask sessions
+
+    //tests
+
+    /*console.log("Username", userName);
+    console.log("email", email);
+    console.log("password", password);
+    console.log("Account Creation Date", creationDate);*/
+  }
+  else {
+    console.log("Error retrieveing user data")
+  }
+
+  alert('Welcome' + ' ' +emailValue+ '!' );
   window.location.href = 'explore'; //redirect to explore page
-  })
-  .catch((error) => {
-    const errorCode = error.code;
+  }
+  catch(error) {
     const errorMessage = error.message;
     alert ('Error logging in: ' + errorMessage);
-  });
- 
+  }
 });
+
 
