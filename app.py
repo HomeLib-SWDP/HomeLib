@@ -66,21 +66,31 @@ def store_user_info():
     password = data.get('password')
     accountCreationDate = data.get('accountCreationDate')
 
-    session ['user_info'] = {
-        "email": email,
-        "password": password,
-        "userName": userName,
-        "accountCreationDate": accountCreationDate
-    }
-   # print (session['user_info'])
-    return jsonify(session['user_info'])
+    session ['email'] = email
+    session ['userName'] = userName
+    session ['password'] = password
+    session ['accountCreationDate'] = accountCreationDate
 
+    #print ("Email:" , session['email'])
+    #print ("Username:" , session['userName'])
+    
+    #print("password:" , session['password'])
+    #print ("Account Creation Date:" , session['accountCreationDate'])
+    return jsonify({"Message": "User info stored"}) 
 
 @app.route('/user_info_get', methods = ['GET'])
 def retrive_user_info ():
-    user_info = session.get('user_info')
-    #print (user_info)
-    return jsonify(user_info)
+    accountCreationDate = session.get('accountCreationDate')
+    email = session.get('email')
+    password = session.get('password')
+    userName = session.get('userName')
+    #print ("EMail:" , email)
+    #print ("Account creation date :", accountCreationDate)
+    #print ("Password:" , password)
+    #print ("Username:" , userName)
+    
+    return jsonify({"accountCreationDate": accountCreationDate, "email": email, "password": password, "userName": userName})
+   
 
     
 @app.route('/manualentry')

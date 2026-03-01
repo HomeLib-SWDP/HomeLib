@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves
-from models.loans import createLoan
+#from models.loans import createLoan
 
 books_bp = Blueprint('books', __name__)
 

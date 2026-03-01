@@ -43,7 +43,6 @@ const sendIdtoFlask = (userId) => {
 
 };
 
-
 const storeUserInfo = (userName, email, password, accountCreationDate) => {
    fetch('/user_info_post', {
     method: 'POST',
@@ -61,7 +60,6 @@ loginForm.addEventListener('submit', async (loginEvent) => {
   const emailValue = emailId.value;
   const passwordValue = password.value;
 
-try {
   const userCredential = await signInWithEmailAndPassword(auth, emailValue, passwordValue);
   const user = userCredential.user; //get user info 
 
@@ -69,6 +67,8 @@ try {
 
   sendIdtoFlask(userId); //function to send to flask middleware
 
+try {
+ 
   const docRef = doc(db, "users", userId);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
@@ -78,24 +78,23 @@ try {
     const password = data.password;
     const creationDate = data.creationDate;
 
+    storeUserInfo(userName, email, password,  creationDate); //sending user profile info to flask sessions
+
+    //tests
+
     /*console.log("Username", userName);
     console.log("email", email);
     console.log("password", password);
     console.log("Account Creation Date", creationDate);*/
-
-  storeUserInfo(userName, email, password,  creationDate); //sending user profile info to flask sessions
-
   }
   else {
-    console.log("data not present")
+    console.log("Error retrieveing user data")
   }
-  
-  //console.log('User id:', userId); 
-  alert('Welcome!' + ' ' + emailValue);
+
+  alert('Welcome' + ' ' +emailValue+ '!' );
   window.location.href = 'explore'; //redirect to explore page
   }
   catch(error) {
-    const errorCode = error.code;
     const errorMessage = error.message;
     alert ('Error logging in: ' + errorMessage);
   }

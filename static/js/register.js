@@ -35,7 +35,7 @@ const confirmPassword = document.getElementById('confirmPassword');
 registerForm.addEventListener('submit', async (registerEvent) => {
   registerEvent.preventDefault();
 
-  //getting value and authentication
+  //getting valuu
   const emailValue = emailId.value;
   const passwordValue = password.value;
   const confirmPasswordValue = confirmPassword.value;
@@ -48,21 +48,19 @@ registerForm.addEventListener('submit', async (registerEvent) => {
   const userCredential = await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
   const user = userCredential.user; //get user info
 
-  try{
-    await setDoc(doc(db, "users", user.uid), {
+  try {
+    await setDoc(doc(db,"users", user.uid), {
+      password: passwordValue,
       userName: usernameValue,
       email: emailValue,
-      password: passwordValue,
       creationDate: new Date().toISOString()
     });
-
-
-  alert('Registering...please login');
+  
+  alert('Redirecting to login page');
   window.location.href = '/'; //redirect to login page
-
-  } catch (error) {
-    const errorCode = error.code;
+  }
+  catch (error){
     const errorMessage = error.message;
-    alert("Error: " + errorMessage);
+    alert(errorMessage);
   }
 });
