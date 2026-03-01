@@ -17,6 +17,10 @@ def index():
 def login():
     return render_template('index.html') 
 
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
 @app.route('/explore')
 def explore():
     return render_template('explore.html')
@@ -29,9 +33,9 @@ def dashboard():
 def library():
     return render_template('library.html')
 
-@app.route('/lists')
-def lists():
-    return render_template('lists.html')
+@app.route('/stats')
+def stats():
+    return render_template('stats.html')
 
 @app.route('/loan')
 def loan():

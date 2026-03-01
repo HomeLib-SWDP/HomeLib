@@ -37,11 +37,18 @@ main{
 .list-items li{
     list-style-type: none; 
     padding-left: 2em;
+    transition: .1s ease-in;
+}
+.list-items li:hover{
+    transform: scale(1.1);
+}
+.list-items li:active{
+    transform: scale(1.0);
 }
 .list-items a{
     text-decoration: none;
     color: rgb(160, 160, 160);
-    font-size: .95em;
+    font-size: 1em;
 }
 
 .list-items i {
@@ -52,6 +59,11 @@ main{
 
 .list-items ul li{
     padding: 1.5em;
+}
+.title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .title .title-text{
     font-size: 2.2em;
@@ -103,4 +115,13 @@ hr{
 }
 .create-btn:active{
     background-color: rgba(195, 209, 241, 0.404);
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 4em;
+    cursor: pointer;
 }

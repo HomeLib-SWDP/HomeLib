@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explore | HOMELIB</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/explore.css') }}">
+    <title>Profile | HOMELIB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-
 </head>
 <body>
     <main>
@@ -29,56 +28,43 @@
                     <a class="loans-item" href="{{ url_for('loan') }}"><li><i class="fa-regular fa-clipboard"></i> Loans</li></a>
                 </ul>
             </div>
-
         </section>
+
         <section class="main-content">
             <div class="title">
-                <p class="title-text">Explore</p>
-                <a href="{{ url_for('profile') }}"><img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}"></a>
+                <p class="title-text">My Profile</p>
+                <img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
                 
             </div>
             <hr>
-            <div class="search-books">
-                <div class="search-books-container">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="searchInput" placeholder="Search books, authors, or lists...">
-                    <div id="suggestions" class="suggestions"></div>
-                    <button class="create-btn"><i class="fa-solid fa-plus"></i> Add New Book</button>
+            <div class="profile-main">
+                <div class="profile-top">
+                    <div class="profile-img-div">
+                        <img class="profile-img-change" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
+                    </div>
+                    <div class="profile-top-content">
+                        <p class="profile-name">John Doe</p>
+                        <p class="profile-username">@johnd</p> - <p class="profile-date-joined">Joined Mar 2026</p>
+                        <p class="profile-desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur pariatur libero est.</p>
+                        <i class="fa-solid fa-location-crosshairs"></i><p class="profile-from">Cleveland, USA</p> &middot; <p class="profile-book-count">14 Books</p> &middot; <p class="profile-shelves-count">4 Shelves</p>
+                    </div>
+                    <div class="edit-profile-btn">
+                        <button>Edit Profile</button>
+                    </div>
                 </div>
-                
-                <hr>
-            </div>
+                <div class="profile-bottom">
 
-
-            <h1>Explore Books</h1>
-            
-            <div id="search-container">
-                <div class="explore-section">
-                    <div id="search-sect" class="book-grid"></div>
-                </div>
-            </div>
-            <div id="regular-explore">
-                <div class="explore-section">
-                    <h2>Popular Since 2020</h2>
-                    <div id="popular-books" class="book-grid"></div>
-                </div>
-        
-                <div class="explore-section">
-                    <h2>New Releases</h2>
-                    <div id="new-books" class="book-grid"></div>
-                </div>
-        
-                <div class="explore-section">
-                    <h2>Fantasy</h2>
-                    <div id="fantasy-books" class="book-grid"></div>
                 </div>
             </div>
             
         
+
+
+
+
         </section>
-        
     </main>
 
-    <script src="{{ url_for('static', filename='js/explore.js') }}?v=2"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

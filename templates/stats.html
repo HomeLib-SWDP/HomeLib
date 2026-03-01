@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lists | HOMELIB</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/lists.css') }}">
+    <title>Stats | HOMELIB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stats.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,10 +21,11 @@
 
             <div class="list-items">
                 <ul>
+                    <a class="explore-item" href="{{ url_for('profile') }}"><li> <i class="fa-regular fa-circle-user"></i> Profile</li></a>
                     <a class="explore-item" href="{{ url_for('explore') }}"><li> <i class="fa-solid fa-magnifying-glass"></i> Explore</li></a>
                     <a class="dashboard-item" href="{{ url_for('dashboard') }}"><li> <i class="fa-solid fa-gauge"></i> Dashboard</li></a>
                     <a class="library-item" href="{{ url_for('library') }}"><li> <i class="fa-solid fa-book"></i> Library</li></a>
-                    <a class="lists-item" href="{{ url_for('lists') }}"><li><i class="fa-solid fa-list"></i> Lists</li></a>
+                    <a class="lists-item" href="{{ url_for('stats') }}"><li><i class="fa-solid fa-list"></i> Stats</li></a>
                     <a class="loans-item" href="{{ url_for('loan') }}"><li><i class="fa-regular fa-clipboard"></i> Loans</li></a>
                 </ul>
             </div>
@@ -33,18 +34,12 @@
         
         <section class="main-content">
             <div class="title">
-                <p class="title-text">My Lists</p>
-                <hr>
-            </div>
-            <div class="search-books">
-                <div class="search-books-container">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input placeholder="Search books..."> 
-                    <button class="create-btn"><i class="fa-solid fa-plus"></i> Create New List</button>
-                </div>
+                <p class="title-text">My Stats</p>
+                <a href="{{ url_for('profile') }}"><img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}"></a>
                 
-                <hr>
             </div>
+            <hr>
+            
 
 
 
@@ -53,7 +48,7 @@
         </section>
     </main>
 
-    <script src="{{ url_for('static', filename='js/lists.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/stats.js') }}"></script>
 </body>
 </html>
 
