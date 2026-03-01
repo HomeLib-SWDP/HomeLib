@@ -283,7 +283,7 @@ async function searchBooks(searchInput, suggestions)
             const searchSection = document.getElementById("search-sect");
             searchSection.className = 'scroll-row';
 
-            renderBooks(booksToShow, searchSection);
+            renderBooks(books, searchSection);
         }
 
         console.log(books)
