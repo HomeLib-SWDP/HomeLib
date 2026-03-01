@@ -159,7 +159,7 @@ function renderBooks(booksArray, container) {
         btn.addEventListener('click', ( )=> {
             handleSaveBook(book);
         })
-
+        
         //console.table(book);
 
         container.appendChild(div);
@@ -321,19 +321,16 @@ async function handleSaveBook(book){
     //console.table(savedBook);
     console.log("saving book: ", savedBook);
 
-    try{
-        const response = await fetch('/api/books/add_manual_book', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(savedBook)
-        })
-         if(response.ok){
-            alert(`Book Saved: "${book.title}"`)
-        } else{
-            alert(`book not saved`)
-        }
-    } catch(err){
-        alert('save failed.')
+    try {
+    const response = await fetch('/api/books/add_manual_book', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(savedBook)
+    });
+        const data = await response.json();
+        alert(data.message);
+    } catch (err) {
+        alert('Save failed.');
     }
 
 };

@@ -6,7 +6,7 @@ import dotenv
 dotenv.load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY")  
+app.secret_key = os.environ.get("SECRET_KEY")
 app.register_blueprint(books_bp, url_prefix = '/api/books')
 
 @app.route('/')
@@ -47,10 +47,13 @@ def register():
 
 @app.route('/user_id_post', methods=['POST'])
 def sent_user_id():
-    data = request.json
+    data = request.get_json()
     user_id = data.get('user_id')
-    session['user_id'] = user_id #storing user id in flask session
-    return jsonify({"message" : "User id stored in session"}) , 200
+    
+    if user_id:
+        session['user_id'] = user_id
+        return jsonify({"success": True}), 200
+    return jsonify({"success": False, "message": "No user_id"}), 400
     
 
 @app.route('/user_id_get', methods=['GET'])
