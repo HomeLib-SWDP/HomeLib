@@ -1,6 +1,22 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
+const fetchInfo = "/user_info_get";
 
+async function displayProfileInfo() {
+    try{
+        //getting user details from flask
+        const response = await fetch(fetchInfo);
+        if (!response.ok) throw new Error("Network Error");
+        const data = await response.json();
+    
+        // displaying info
+        document.querySelector(".profile-name").textContent = data.userName;
+        document.querySelector(".profile-username").textContent= data.userName;
+        document.querySelector(".profile-date-joined").textContent=data.accountCreationDate;
+    } 
+    catch (error) {
+        const errorMes = error.message;
+        console.log(errorMes);
+    }
+}
 
-//userData = retrieveUserInfo();
+displayProfileInfo();
