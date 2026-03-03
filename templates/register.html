@@ -16,12 +16,15 @@
 
             <div class="right-side">
                 <div class="login-container">
-                    <img class="logo" src="{{ url_for('static', filename='images/logo.png') }}" title="Graphic by Md Rubel Miah from Vecteezy.com">
                     <h1>Register</h1>
                     <form id="registerForm">
 
                     
                     <form action="{{ url_for('register') }}" method="POST">
+                        <div class="names">
+                            <input type="name" id="name" name="name" required placeholder="First Name">
+                            <input type="name" id="name" name="name" required placeholder="Last Name">
+                        </div>
                         <div>
                             <input type="email" id="email" name="email" required placeholder="Email Address">
                         </div>

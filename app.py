@@ -25,9 +25,6 @@ def profile():
 def explore():
     return render_template('explore.html')
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
 
 @app.route('/library')
 def library():
