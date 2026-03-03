@@ -263,6 +263,8 @@ async function searchBooks(searchInput, suggestions)
         .sort((a, b) => b.score - a.score)
         .map(item => item.book);
 
+        bookSuggestions = bookSuggestions.filter(book => book.cover_i != null)
+
         let books = [];
 
 
