@@ -53,7 +53,7 @@ registerForm.addEventListener('submit', async (registerEvent) => {
       password: passwordValue,
       userName: usernameValue,
       email: emailValue,
-      creationDate: new Date().toISOString()
+      creationDate: new Date().toLocaleDateString()
     });
   
   alert('Redirecting to login page');
