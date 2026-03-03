@@ -48,17 +48,15 @@ main{
     position: relative;
 
 }
-.logo{
-    width: 14em;
-}
 .login-container{
     height: 20em;
     width: 21em;
     text-align: center;
 }
+
 .login-container h1{
     text-align: center;
-    margin-top: 0.5em;
+    margin-top: 1.8em;
     font-size: 2em;
 }
 #email{
@@ -71,6 +69,15 @@ main{
     background: none;
 }
 #username{
+    width: 25em;
+    height: 2em;
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+    margin-top: 2em;
+    background: none;
+}
+#name{
     width: 25em;
     height: 2em;
     border: none;
