@@ -191,7 +191,6 @@ hr{
 
 
 .book-card {
-    
     flex: 0 0 auto; 
     width: 150px; 
     scroll-snap-align: start;
@@ -200,28 +199,44 @@ hr{
     gap: 5px;
     cursor: pointer;
     transition: transform 0.2s ease;
+    position: relative;
 }
 
+.book-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;          
+    height: 100%;         
+    pointer-events: none;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.25) 40%,
+        rgba(255,255,255,0) 70%
+    );
+    border-radius: 8px;
+    z-index: 2;
+    opacity: 0;            
+    transition: opacity 0.25s ease;
+}
+.book-card:hover::after {
+    opacity: 1;
+}
 .book-cover {
     width: 150px;      
-    height: 225px;      
+    height: 100%;     
     object-fit: cover;  
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+    display: block;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s ease;
 }
 
-.book-card:hover {
-    transform: translateY(-5px);
-}
-
-
-.book-cover {
-    width: 100%;
-    aspect-ratio: 2 / 3; 
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
 .profile-img {
     width: 40px;
     height: 40px;
@@ -231,7 +246,11 @@ hr{
     cursor: pointer;
     transform: translateY(-5px); /
 }
-
+h2{
+    padding-bottom: .8em;
+    font-family: "SN Pro", sans-serif;
+    font-weight: 500;
+}
 
 .search-books-container{
     padding: 1.4em;
@@ -249,7 +268,7 @@ hr{
     padding-left: 2.4em;
     color: rgb(160, 160, 160);
 }
-.search-books-container i{
+.search-books-container .fa-magnifying-glass{
     position: absolute;
     z-index: 2;
     left: 74px;
@@ -301,4 +320,20 @@ hr{
 
 .suggestions div:hover {
     background-color: #f0f0f0;
+}
+.add-btn{
+    padding: .4em 1em;
+    font-size: 1.1em;
+    border: none;
+    background-color: rgba(195, 209, 241, 0.404);
+    color: rgb(95, 109, 155);
+    border-radius: 5px;
+    transition: .1s ease-in;
+    cursor: pointer;
+}
+.add-btn:hover{
+    background-color: rgb(195, 209, 241);
+}
+.add-btn:active{
+    background-color: rgba(195, 209, 241, 0.404);
 }
