@@ -53,3 +53,40 @@
     margin-top:1em;
     text-align:center;
 }
+
+.manual-entry-container{
+    display:flex;
+    justify-content:center;
+    margin-top:40px;
+}
+
+#manualBookForm{
+    display:flex;
+    flex-direction:column;
+    width:400px;
+    gap:12px;
+    padding:30px;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+#manualBookForm input{
+    padding:8px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+#manualBookForm button{
+    margin-top:10px;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background-color:#c3d1f1;
+    cursor:pointer;
+    font-weight:600;
+}
+
+#manualBookForm button:hover{
+    background-color:#aab9e6;
+}

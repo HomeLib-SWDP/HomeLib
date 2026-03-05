@@ -5,38 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual Book Entry | HomeLib</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/library.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/library.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/manualentry.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manualentry.css') }}">
 </head>
 <body>
 
-<h1>Add a Book Manually</h1>
+<main>
 
-<form id="manualBookForm" action="{{ url_for('books.add_manual_book') }}">
-    <label>Title</label>
-    <input type="text" name="title" required>
+<div class="main-content">
 
-    <label>Author</label>
-    <input type="text" name="author" required>
+<div class="title">
+<div class="title-text">Add a Book Manually</div>
+</div>
 
-    <label>ISBN</label>
-    <input type="text" name="isbn">
+<hr>
 
-    <label>Cover ID (optional)</label>
-    <input type="text" name="cover_id">
+<div class="manual-entry-container">
 
-        <label>Publish Year (optional)</label>
-    <input type="text" name="publish_date">
+<form id="manualBookForm" action="{{ url_for('manualentry') }}">
 
-    <input type="hidden" id="username" name="username">
-    <input type="hidden" name="book_id">
+<label>Title</label>
+<input type="text" name="title" required>
 
-    <button type="submit">Add Book</button>
+<label>Author</label>
+<input type="text" name="author" required>
+
+<label>ISBN</label>
+<input type="text" name="isbn">
+
+<label>Cover ID (optional)</label>
+<input type="text" name="cover_id">
+
+<label>Publish Year (optional)</label>
+<input type="text" name="publish_date">
+
+<input type="hidden" id="username" name="username">
+<input type="hidden" name="book_id">
+
+<button type="submit">Add Book</button>
+
 </form>
 
 <p id="message"></p>
 
-<script type="module" src="{{ url_for('static', filename='js/books.js') }}"></script>
+</div>
+
+</div>
+
+</main>
 
 </body>
 </html>

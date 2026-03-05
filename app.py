@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify
-from routes import books_bp
+#from routes import books_bp
 import os
 import dotenv
 
@@ -7,7 +7,7 @@ dotenv.load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
-app.register_blueprint(books_bp, url_prefix = '/api/books')
+#app.register_blueprint(books_bp, url_prefix = '/api/books')
 
 @app.route('/')
 def index():
