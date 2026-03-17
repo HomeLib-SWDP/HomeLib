@@ -4,6 +4,7 @@ let currentLang = '';
 let currentSubject = '';
 let currentYearMin = '';
 let currentYearMax = '';
+const card = document.getElementById("details");
 
 function renderBooks(booksArray, container) {
     booksArray.forEach(book => {
@@ -23,7 +24,9 @@ function renderBooks(booksArray, container) {
 
         const coverImg = div.querySelector( '.book-cover');
 
-        coverImg.addEventListener('click', ( ) => {
+        // Displays an overlay card when clicking the book cover
+        coverImg.addEventListener('click', (e) => {
+            e.stopPropagation();
             DisplayBookInfo(book);
         })
         
@@ -36,9 +39,6 @@ function renderBooks(booksArray, container) {
         //console.table(book);
 
         container.appendChild(div);
-
-
-
     });
 }
 
@@ -242,10 +242,46 @@ async function DisplayBookInfo(book)
 
     console.log(data);
 
-    // Description can either be: a string: 'description': 'blah blah blah'
-    // Or an Object: 'description': {'type': 'text', 'value': 'blah blah blah'}
-    // Or just not exist at all
-    // fun
-
     const description = data.description;
+    var summary = "";
+
+    if(description) // First check if there is a description
+    {
+        summary = typeof description == 'object' ? description.value : description;
+    }
+    else
+    {
+        summary = "No summary";
+    }
+    var subjects = data.subjects;
+    const overlay = document.getElementById("details");
+    overlay.innerHTML = `
+    <div style="display: flex">
+        <h2 style="padding-top: 1em">${book.title}</h2>
+        <button id=closeBtn class="close-btn">&times;</button>
+    </div>
+    <p>${summary}</p>
+    <div id="subjects"></div>`;
+    overlay.classList.toggle("hidden");
+    const subjectDiv = document.getElementById("subjects");
+    subjectDiv.textContent = "";
+
+    subjects.forEach(subj =>{
+        subjectDiv.textContent += subj + "\n";
+    })
+
+    const closeBtn = document.getElementById("closeBtn");
+    closeBtn.addEventListener("click", (e) =>{
+        e.stopPropagation();
+        card.classList.toggle("hidden");
+    })
 }
+
+card.addEventListener("click", (e) => {
+    e.stopPropagation();
+})
+
+document.addEventListener("click", () =>
+{
+    card.classList.add("hidden");
+})
