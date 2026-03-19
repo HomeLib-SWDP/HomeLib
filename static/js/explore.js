@@ -233,6 +233,7 @@ async function handleSaveBook(book){
 
 async function DisplayBookInfo(book)
 {
+    // Use cover_edition_key instead
     const url = `https://openlibrary.org${book.key}.json`
 
     const response = await fetch(url);
@@ -240,8 +241,9 @@ async function DisplayBookInfo(book)
 
     const data = await response.json();
 
+    console.log(book);
     console.log(data);
-
+    
     const description = data.description;
     var summary = "";
 
@@ -254,21 +256,24 @@ async function DisplayBookInfo(book)
         summary = "No summary";
     }
     var subjects = data.subjects;
+    subjects = subjects.filter(subject => {
+        return !subject.match(/[-:=]/);
+    });
     const overlay = document.getElementById("details");
     overlay.innerHTML = `
     <div style="display: flex">
         <h2 style="padding-top: 1em">${book.title}</h2>
         <button id=closeBtn class="close-btn">&times;</button>
     </div>
-    <p>${summary}</p>
-    <div id="subjects"></div>`;
+    <div style="display: flex">
+        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
+        <div style="padding-left: 1rem">
+            <h4>By: ${book.author_name[0]}</h4>
+            <h4>Published: ${book.first_publish_year}</h4>
+        </div>
+    </div>
+    <p style="padding-top: 1rem">${summary}</p>`;
     overlay.classList.toggle("hidden");
-    const subjectDiv = document.getElementById("subjects");
-    subjectDiv.textContent = "";
-
-    subjects.forEach(subj =>{
-        subjectDiv.textContent += subj + "\n";
-    })
 
     const closeBtn = document.getElementById("closeBtn");
     closeBtn.addEventListener("click", (e) =>{
