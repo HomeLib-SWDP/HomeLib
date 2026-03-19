@@ -56,6 +56,7 @@ async function loadSection(apiUrl, containerId) {
         if (!response.ok) throw new Error("Network Error");
         
         const data = await response.json();
+        console.log(data);
         container.innerHTML = ''; 
         
         if (data.docs && data.docs.length > 0) {
@@ -84,14 +85,14 @@ async function loadSection(apiUrl, containerId) {
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    const popularUrl = `https://openlibrary.org/search.json?q=first_publish_year:2020+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
+    const popularUrl = `https://openlibrary.org/search.json?q=first_publish_year:2020+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year,cover_edition_key`;
     loadSection(popularUrl, 'popular-books');
 
 
-    const newReleasesUrl = `https://openlibrary.org/search.json?q=first_publish_year:[2025 TO 2026]+subject:fiction&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
+    const newReleasesUrl = `https://openlibrary.org/search.json?q=first_publish_year:[2025 TO 2026]+subject:fiction&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year,cover_edition_key`;
     loadSection(newReleasesUrl, 'new-books');
 
-    const fantasyUrl = `https://openlibrary.org/search.json?q=subject:fantasy+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
+    const fantasyUrl = `https://openlibrary.org/search.json?q=subject:fantasy+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year,cover_edition_key`;
     loadSection(fantasyUrl, 'fantasy-books');
 
 });
@@ -233,16 +234,13 @@ async function handleSaveBook(book){
 
 async function DisplayBookInfo(book)
 {
-    // Use cover_edition_key instead
+    // API call to get the description and other info
     const url = `https://openlibrary.org${book.key}.json`
 
     const response = await fetch(url);
     if (!response.ok) throw new Error("Network error: " + response.status);
 
     const data = await response.json();
-
-    console.log(book);
-    console.log(data);
     
     const description = data.description;
     var summary = "";
@@ -253,8 +251,29 @@ async function DisplayBookInfo(book)
     }
     else
     {
-        summary = "No summary";
+        summary = "No summary found";
     }
+
+    // Now we try to get the other information from the cover_edition_key
+
+    var isbn_10 = 'undefined'
+    var isbn_13 = 'undefined';
+
+    if(book.cover_edition_key)
+    {
+        const url2 = `https://openlibrary.org/books/${book.cover_edition_key}.json`;
+        const response2 = await fetch(url2);
+        const data2 = await response2.json();
+
+        console.log(data2);
+
+        isbn_10 = data2.isbn_10 ? data2.isbn_10[0] : 'undefined';
+        isbn_13 = data2.isbn_13 ? data2.isbn_13[0] : 'undefined';
+    }
+
+    console.log(isbn_10);
+    console.log(isbn_13);
+
     var subjects = data.subjects;
     subjects = subjects.filter(subject => {
         return !subject.match(/[-:=]/);
@@ -268,8 +287,10 @@ async function DisplayBookInfo(book)
     <div style="display: flex">
         <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
         <div style="padding-left: 1rem">
-            <h4>By: ${book.author_name[0]}</h4>
+            <h4>Author: ${book.author_name ? book.author_name[0] : "Unknown Author"}</h4>
             <h4>Published: ${book.first_publish_year}</h4>
+            <h4>ISBN_10: ${isbn_10}</h4>
+            <h4>ISBN_13: ${isbn_13}</h4>
         </div>
     </div>
     <p style="padding-top: 1rem">${summary}</p>`;
@@ -278,7 +299,7 @@ async function DisplayBookInfo(book)
     const closeBtn = document.getElementById("closeBtn");
     closeBtn.addEventListener("click", (e) =>{
         e.stopPropagation();
-        card.classList.toggle("hidden");
+        overlay.classList.add("hidden");
     })
 }
 
