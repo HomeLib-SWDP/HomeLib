@@ -137,3 +137,20 @@ async function loadSection(apiUrl, containerId) {
         container.innerHTML = `<p style="color:red; padding: 2em;">Error loading books.</p>`;
     }
 }
+
+
+
+const addShelfBtn = document.getElementById("addShelfBtn");
+const shelvesContainer = document.getElementById("shelves-container");
+
+addShelfBtn.addEventListener("click", () => {
+  const shelfName = prompt("Enter new shelf name:");
+
+  if (shelfName && shelfName.trim() !== "") {
+    const newShelf = document.createElement("button");
+
+    newShelf.innerHTML = `<span class="shelf">0</span> ${shelfName}`;
+
+    shelvesContainer.insertBefore(newShelf, addShelfBtn);
+  }
+});
