@@ -6,10 +6,10 @@ let currentYearMin = '';
 let currentYearMax = '';
 const card = document.getElementById("details");
 
-function renderBooks(booksArray, container) {
+async function renderBooks(booksArray, container) {    
     booksArray.forEach(book => {
         const div = document.createElement('div');
-        div.className = 'book-card'; 
+        div.className = 'book-card';
         
         div.innerHTML = `
             <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
@@ -47,7 +47,6 @@ async function loadSection(apiUrl, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return; 
 
-    
     container.className = 'scroll-row';
     container.innerHTML = '<p>Loading books...</p>'; 
 
@@ -55,9 +54,9 @@ async function loadSection(apiUrl, containerId) {
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error("Network Error");
         
-        const data = await response.json();
+        var data = await response.json();
         console.log(data);
-        container.innerHTML = ''; 
+        container.innerHTML = '';
         
         if (data.docs && data.docs.length > 0) {
             
@@ -241,6 +240,7 @@ async function DisplayBookInfo(book)
     if (!response.ok) throw new Error("Network error: " + response.status);
 
     const data = await response.json();
+    console.log(data);
     
     const description = data.description;
     var summary = "";
@@ -263,6 +263,7 @@ async function DisplayBookInfo(book)
     {
         const url2 = `https://openlibrary.org/books/${book.cover_edition_key}.json`;
         const response2 = await fetch(url2);
+        if (!response2.ok) throw new Error("Network error: " + response.status);
         const data2 = await response2.json();
 
         console.log(data2);
@@ -271,8 +272,18 @@ async function DisplayBookInfo(book)
         isbn_13 = data2.isbn_13 ? data2.isbn_13[0] : 'undefined';
     }
 
-    console.log(isbn_10);
-    console.log(isbn_13);
+    var rating = 'No rating found';
+    const url3 = `https://openlibrary.org${book.key}/ratings.json`;
+    console.log(url3);
+    const response3 = await fetch(url3);
+
+    if (!response3.ok) throw new Error("Network error: " + response.status);
+    
+    const data3 = await response3.json();
+
+    console.log(data3);
+
+    rating = data3.summary.average ? data3.summary.average : 'No rating found';
 
     var subjects = data.subjects;
     subjects = subjects.filter(subject => {
@@ -291,6 +302,7 @@ async function DisplayBookInfo(book)
             <h4>Published: ${book.first_publish_year}</h4>
             <h4>ISBN_10: ${isbn_10}</h4>
             <h4>ISBN_13: ${isbn_13}</h4>
+            <h4>Rating: ${rating}</h4>
         </div>
     </div>
     <p style="padding-top: 1rem">${summary}</p>`;
