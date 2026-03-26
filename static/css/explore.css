@@ -366,3 +366,30 @@ h2{
   font-size: 30px;
   cursor: pointer;
 }
+
+/* Stars */
+
+.stars-outer {
+  display: inline-block;
+  position: relative;
+  font-family: Arial;
+}
+
+.stars-outer::before {
+  content: "★★★★★";
+  color: #ccc; /* empty stars */
+}
+
+.stars-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+}
+
+.stars-inner::before {
+  content: "★★★★★";
+  color: gold; /* filled stars */
+}

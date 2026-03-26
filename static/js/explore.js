@@ -7,39 +7,72 @@ let currentYearMax = '';
 const card = document.getElementById("details");
 
 async function renderBooks(booksArray, container) {    
-    booksArray.forEach(book => {
+    for (let book of booksArray) {
+
         const div = document.createElement('div');
         div.className = 'book-card';
-        
+
+        const percentage = 0; // start at 0
+
+        // Create each card
         div.innerHTML = `
             <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
             <div class="book-info" style="font-size: 0.9rem; padding-top: 5px;">
-                <strong style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${book.title}">${book.title || 'No title'}</strong>
-                <span style="color: #555;">${book.author_name ? book.author_name[0] : 'Unknown'}</span>
-                <button type="button" class ="add-btn" style="margin-top: 8px; width: fit-content;">
+                <strong style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${book.title}">
+                    ${book.title || 'No title'}
+                </strong>
+                <span style="color: #555;">
+                    ${book.author_name ? book.author_name[0] : 'Unknown'}
+                </span>
+
+                <div class="star-rating">
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+
+                <button type="button" class="add-btn" style="margin-top: 8px; width: fit-content;">
                     Add to library
                 </button>
             </div>
         `;
 
-        const coverImg = div.querySelector( '.book-cover');
-
-        // Displays an overlay card when clicking the book cover
+        // Event listeners
+        const coverImg = div.querySelector('.book-cover');
         coverImg.addEventListener('click', (e) => {
             e.stopPropagation();
             DisplayBookInfo(book);
-        })
-        
-        const btn = div.querySelector( '.add-btn');
-        
-        btn.addEventListener('click', ( )=> {
-            handleSaveBook(book);
-        })
-        
-        //console.table(book);
+        });
 
+        const btn = div.querySelector('.add-btn');
+        btn.addEventListener('click', () => {
+            handleSaveBook(book);
+        });
+
+        // Append div
         container.appendChild(div);
-    });
+
+        // Fetch rating AFTER rendering
+        fetch(`https://openlibrary.org${book.key}/ratings.json`)
+            .then(res => { // Checks response
+                if (!res.ok) return null;
+                return res.json();
+            }) // If we are okay, then we get the percentage
+            .then(data => {
+                if (!data) return;
+
+                const rating = data.summary?.average || 0;
+                const percent = (rating / 5) * 100;
+
+                const starsInner = div.querySelector('.stars-inner');
+                if (starsInner) {
+                    starsInner.style.width = percent + "%"; // Then we set the inner star width
+                }
+            })
+            .catch(err => {
+                console.log("Rating fetch failed:", err);
+            });
+    }
 }
 
 
@@ -55,7 +88,6 @@ async function loadSection(apiUrl, containerId) {
         if (!response.ok) throw new Error("Network Error");
         
         var data = await response.json();
-        console.log(data);
         container.innerHTML = '';
         
         if (data.docs && data.docs.length > 0) {
@@ -65,7 +97,7 @@ async function loadSection(apiUrl, containerId) {
             
             //grab 10 books from the list that filtered out ones missing covers
             const finalTenBooks = booksWithCovers.slice(0, 10);
-            
+
             if(finalTenBooks.length > 0) {
                 renderBooks(finalTenBooks, container); 
             } else {
@@ -153,15 +185,11 @@ async function searchBooks(searchInput, suggestions)
             {
                 books = bookSuggestions;
             }
-            console.log(books);
-            console.log(document.getElementById("search-sect"));
             const searchSection = document.getElementById("search-sect");
             searchSection.className = 'scroll-row';
 
             renderBooks(books, searchSection);
         }
-
-        console.log(books)
         
         suggestionsBox.style.display = "block";
     }, 400));
@@ -240,7 +268,6 @@ async function DisplayBookInfo(book)
     if (!response.ok) throw new Error("Network error: " + response.status);
 
     const data = await response.json();
-    console.log(data);
     
     const description = data.description;
     var summary = "";
@@ -266,29 +293,22 @@ async function DisplayBookInfo(book)
         if (!response2.ok) throw new Error("Network error: " + response.status);
         const data2 = await response2.json();
 
-        console.log(data2);
-
         isbn_10 = data2.isbn_10 ? data2.isbn_10[0] : 'undefined';
         isbn_13 = data2.isbn_13 ? data2.isbn_13[0] : 'undefined';
     }
 
     var rating = 'No rating found';
     const url3 = `https://openlibrary.org${book.key}/ratings.json`;
-    console.log(url3);
     const response3 = await fetch(url3);
 
     if (!response3.ok) throw new Error("Network error: " + response.status);
     
     const data3 = await response3.json();
 
-    console.log(data3);
+    rating = data3.summary.average ? data3.summary.average : 0;
 
-    rating = data3.summary.average ? data3.summary.average : 'No rating found';
+    var percentage = (rating / 5) * 100;
 
-    var subjects = data.subjects;
-    subjects = subjects.filter(subject => {
-        return !subject.match(/[-:=]/);
-    });
     const overlay = document.getElementById("details");
     overlay.innerHTML = `
     <div style="display: flex">
@@ -302,7 +322,14 @@ async function DisplayBookInfo(book)
             <h4>Published: ${book.first_publish_year}</h4>
             <h4>ISBN_10: ${isbn_10}</h4>
             <h4>ISBN_13: ${isbn_13}</h4>
-            <h4>Rating: ${rating}</h4>
+            <div style="display: flex">
+                <h4>Rating: </h4>
+                <div class="star-rating">
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width: ${percentage}%;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <p style="padding-top: 1rem">${summary}</p>`;
