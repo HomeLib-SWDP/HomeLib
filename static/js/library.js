@@ -16,7 +16,7 @@ async function loadLibrary(shelfId = null) {
         allBooks = await response.json();
 
         if (allBooks.length > 0) {
-            renderBook(allBooks, container);
+            filterAndSortBooks();
         } else {
             container.innerHTML = '<p style="padding: 2em;">No books in this shelf yet.</p>';
         }
@@ -62,11 +62,36 @@ function filterAndSortBooks() {
         return title.includes(searchTerm) || author.includes(searchTerm);
     });
 
+    function getYear(book) {
+        let raw = book.publishdate || 0;
+        if (typeof raw === 'string') {
+            const match = raw.match(/\d{4}/);
+            if (match) raw = match[0];
+        }
+        return parseInt(raw, 10) || 0;
+    }
+
     filtered.sort((a,b) => {
-        if (sortBy === "old") return (a.year || 0) - (b.year || 0);
-        if (sortBy === "new") return (b.year || 0) - (a.year || 0);
-        if (sortBy === "subject") return (a.subject || "").localeCompare(b.subject || "");
-        return a.title.localeCompare(b.title);
+        switch (sortBy) {
+            case 'title_asc':
+                return (a.title || '').localeCompare(b.title || '');
+            case 'title_dec':
+                return (b.title || '').localeCompare(a.title || '');
+            case 'author_asc':
+                return (a.author || '').localeCompare(b.author || '');
+            case 'author_dec':
+                return (b.author || '').localeCompare(a.author || '');
+            case 'year_asc':
+                const yearA_asc = getYear(a);
+                const yearB_asc = getYear(b);
+                return yearB_asc - yearA_asc;
+            case 'year_dec':
+                const yearA_dec = getYear(a);
+                const yearB_dec = getYear(b);
+                return yearA_dec - yearB_dec;
+            default:
+                return (a.title || '').localeCompare(b.title || '');
+        }
     });
 
     renderBook(filtered, container);
