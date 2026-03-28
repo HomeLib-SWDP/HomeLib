@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf
-#from models.loans import createLoan
+from models.loans import createLoan, expireLoansBatch, editReturn
 
 books_bp = Blueprint('books', __name__)
 
@@ -53,8 +53,6 @@ def create_new_shelf():
         return jsonify({"success": True, "shelf_id": shelf_id, "message": "Shelf created successfully"}), 201
     return jsonify({"success": False, "message": "Failed to create shelf"}), 500
 
-
-
 @books_bp.route('/shelves/add-book', methods=['POST'])
 def add_to_shelf():
     data = request.get_json()
@@ -72,23 +70,6 @@ def get_my_shelves():
     
     shelves = get_user_shelves(user_id)
     return jsonify({"success": True, "shelves": shelves})
-
-
-#@books_bp.route('/make-loan', methods = ['POST'])
-#def create_new_loan():
-   # data = request.get_json()
-   # borrowedate = data.get('borrowedDate')
-      #returningdate = data.get('returningDate')
-       #user_book_id = data.get('user_book_id')
-      # borrowerName = data.get('borrowerName')
-       #newLoan = createLoan(borrowedate, returningdate, user_book_id, borrowerName)
-
-    
-#@books_bp.route('/display_user_loans', methods = ['GET'])
-#def display_loans():
-  #  data = request.get_json()
-  #  userId = data.get('user_id')
-
 
 @books_bp.route('/shelves/<int:shelf_id>', methods=['PUT'])
 def edit_shelf(shelf_id):
@@ -109,4 +90,16 @@ def remove_from_shelf():
     if remove_book_from_shelf(data['user_book_id'], data['shelf_id']):
         return jsonify({"success": True, "message": "Book removed from shelf"})
     return jsonify({"success": False, "message": "Failed to remove the book"}), 400
+'''
+@books_bp.route('/loan/createLoan', methods = ['POST'])
+def make_loan():
+    userId = session.get('user_id')
+    data = request.get_json()
 
+
+@books_bp.route('/loan/displayLoan' , methods = ['GET'])
+def display_loan():
+    userId = session.get('user_id')
+    data = request.get_json()
+
+'''

@@ -1,67 +1,136 @@
-'''
 from utils.sqldb import connect_to_sql, disconnect_from_sql   
+from flask import session
 from models import books
 
 # loan class to store info
 class Loan:
 
-    def __init__(self, borrowerName, borrowedDate= None, returningDate = None, loanId = None,):
-        self.borrowedDate = borrowedDate
+    def __init__(self, borrowedDate= None, returningDate = None, loanId = None, borrowerName = None, bookName = None , edition = None, userId = None):
+        self.borrowedDate= borrowedDate
         self.returningDate = returningDate
+        self. loanId =loanId
         self.borrowerName = borrowerName
-        self.loanId = loanId
+        self.bookName = bookName
+        self.userId = userId
 
-# function to create loan
-def createLoan(borrowedDate, returningDate, user_book_id, borrowerName):
+def bookSearch(bookName, userId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
-    if borrowedDate > returningDate: #making sure that the borrowed date is not after the returning date
-        print("Borrowed date cannot be after returning date")
-        return None
+    #userId = session["user_id"]  will add after testing
+
     try:
         query = """
-            INSERT INTO `loans_test` (borrowerName, borrowedDate, returningDate, user_book_id) VALUES(%s,%s,%s,%s)
+        SELECT lib_id FROM `user_books` WHERE booktitle = %s AND user_id = %s 
         """
-        cursor.execute(query, (borrowerName, borrowedDate, returningDate, user_book_id))
+        cursor.execute(query, (bookName, userId,)) # will change when ediiton is added 
+        idResult = cursor.fetchone()
+        return idResult[0] if idResult else None
+    
+    except Exception as e:
+        print(e)
+        return False
+    
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+    
+# function to create loan
+def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+
+    bookId = bookSearch (bookName, userId)
+
+    try:
+        query = """
+        INSERT INTO `loans` (bookId, borrowedDate, returningDate,borrowerName, bookName) VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (bookId, borrowedDate, returningDate,borrowerName, bookName,))
         cnx.commit()
-        print(f"Loan created for lib ID {user_book_id} and borrower {borrowerName}")
+        return cursor.lastrowid
+    
+    except Exception as e:
+        print(e)
+        return False
+    
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+
+
+def expireLoansBatch():
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    try:
+        query = """
+        UPDATE `loans` SET expired = 1 WHERE (CURDATE() > returningDate)
+        """
+        cursor.execute(query)
+        cnx.commit()
 
     except Exception as e:
-       if "Duplicate entry" in str(e) or "unique_loan" in str(e): #checking if there is a duplicate loan
-           cursor.execute(""" 
-                SELECT loan_id FROM `loans_test`
-                WHERE user_book_id = %s AND returningDate IS NULL
-            """, (user_book_id,))
-           result = cursor.fetchone()
-           if result:
-                presentId = result[0]
-                print(f"Loan exists, present loan id = {presentId}")
-                return presentId
-           else:                
-               return None
-       else:
-            print(f"Error: {e}")
-            return None 
-    finally:
-        cursor.close()  
-        disconnect_from_sql(cnx)    
+        print(e)
+        return False
     
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+        
+
+def editReturn(returningDate, loanId):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+
+    print
+
+    try:
+        query = """
+        UPDATE `loans` SET returningDate = %s WHERE loanId = %s
+        """
+        cursor.execute(query, (returningDate, loanId,)) 
+        cnx.commit()
+        return True
+    
+    except Exception as e:
+        print(e)
+        return False
+    
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)        
+
+
+#TESTS    
 def test_create_loan():
-    borrowedDate = "2026-02-23"
-    returningDate = "2026-03-26"
-    user_book_id = 5
+    borrowedDate = "2026-02-19"
+    returningDate = "2026-03-20"
+    bookName = "The Hunger Games"
     borrowerName = "Michael"
+    userId= "fIO3VheplRM3Lebvdl2mQAuI7E42"
 
-
-    loan_test = createLoan(borrowedDate, returningDate, user_book_id, borrowerName)
+    loan_test = createLoan(borrowedDate, returningDate, borrowerName, bookName, userId)
     if loan_test:
         print(f"Loan made with ID: {loan_test}")
         return loan_test
     else:
         print("Error creating loan")
 
+def test_return_loan():
+    returningDate = "2026-03-22"
+    loanId = 7
+
+    return_test = editReturn(returningDate, loanId)
+
+    if return_test:
+        print("Return edit completed")
+    
+    else:
+        print("Error editing return")
+
+
 if __name__ == "__main__":
-    test_create_loan()
+    #test_create_loan()
+    #expireLoansBatch()
+    test_return_loan()
    
-  '''

@@ -6,7 +6,6 @@
     <title>Loans | HOMELIB</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loan.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
@@ -45,6 +44,49 @@
                     <button class="create-btn"><i class="fa-solid fa-plus"></i> Add New Loan</button>
                 </div>
                 <hr>
+            </div>
+
+            <div class = "loan-table-section">
+                <div class = "loan-container">
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th scope = "column-name"> Loan ID</th>
+                                <th scope = "column-name" >Book Name </th>
+                                <th scope = "column-name">Borrow Date</th>
+                                <th scope = "column-name">Return Date</th>
+                                <th scope = "column-name">Loanee Name</th>
+                                <th scope = "column-name"> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                              <tr>
+                                <td id = "loanid"> 5</td>
+                                <td id = "bookname">The Hunger Games </td>
+                                <td id = "borrowdate">20/3/26</td>
+                                <td id = "returndate">1/4/26</td>
+                                <td id = "loaneename">Michael</td>
+                                <td> <button class = "editbutton"> Edit </button> </td>
+                            </tr>
+                             <tr>
+                                <td id = "loanid"> 5</td>
+                                <td id = "bookname">The Hunger Games </td>
+                                <td id = "borrowdate">20/3/26</td>
+                                <td id = "returndate">1/4/26</td>
+                                <td id = "loaneename">Michael</td>
+                                <td> <button class = "editbutton"> Edit </button> </td>
+                            </tr>
+                             <tr>
+                                <td id = "loanid"> 5</td>
+                                <td id = "bookname">The Hunger Games </td>
+                                <td id = "borrowdate">20/3/26</td>
+                                <td id = "returndate">1/4/26</td>
+                                <td id = "loaneename">Michael</td>
+                                <td> <button class = "editbutton"> Edit </button> </td>
+                            </tr>
+                            
+                    </table>
+                </div>
             </div>
         </section>
     </main>
