@@ -52,7 +52,62 @@
                     </div>
                 </div>
                 <div class="profile-bottom">
-
+                    <div class="explore-quick">
+                        <div class="explore-title pro-title">
+                            <img class="profile-tile" src="{{ url_for('static', filename='images/book-background.jpg') }}">
+                            <!-- Bookshelf Vectors by Vecteezy  https://www.vecteezy.com/members/illustration4stock224427 -->
+                            <i class="fa-solid fa-magnifying-glass pro-icon"></i>
+                            <p class="tile-title">Browse Books</p>
+                        </div>
+                        <div class="explore-desc">
+                            <p class="tile-desc">Discover books, authors, and trending collections.</p>
+                        </div>
+                        <div class="explore-btn pro-btn">
+                            <a href="{{ url_for('explore') }}" target="_blank">Discover Books <i class="fa-solid fa-chevron-right" style="color: rgb(165, 188, 241);"></i></a>
+                        </div>
+                    </div>
+                    <div class="library-quick">
+                        <div class="library-title pro-title">
+                            <img class="profile-tile" src="{{ url_for('static', filename='images/book-background2.jpg') }}">
+                             <!-- Bookshelf Vectors by Vecteezy  https://www.vecteezy.com/members/freepikcompanysl -->
+                            <i class="fa-solid fa-book pro-icon"></i>
+                            <p class="tile-title">Your Collection</p>
+                        </div>
+                        <div class="library-desc">
+                            <p class="tile-desc">View and manage your personal book collection.</p>
+                        </div>
+                        <div class="library-btn pro-btn">
+                            <a href="{{ url_for('library') }}" target="_blank">My Books <i class="fa-solid fa-chevron-right" style="color: rgb(165, 188, 241);"></i></a>
+                        </div>
+                    </div>
+                    <div class="stats-quick">
+                        <div class="stats-title pro-title">
+                            <img class="profile-tile" src="{{ url_for('static', filename='images/book-background3.jpg') }}">
+                             <!-- Bookshelf Vectors by Vecteezy  https://www.vecteezy.com/members/115454549176569242974 -->
+                            <i class="fa-solid fa-list pro-icon"></i>
+                            <p class="tile-title">Reading Progress</p>
+                        </div>
+                        <div class="stats-desc">
+                            <p class="tile-desc">Track reading habits and progress over time.</p>
+                        </div>
+                        <div class="stats-btn pro-btn">
+                            <a href="{{ url_for('stats') }}" target="_blank">Progress <i class="fa-solid fa-chevron-right" style="color: rgb(165, 188, 241);"></i></a>
+                        </div>
+                    </div>
+                    <div class="loans-quick">
+                        <div class="loans-title pro-title">
+                            <img class="profile-tile" src="{{ url_for('static', filename='images/book-background4.jpg') }}">
+                             <!-- Bookshelf Vectors by Vecteezy  https://www.vecteezy.com/members/vectoroartworks -->
+                            <i class="fa-regular fa-clipboard pro-icon"></i>
+                            <p class="tile-title">Loaned Books</p>
+                        </div>
+                        <div class="loans-desc">
+                            <p class="tile-desc">Manage borrowed books, due dates, and renewals.</p>
+                        </div>
+                        <div class="loans-btn pro-btn">
+                            <a href="{{ url_for('loan') }}" target="_blank">Current Loans <i class="fa-solid fa-chevron-right" style="color: rgb(165, 188, 241);"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
             
