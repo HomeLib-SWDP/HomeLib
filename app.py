@@ -21,6 +21,10 @@ def login():
 def profile():
     return render_template('profile.html')
 
+@app.route('/editProfile')
+def editProfile():
+    return render_template('editProfile.html')
+
 @app.route('/explore')
 def explore():
     return render_template('explore.html')
