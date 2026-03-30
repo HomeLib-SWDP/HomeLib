@@ -76,7 +76,7 @@ async function renderBooks(booksArray, container) {
 }
 
 
-async function loadSection(apiUrl, containerId) {
+async function loadSection(category, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return; 
 
@@ -84,31 +84,21 @@ async function loadSection(apiUrl, containerId) {
     container.innerHTML = '<p>Loading books...</p>'; 
 
     try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error("Network Error");
-        
-        var data = await response.json();
+        const response = await fetch(`/api/books/${category}`);
+
+        if(!response.ok) throw new Error("server error");
+
+        const finalFifteenBooks = await response.json();
+
         container.innerHTML = '';
-        
-        if (data.docs && data.docs.length > 0) {
-            
-            //dont use books with no coverid
-            const booksWithCovers = data.docs.filter(book => book.cover_i !== undefined);
-            
-            //grab 10 books from the list that filtered out ones missing covers
-            const finalTenBooks = booksWithCovers.slice(0, 10);
 
-            if(finalTenBooks.length > 0) {
-                renderBooks(finalTenBooks, container); 
-            } else {
-                container.innerHTML = '<p>No books with covers found for this section.</p>';
-            }
-
+        if (finalFifteenBooks.length > 0){
+            renderBooks(finalFifteenBooks, container);
         } else {
-            container.innerHTML = '<p>No books found for this section.</p>';
+            container.innerHTML = `<p> No popualr books for category ${category}.</p>`
         }
-
     } catch (err) {
+        console.error(err);
         container.innerHTML = `<p style="color:red">Error loading section.</p>`;
     }
 }
@@ -116,18 +106,14 @@ async function loadSection(apiUrl, containerId) {
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    const popularUrl = `https://openlibrary.org/search.json?q=first_publish_year:2020+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year,cover_edition_key`;
-    loadSection(popularUrl, 'popular-books');
 
-
-    const newReleasesUrl = `https://openlibrary.org/search.json?q=first_publish_year:[2025 TO 2026]+subject:fiction&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year,cover_edition_key`;
-    loadSection(newReleasesUrl, 'new-books');
-
-    const fantasyUrl = `https://openlibrary.org/search.json?q=subject:fantasy+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year,cover_edition_key`;
-    loadSection(fantasyUrl, 'fantasy-books');
+    loadSection('popular', 'popular-books');
+    loadSection('new', 'new-books');
+    loadSection('fantasy', 'fantasy-books');
+    loadSection('mystery', 'mystery-books');
+    loadSection('nonfiction', 'nonfic-books');
 
 });
-
 var bookSuggestions = [];
 
 async function searchBooks(searchInput, suggestions)
