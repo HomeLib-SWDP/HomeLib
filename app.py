@@ -92,7 +92,9 @@ def retrive_user_info ():
     
     return jsonify({"accountCreationDate": accountCreationDate, "email": email, "password": password, "userName": userName})
    
-
+@app.route('/shelves')
+def shelves():
+    return render_template('shelves.html')
     
 @app.route('/manualentry')
 def manualentry():
