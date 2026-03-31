@@ -24,10 +24,12 @@ main{
     margin-right: 1em;
 }
 .main-content{
-    height: 95vh;
+    min-height: 95vh;
     width: 98em;
     border-radius: 15px;
     background-color: white;
+    display: flex;
+    flex-direction: column;
 }
 .logo{
     width: 16em;
@@ -124,4 +126,43 @@ hr{
     object-fit: cover;
     margin-right: 4em;
     cursor: pointer;
+}
+
+.stats-container{
+    display: grid;
+    width: 100%;
+    padding: 4em;
+    flex: 1;              
+    overflow-y: auto;  
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 50px;    
+}
+.stat-tile{
+    width: 100%;
+    border-radius: 15px;
+    background-color: #ffffff75;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+.stat-title{
+    font-size: 1.5em;
+    padding: 0.8em 0em 0em 1em;
+}
+.stat-month,
+.stat-year,
+.stat-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9em 2em 1em 1.6em;
+    color: rgb(92, 92, 92);
+}
+.stat-author,
+.stat-genre,
+.stat-days,
+.stat-book,
+.stat-pages{
+    padding: 0.9em 2em 1em 1.6em;
+    color: rgb(92, 92, 92);
 }

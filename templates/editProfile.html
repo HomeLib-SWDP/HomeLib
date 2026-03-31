@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | HOMELIB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/editProfile.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <section class="left-task-bar">
+            <div>
+                <img class="logo" src="{{ url_for('static', filename='images/logo.png') }}" title="Graphic by Md Rubel Miah from Vecteezy.com">
+            </div>
+
+            <div class="list-items">
+                <ul>
+                    <a class="explore-item" href="{{ url_for('profile') }}"><li> <i class="fa-regular fa-circle-user"></i> Profile</li></a>
+                    <a class="explore-item" href="{{ url_for('explore') }}"><li> <i class="fa-solid fa-magnifying-glass"></i> Explore</li></a>
+                    <a class="library-item" href="{{ url_for('library') }}"><li> <i class="fa-solid fa-book"></i> Library</li></a>
+                    <a class="lists-item" href="{{ url_for('stats') }}"><li><i class="fa-solid fa-list"></i> Stats</li></a>
+                    <a class="loans-item" href="{{ url_for('loan') }}"><li><i class="fa-regular fa-clipboard"></i> Loans</li></a>
+                </ul>
+            </div>
+        </section>
+
+        <section class="main-content">
+            <div class="title">
+                <p class="title-text">Edit Profile</p>
+                <img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
+                
+            </div>
+            <hr>
+            <div class="profile-main">
+                <div class="profile-top">
+                    <div class="profile-img-div">
+                        <img class="profile-img-change" id="profileImg" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
+                        <input type="file" id="uploadImg" accept="image/*">
+                    </div>
+                   <form class="profile-form" action="/save-profile" method="POST">
+                        <div class="profile-top-content">
+                            
+                            <div class="first-name-div div-inputs">
+                            <p>First Name</p>
+                            <input type="text" name="firstName" required>
+                            </div>
+
+                            <div class="last-name-div div-inputs">
+                            <p>Last Name</p>
+                            <input type="text" name="lastName" required>
+                            </div>
+
+                            <div class="email-div div-inputs">
+                            <p>Email</p>
+                            <input type="email" name="email" required>
+                            </div>
+
+                            <div class="username-div div-inputs">
+                            <p>Username</p>
+                            <input type="text" name="username" required>
+                            </div>
+
+                            <div class="desc-div div-inputs">
+                            <p>Description</p>
+                            <textarea name="description"></textarea>
+                            </div>
+
+                            <div class="city-div div-inputs">
+                            <p>City</p>
+                            <input type="text" name="city" required>
+                            </div>
+
+                            <div class="country-div div-inputs">
+                            <p>Country</p>
+                            <input type="text" name="country" required>
+                            </div>
+
+                            <div class="save-div">
+                            <button type="submit">
+                                <i class="fa-solid fa-floppy-disk" style="color: rgb(0, 0, 0);"></i>
+                                Save
+                            </button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="edit-profile-btn">
+                         <a href="{{ url_for('profile') }}"><li> <i class="fa-regular fa-circle-user"></i> Profile Page</li></a>
+                    </div>
+                </div>
+                
+            </div>
+            
+        
+
+
+
+
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>

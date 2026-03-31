@@ -4,206 +4,101 @@ let currentLang = '';
 let currentSubject = '';
 let currentYearMin = '';
 let currentYearMax = '';
- /*
-document.getElementById('subjectFilter').addEventListener('change', (e) => { 
-  currentSubject = e.target.value; 
-});
+const card = document.getElementById("details");
 
-document.getElementById('yearMin').addEventListener('input', (e) => { 
-    currentYearMin = e.target.value; 
-});
+async function renderBooks(booksArray, container) {    
+    for (let book of booksArray) {
 
-document.getElementById('yearMax').addEventListener('input', (e) => { 
-    currentYearMax = e.target.value; 
-});
-
-async function search(offset = 0) {
-    const titleQ = document.getElementById('titleQuery').value.trim();
-    const authorQ = document.getElementById('authorQuery').value.trim();
-    const isbnQ = document.getElementById('isbnQuery').value.trim();
-    const publisherQ = document.getElementById('publisherQuery').value.trim();
-    const subjectQ = document.getElementById('subjectQuery').value.trim();
-    const yearQ = document.getElementById('yearQuery').value.trim();
-    const lang = document.getElementById('language').value;
-    const yearMin = document.getElementById('yearMin').value;
-    const yearMax = document.getElementById('yearMax').value;
-   
-    const queries = [];
-    if (titleQ) queries.push(`title:"${titleQ}"`);
-    if (authorQ) queries.push(`author:"${authorQ}"`);
-    if (isbnQ) queries.push(`isbn:${isbnQ}`);
-    if (publisherQ) queries.push(`publisher:"${publisherQ}"`);
-    if (subjectQ) queries.push(`subject:"${subjectQ}"`);
-    if (yearQ) queries.push(`first_publish_year:${yearQ}`);
-
-    if (queries.length === 0 && offset === 0) {
-        return alert("Enter at least one search term");
-    }
-
-    let searchQuery = queries.join(' AND ');
-
-    if (lang) {
-        searchQuery += ` AND language:${lang}`;
-    }
-    if (currentSubject) {
-        searchQuery += ` AND subject:"${currentSubject}"`;
-    }
-    let yearRange = '';
-    if (yearMin && yearMax) {
-        yearRange = ` first_publish_year:[${yearMin} TO ${yearMax}]`;
-    } else if (yearMin) {
-        yearRange = ` first_publish_year:[${yearMin} TO *]`;
-    } else if (yearMax) {
-        yearRange = ` first_publish_year:[* TO ${yearMax}]`;
-    }
-    if (yearRange) {
-        searchQuery += ` AND ${yearRange}`;
-    }
-
-    currentQuery = searchQuery;
-    currentLang = lang;
-    currentOffset = offset;
-
-    const params = new URLSearchParams({
-        q: searchQuery,
-        limit: 6,
-        offset: offset.toString(),
-        fields: 'title,author_name,first_publish_year,language,subject,edition_count,cover_i'
-    });
-    const url = `https://openlibrary.org/search.json?${params}`;
-    const container = document.getElementById('results');
-
-    if (offset === 0) {
-        container.innerHTML = '';
-        document.getElementById('loadMore').style.display = 'none';
-    }
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Network error: " + response.status);
-       
-        const data = await response.json();
-
-        if (offset === 0) {
-            container.innerHTML = `<p>Found ${data.num_found} results.</p>`;
-        }
-
-        data.docs.forEach(book => {
-            const div = document.createElement('div');
-            div.className = 'book';
-            const langs = book.language && Array.isArray(book.language) && book.language.length > 0 
-                ? book.language.slice(0, 10).join(', ') 
-                : 'Unknown';
-            let subs = 'No subjects';
-            if (book.subject && Array.isArray(book.subject) && book.subject.length > 0) {
-                subs = book.subject.slice(0, 5).join(', ');
-            }
-            const editions = book.edition_count ? `${book.edition_count} editions` : '1 edition';
-            div.innerHTML = `
-                <strong>${book.title || 'No title'}</strong><br>
-                ${book.author_name ? 'By ' + book.author_name.join(', ') : 'Unknown author'}<br>
-                ${book.first_publish_year ? 'First published: ' + book.first_publish_year : ''}<br>
-                <span class="languages">Languages: ${langs}</span><br>
-                <span class="subjects">Subjects: ${subs}</span><br>
-                <span class="editions">${editions}</span><br>
-                ${book.cover_i ? `<br><img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" style="max-width:120px; margin-top:0.5rem;">` : ''}
-            `;
-            container.appendChild(div);
-        });
-
-        if (data.docs.length === 0) {
-            if (offset === 0) {
-                container.innerHTML = '<p>No books found for this query.</p>';
-            }
-            return;
-        }
-
-        if (data.docs.length < 6) {
-            container.innerHTML += '<p>No more results.</p>';
-        } else {
-            document.getElementById('loadMore').style.display = 'inline-block';
-        }
-    } catch (err) {
-        if (offset === 0) {
-            container.innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
-        } else {
-            container.innerHTML += `<p style="color:red">Error loading more: ${err.message}</p>`;
-        }
-    }
-}
-
-function loadMore() {
-    search(currentOffset + 6);
-}
-
-*/
-
-function renderBooks(booksArray, container) {
-    booksArray.forEach(book => {
         const div = document.createElement('div');
-        div.className = 'book-card'; 
-        
+        div.className = 'book-card';
+
+        const percentage = 0; // start at 0
+
+        // Create each card
         div.innerHTML = `
             <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
             <div class="book-info" style="font-size: 0.9rem; padding-top: 5px;">
-                <strong style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${book.title}">${book.title || 'No title'}</strong>
-                <span style="color: #555;">${book.author_name ? book.author_name[0] : 'Unknown'}</span>
-                <button type="button" class ="add-btn" style="margin-top: 8px; width: fit-content;">
+                <strong style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${book.title}">
+                    ${book.title || 'No title'}
+                </strong>
+                <span style="color: #555;">
+                    ${book.author_name ? book.author_name[0] : 'Unknown'}
+                </span>
+
+                <div class="star-rating">
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+
+                <button type="button" class="add-btn" style="margin-top: 8px; width: fit-content;">
                     Add to library
                 </button>
             </div>
         `;
 
-        const btn = div.querySelector( '.add-btn');
-        
-        btn.addEventListener('click', ( )=> {
-            handleSaveBook(book);
-        })
-        
-        //console.table(book);
+        // Event listeners
+        const coverImg = div.querySelector('.book-cover');
+        coverImg.addEventListener('click', (e) => {
+            e.stopPropagation();
+            DisplayBookInfo(book);
+        });
 
+        const btn = div.querySelector('.add-btn');
+        btn.addEventListener('click', () => {
+            handleSaveBook(book);
+        });
+
+        // Append div
         container.appendChild(div);
 
+        // Fetch rating AFTER rendering
+        fetch(`https://openlibrary.org${book.key}/ratings.json`)
+            .then(res => { // Checks response
+                if (!res.ok) return null;
+                return res.json();
+            }) // If we are okay, then we get the percentage
+            .then(data => {
+                if (!data) return;
 
+                const rating = data.summary?.average || 0;
+                const percent = (rating / 5) * 100;
 
-    });
+                const starsInner = div.querySelector('.stars-inner');
+                if (starsInner) {
+                    starsInner.style.width = percent + "%"; // Then we set the inner star width
+                }
+            })
+            .catch(err => {
+                console.log("Rating fetch failed:", err);
+            });
+    }
 }
 
 
-async function loadSection(apiUrl, containerId) {
+async function loadSection(category, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return; 
 
-    
     container.className = 'scroll-row';
     container.innerHTML = '<p>Loading books...</p>'; 
 
     try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error("Network Error");
-        
-        const data = await response.json();
-        container.innerHTML = ''; 
-        
-        if (data.docs && data.docs.length > 0) {
-            
-            //dont use books with no coverid
-            const booksWithCovers = data.docs.filter(book => book.cover_i !== undefined);
-            
-            //grab 10 books from the list that filtered out ones missing covers
-            const finalTenBooks = booksWithCovers.slice(0, 10);
-            
-            if(finalTenBooks.length > 0) {
-                renderBooks(finalTenBooks, container); 
-            } else {
-                container.innerHTML = '<p>No books with covers found for this section.</p>';
-            }
+        const response = await fetch(`/api/books/${category}`);
 
+        if(!response.ok) throw new Error("server error");
+
+        const finalFifteenBooks = await response.json();
+
+        container.innerHTML = '';
+
+        if (finalFifteenBooks.length > 0){
+            renderBooks(finalFifteenBooks, container);
         } else {
-            container.innerHTML = '<p>No books found for this section.</p>';
+            container.innerHTML = `<p> No popualr books for category ${category}.</p>`
         }
-
     } catch (err) {
+        console.error(err);
         container.innerHTML = `<p style="color:red">Error loading section.</p>`;
     }
 }
@@ -211,18 +106,14 @@ async function loadSection(apiUrl, containerId) {
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    const popularUrl = `https://openlibrary.org/search.json?q=first_publish_year:2020+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
-    loadSection(popularUrl, 'popular-books');
 
-
-    const newReleasesUrl = `https://openlibrary.org/search.json?q=first_publish_year:[2025 TO 2026]+subject:fiction&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
-    loadSection(newReleasesUrl, 'new-books');
-
-    const fantasyUrl = `https://openlibrary.org/search.json?q=subject:fantasy+subject:ny_times_bestseller&sort=editions&limit=25&fields=title,author_name,cover_i,key,isbn,first_publish_year`;
-    loadSection(fantasyUrl, 'fantasy-books');
+    loadSection('popular', 'popular-books');
+    loadSection('new', 'new-books');
+    loadSection('fantasy', 'fantasy-books');
+    loadSection('mystery', 'mystery-books');
+    loadSection('nonfiction', 'nonfic-books');
 
 });
-
 var bookSuggestions = [];
 
 async function searchBooks(searchInput, suggestions)
@@ -280,15 +171,11 @@ async function searchBooks(searchInput, suggestions)
             {
                 books = bookSuggestions;
             }
-            console.log(books);
-            console.log(document.getElementById("search-sect"));
             const searchSection = document.getElementById("search-sect");
             searchSection.className = 'scroll-row';
 
             renderBooks(books, searchSection);
         }
-
-        console.log(books)
         
         suggestionsBox.style.display = "block";
     }, 400));
@@ -357,3 +244,95 @@ async function handleSaveBook(book){
     }
 
 };
+
+async function DisplayBookInfo(book)
+{
+    // API call to get the description and other info
+    const url = `https://openlibrary.org${book.key}.json`
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Network error: " + response.status);
+
+    const data = await response.json();
+    
+    const description = data.description;
+    var summary = "";
+
+    if(description) // First check if there is a description
+    {
+        summary = typeof description == 'object' ? description.value : description;
+    }
+    else
+    {
+        summary = "No summary found";
+    }
+
+    // Now we try to get the other information from the cover_edition_key
+
+    var isbn_10 = 'undefined'
+    var isbn_13 = 'undefined';
+
+    if(book.cover_edition_key)
+    {
+        const url2 = `https://openlibrary.org/books/${book.cover_edition_key}.json`;
+        const response2 = await fetch(url2);
+        if (!response2.ok) throw new Error("Network error: " + response.status);
+        const data2 = await response2.json();
+
+        isbn_10 = data2.isbn_10 ? data2.isbn_10[0] : 'undefined';
+        isbn_13 = data2.isbn_13 ? data2.isbn_13[0] : 'undefined';
+    }
+
+    var rating = 'No rating found';
+    const url3 = `https://openlibrary.org${book.key}/ratings.json`;
+    const response3 = await fetch(url3);
+
+    if (!response3.ok) throw new Error("Network error: " + response.status);
+    
+    const data3 = await response3.json();
+
+    rating = data3.summary.average ? data3.summary.average : 0;
+
+    var percentage = (rating / 5) * 100;
+
+    const overlay = document.getElementById("details");
+    overlay.innerHTML = `
+    <div style="display: flex">
+        <h2 style="padding-top: 1em">${book.title}</h2>
+        <button id=closeBtn class="close-btn">&times;</button>
+    </div>
+    <div style="display: flex">
+        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
+        <div style="padding-left: 1rem">
+            <h4>Author: ${book.author_name ? book.author_name[0] : "Unknown Author"}</h4>
+            <h4>Published: ${book.first_publish_year}</h4>
+            <h4>ISBN_10: ${isbn_10}</h4>
+            <h4>ISBN_13: ${isbn_13}</h4>
+            <div style="display: flex">
+                <h4>Rating: </h4>
+                <div class="star-rating">
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width: ${percentage}%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p style="padding-top: 1rem">${summary}</p>`;
+    overlay.classList.toggle("hidden");
+
+    const closeBtn = document.getElementById("closeBtn");
+    closeBtn.addEventListener("click", (e) =>{
+        e.stopPropagation();
+        overlay.classList.add("hidden");
+    })
+}
+
+card.addEventListener("click", (e) => {
+    e.stopPropagation();
+})
+
+document.addEventListener("click", () =>
+{
+    card.classList.add("hidden");
+})

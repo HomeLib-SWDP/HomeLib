@@ -21,6 +21,10 @@ def login():
 def profile():
     return render_template('profile.html')
 
+@app.route('/editProfile')
+def editProfile():
+    return render_template('editProfile.html')
+
 @app.route('/explore')
 def explore():
     return render_template('explore.html')
@@ -92,7 +96,9 @@ def retrive_user_info ():
     
     return jsonify({"accountCreationDate": accountCreationDate, "email": email, "password": password, "userName": userName})
    
-
+@app.route('/shelves')
+def shelves():
+    return render_template('shelves.html')
     
 @app.route('/manualentry')
 def manualentry():

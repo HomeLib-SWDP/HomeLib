@@ -36,11 +36,11 @@
             <hr>
             
             <div class="shelves">
-                <div class="shelves-container">
+                <div id="shelves-container" class="shelves-container">
                     <button><span class="read-value shelf">10</span> Read</button>
                     <button><span class="reading-value shelf">10</span> Reading</button>
                     <button><span class="want-to-read-value shelf">10</span> Want to Read</button>
-                    <button>Add Shelf</button>
+                    <button id="addShelfBtn">Add Shelf</button>
                 </div>
                 <hr>
             </div>
@@ -55,11 +55,12 @@
 
                     <select class="sort-by">
                         <option> Sort by</option>
-                        <option value="">All Subjects</option>
-                        <option value="fiction">Fiction</option>
-                        <option value="non fiction">History</option>
-                        <option value ="yearMin">Min Year</option>
-                        <option value ="yearMax">Max Year</option>
+                        <option value="title_asc">Title (A-Z)</option>
+                        <option value="title_dec">Title (Z-A)</option>
+                        <option value="author_asc">Author (A-Z)</option>
+                        <option value="author_dec">Author (Z-A)</option>
+                        <option value ="year_asc">Release Year (Newest First)</option>
+                        <option value ="year_dec">Release Year (Oldest First)</option>
                     </select>
 
                     <input type="hidden" id="titleQuery">

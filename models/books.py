@@ -1,13 +1,14 @@
 from utils.sqldb import connect_to_sql, disconnect_from_sql
 
 class Book:
-    def __init__(self, booktitle, author, isbn = None, cover_id = None, publishdate = None, user_id = None):
+    def __init__(self, booktitle, author, isbn = None, cover_id = None, publishdate = None, user_id = None, cover_edition_key = None):
         self.user_id = user_id
         self.cover_id = cover_id
         self.publishdate = publishdate
         self.booktitle = booktitle
         self.author = author
         self.isbn = isbn
+        self.cover_edition_key = cover_edition_key
 
     def to_dict(self):
         return {
@@ -17,6 +18,7 @@ class Book:
             "cover_id": self.cover_id,
             "author": self.author,
             "user_id": self.user_id,
+            "cover_edition_key": ""
         }
 
 def add_book(book):
