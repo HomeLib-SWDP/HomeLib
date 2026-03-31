@@ -20,3 +20,14 @@ async function displayProfileInfo() {
 }
 
 displayProfileInfo();
+
+
+const profileImg = document.getElementById('profileImg');
+  const uploadImg = document.getElementById('uploadImg');
+
+  uploadImg.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if(file) {
+      profileImg.src = URL.createObjectURL(file);
+    }
+  });
