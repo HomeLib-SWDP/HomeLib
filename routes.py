@@ -119,8 +119,8 @@ def get_books_by_cat(category):
     if not query:
         return jsonify({"error": "Category not found"}), 404
     
-    fields = "title,author_name,cover_i,key,isbn,first_publish_year,cover_edition_key";
-    url = f"https://openlibrary.org/search.json?q={query}&sort=editions&limit=25&fields={fields}";
+    fields = "title,author_name,cover_i,key,isbn,first_publish_year,ratings_average";
+    url = f"https://openlibrary.org/search.json?q={query}&sort=editions&limit=15&fields={fields}";
 
     try:
         response = requests.get(url)
@@ -133,7 +133,7 @@ def get_books_by_cat(category):
         #use random to shuffle that list so that not always same 15 grabbed
         random.shuffle(withCovers)
 
-        finalBooks = withCovers[:15]
+        finalBooks = withCovers[:10]
 
         return jsonify(finalBooks)
 
