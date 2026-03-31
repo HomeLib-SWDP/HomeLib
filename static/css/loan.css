@@ -125,3 +125,39 @@ hr{
     margin-right: 4em;
     cursor: pointer;
 }
+
+.loan-table{
+    width: 100%;
+    border-collapse: separate;
+}
+
+.loan-table, td, th {
+border: 1.5px solid rgb(160, 160, 160);
+border-collapse:collapse;
+
+}
+
+td {
+    text-align: left;
+    height:40px;
+    padding:15px;
+}
+
+th{
+    text-align:center;
+    height:70px;
+    background-color:  rgb(181, 141, 182, 0.7) ;
+}
+
+tr:nth-child(even){
+    background-color:rgb(181, 141, 182, 0.2) ;
+}
+
+.editbutton{
+    width:40px;
+  
+}
+
+.editbutton:hover{
+    cursor: pointer;
+}
