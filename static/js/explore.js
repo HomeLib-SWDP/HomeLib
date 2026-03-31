@@ -7,12 +7,12 @@ let currentYearMax = '';
 const card = document.getElementById("details");
 
 async function renderBooks(booksArray, container) {    
-    for (let book of booksArray) {
+    booksArray.forEach(book =>{
 
         const div = document.createElement('div');
         div.className = 'book-card';
-
-        const percentage = 0; // start at 0
+        
+        const percentage = (book.ratings_average / 5) * 100; // start at 0
 
         // Create each card
         div.innerHTML = `
@@ -51,28 +51,7 @@ async function renderBooks(booksArray, container) {
 
         // Append div
         container.appendChild(div);
-
-        // Fetch rating AFTER rendering
-        fetch(`https://openlibrary.org${book.key}/ratings.json`)
-            .then(res => { // Checks response
-                if (!res.ok) return null;
-                return res.json();
-            }) // If we are okay, then we get the percentage
-            .then(data => {
-                if (!data) return;
-
-                const rating = data.summary?.average || 0;
-                const percent = (rating / 5) * 100;
-
-                const starsInner = div.querySelector('.stars-inner');
-                if (starsInner) {
-                    starsInner.style.width = percent + "%"; // Then we set the inner star width
-                }
-            })
-            .catch(err => {
-                console.log("Rating fetch failed:", err);
-            });
-    }
+    });
 }
 
 
@@ -91,6 +70,8 @@ async function loadSection(category, containerId) {
         const finalFifteenBooks = await response.json();
 
         container.innerHTML = '';
+
+        console.log(finalFifteenBooks);
 
         if (finalFifteenBooks.length > 0){
             renderBooks(finalFifteenBooks, container);
