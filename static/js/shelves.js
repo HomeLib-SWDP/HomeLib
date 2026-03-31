@@ -26,7 +26,7 @@ function renderShelves() {
         card.innerHTML = `
             <h3>${shelf.name}</h3>
             <p>${shelf.book_count || 0} books</p>
-            ${shelf.name !== 'Read' ? `<button class="edit-shelf-btn" data-id=${shelf.id}>Edit</button>` : ''}
+            ${shelf.name !== 'Read' ? `<button class="edit-shelf-btn" data-id="${shelf.id}>Edit</button>` : ''}
         `;
         container.appendChild(card);
     });
