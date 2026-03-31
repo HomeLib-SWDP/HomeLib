@@ -4,54 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual Book Entry | HomeLib</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/library.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/manualentry.css') }}">
 </head>
+
 <body>
 
 <main>
-
 <div class="main-content">
 
-<div class="title">
-<div class="title-text">Add a Book Manually</div>
-</div>
+    <div class="title">
+        <div class="title-text">Add a Book Manually</div>
+    </div>
 
-<hr>
+    <hr>
 
-<div class="manual-entry-container">
+    <div class="manual-entry-container">
 
-<form id="manualBookForm" action="{{ url_for('manualentry') }}">
+        <!-- ✅ NO action attribute -->
+        <form id="manualBookForm">
 
-<label>Title</label>
-<input type="text" name="title" required>
+            <label>Title</label>
+            <input type="text" name="title" required>
 
-<label>Author</label>
-<input type="text" name="author" required>
+            <label>Author</label>
+            <input type="text" name="author" required>
 
-<label>ISBN</label>
-<input type="text" name="isbn">
+            <label>ISBN</label>
+            <input type="text" name="isbn">
 
-<label>Cover ID (optional)</label>
-<input type="text" name="cover_id">
+            <label>Cover ID (optional)</label>
+            <input type="text" name="cover_id">
 
-<label>Publish Year (optional)</label>
-<input type="text" name="publish_date">
+            <label>Publish Year (optional)</label>
+            <input type="text" name="publish_date">
 
-<input type="hidden" id="username" name="username">
-<input type="hidden" name="book_id">
+            <button type="submit">Add Book</button>
 
-<button type="submit">Add Book</button>
+        </form>
 
-</form>
+        <p id="message"></p>
 
-<p id="message"></p>
-
-</div>
+    </div>
 
 </div>
-
 </main>
+
+<!-- ✅ WORKING SCRIPT -->
+<script>
+document.getElementById("manualBookForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    const data = {
+        title: formData.get("title"),
+        author: formData.get("author"),
+        isbn: formData.get("isbn"),
+        cover_id: formData.get("cover_id"),
+        publish_date: formData.get("publish_date")
+    };
+
+    try {
+        const response = await fetch("/api/books/add_manual_book", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        document.getElementById("message").innerText =
+            result.message || result.error || "Something went wrong";
+
+        // ✅ Optional: clear form after success
+        if (response.ok) {
+            document.getElementById("manualBookForm").reset();
+        }
+
+    } catch (error) {
+        document.getElementById("message").innerText = "Error connecting to server";
+        console.error(error);
+    }
+});
+</script>
 
 </body>
 </html>
