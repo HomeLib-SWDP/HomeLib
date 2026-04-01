@@ -44,9 +44,9 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
 
     try:
         query = """
-        INSERT INTO `loans` (bookId, borrowedDate, returningDate,borrowerName, bookName) VALUES (%s, %s, %s, %s, %s)
+        INSERT INTO `loans` (bookId, userId, borrowedDate, returningDate,borrowerName, bookName) VALUES (%s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (bookId, borrowedDate, returningDate,borrowerName, bookName,))
+        cursor.execute(query, (bookId, userId, borrowedDate, returningDate,borrowerName, bookName,))
         cnx.commit()
         return cursor.lastrowid
     
@@ -82,8 +82,6 @@ def editReturn(returningDate, loanId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
-    print
-
     try:
         query = """
         UPDATE `loans` SET returningDate = %s WHERE loanId = %s
@@ -98,16 +96,38 @@ def editReturn(returningDate, loanId):
     
     finally:
         cursor.close()
-        disconnect_from_sql(cnx)        
+        disconnect_from_sql(cnx)     
+
+
+def displayLoans(userId):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+
+    try:
+        query = """
+        SELECT * FROM `loans` WHERE userId = %s 
+        """
+        cursor.execute(query, ( userId,))
+        result = cursor.fetchall()
+        #print(result)
+        return result if result else None
+    
+    except Exception as e:
+        print(e)
+        return False
+    
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)   
 
 
 #TESTS    
 def test_create_loan():
     borrowedDate = "2026-02-19"
-    returningDate = "2026-03-20"
-    bookName = "The Hunger Games"
-    borrowerName = "Michael"
-    userId= "fIO3VheplRM3Lebvdl2mQAuI7E42"
+    returningDate = "2026-05-21"
+    bookName = "Fourth Wing"
+    borrowerName = "John"
+    userId= "kqA82Go1gfhhUWOnEIdCkHcglAI3"
 
     loan_test = createLoan(borrowedDate, returningDate, borrowerName, bookName, userId)
     if loan_test:
@@ -128,9 +148,19 @@ def test_return_loan():
     else:
         print("Error editing return")
 
+def test_display_loan():
+    userId= "kqA82Go1gfhhUWOnEIdCkHcglAI3"
+
+    load = displayLoans(userId)
+    if load:
+        #print(f"Loans displayed: {load}")
+        return load
+    else:
+        ("Error creating loan")
+
 
 if __name__ == "__main__":
-    #test_create_loan()
+    test_create_loan()
     #expireLoansBatch()
-    test_return_loan()
-   
+    # test_return_loan()
+    test_display_loan()

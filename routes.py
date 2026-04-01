@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 import requests, random
 from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf
-from models.loans import createLoan, expireLoansBatch, editReturn
 
 books_bp = Blueprint('books', __name__)
 
@@ -100,19 +99,7 @@ def remove_from_shelf():
     if remove_book_from_shelf(data['user_book_id'], data['shelf_id']):
         return jsonify({"success": True, "message": "Book removed from shelf"})
     return jsonify({"success": False, "message": "Failed to remove the book"}), 400
-'''
-@books_bp.route('/loan/createLoan', methods = ['POST'])
-def make_loan():
-    userId = session.get('user_id')
-    data = request.get_json()
 
-
-@books_bp.route('/loan/displayLoan' , methods = ['GET'])
-def display_loan():
-    userId = session.get('user_id')
-    data = request.get_json()
-
-'''
 @books_bp.route('/<category>', methods=['GET'])
 def get_books_by_cat(category):
     query = CATEGORY_DICT.get(category)
