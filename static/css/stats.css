@@ -24,7 +24,7 @@ main{
     margin-right: 1em;
 }
 .main-content{
-    min-height: 95vh;
+    height: 95vh;
     width: 98em;
     border-radius: 15px;
     background-color: white;
