@@ -5,17 +5,11 @@ import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11
 const firebaseConfig = {
 
   apiKey: "AIzaSyAvMDcDz-yh4BpTpkb5_-M41EbMLw6xmh0",
-
   authDomain: "homelib-caef7.firebaseapp.com",
-
   projectId: "homelib-caef7",
-
   storageBucket: "homelib-caef7.firebasestorage.app",
-
   messagingSenderId: "935710501303",
-
   appId: "1:935710501303:web:3b400acaaaee116fcd2032",
-
   measurementId: "G-RPQN19H629"
 
 };
@@ -50,7 +44,6 @@ registerForm.addEventListener('submit', async (registerEvent) => {
 
   try {
     await setDoc(doc(db,"users", user.uid), {
-      password: passwordValue,
       userName: usernameValue,
       email: emailValue,
       creationDate: new Date().toLocaleDateString()

@@ -23,7 +23,6 @@ async function displayLoanInfo() {
         });
 
         document.getElementById('tablebody').innerHTML = table
-        displayLoanInfo()
 
     } 
     catch (error) {

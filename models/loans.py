@@ -17,8 +17,6 @@ def bookSearch(bookName, userId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
-    #userId = session["user_id"]  will add after testing
-
     try:
         query = """
         SELECT lib_id FROM `user_books` WHERE booktitle = %s AND user_id = %s 
@@ -50,7 +48,7 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
         cnx.commit()
         return cursor.lastrowid
     
-    except Exception as e:
+    except Exception as e:  #NEED TO ADD DUPLICATE LOAN CHECKS
         print(e)
         return False
     
