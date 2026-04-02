@@ -4,14 +4,7 @@ from models.books import Book, add_book, get_books, create_shelf, add_book_to_sh
 
 books_bp = Blueprint('books', __name__)
 
-CATEGORY_DICT = {
-    "popular": "first_publish_year:2020+subject:ny_times_bestseller",
-    "new": "first_publish_year:[2025 TO 2026]+subject:fiction",
-    "fantasy": "subject:fantasy+subject:ny_times_bestseller",
-    "mystery": "subject:mystery+subject:ny_times_bestseller",
-    "nonfiction": "subject:nonfiction+subject:ny_times_bestseller",
 
-}
 
 @books_bp.route('/add_manual_book', methods=['POST'])
 def add_manual_book():
@@ -102,27 +95,39 @@ def remove_from_shelf():
 
 @books_bp.route('/<category>', methods=['GET'])
 def get_books_by_cat(category):
-    query = CATEGORY_DICT.get(category)
-    if not query:
-        return jsonify({"error": "Category not found"}), 404
+    queries = {
+        "popular": "first_publish_year:2020 subject:ny_times_bestseller",
+        "new": "first_publish_year:2024 subject:fiction" ,
+        "fantasy": "subject:fantasy subject:fantasy subject:ny_times_bestseller",
+        "mystery": "subject:mystery subject:mystery subject:ny_times_bestseller",
+        "nonfiction": "subject:nonfiction subject:nonfiction subject:ny_times_bestseller",
+    }
     
-    fields = "title,author_name,cover_i,key,isbn,first_publish_year,ratings_average";
-    url = f"https://openlibrary.org/search.json?q={query}&sort=editions&limit=15&fields={fields}";
+    query_str = queries.get(category)
+    if not query_str:
+        return jsonify({"error": "Category not found"}), 404
+
+    params = {
+        "q": query_str,
+        "sort": "rating",
+        "limit": 25,  
+        "fields": "title,author_name,cover_i,key,isbn,first_publish_year,ratings_average"
+    }
 
     try:
-        response = requests.get(url)
+
+        response = requests.get("https://openlibrary.org/search.json", params=params)
         response.raise_for_status()
         data = response.json()
+     
+        with_covers = [b for b in data.get('docs', []) if b.get('cover_i')]
 
-        #get the 50 w covers
-        withCovers = [b for b in data.get('docs', []) if b.get('cover_i')]
+        
+        random.shuffle(with_covers)
 
-        #use random to shuffle that list so that not always same 15 grabbed
-        random.shuffle(withCovers)
-
-        finalBooks = withCovers[:10]
-
-        return jsonify(finalBooks)
+        
+        return jsonify(with_covers[:10])
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"CRASH in get_books_by_cat: {e}")
+        return jsonify({"error": "Internal server error", "details": str(e)}), 500
