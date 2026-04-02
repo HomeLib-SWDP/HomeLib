@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, request, url_for, session, j
 from routes import books_bp
 import os
 import dotenv
+from models.loans import createLoan, expireLoansBatch, editReturn, displayLoans
 
 dotenv.load_dotenv()
 
@@ -48,7 +49,7 @@ def register():
 
 @app.route('/user_id_post', methods=['POST'])
 def sent_user_id():
-    data = request.get_json()
+    data = request.json
     user_id = data.get('user_id')
     session['user_id'] = user_id #storing user id in flask session
     return jsonify({"message" : "User id stored in session"}) , 200
@@ -103,6 +104,14 @@ def shelves():
 @app.route('/manualentry')
 def manualentry():
     return render_template('manualentry.html')
+    
+@app.route('/displayLoan' , methods = ['GET'])
+def display_loan():
+    userId = session.get('user_id')
+    #print (userId)
+    loandisplay = displayLoans(userId)
+    return jsonify(loandisplay), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)

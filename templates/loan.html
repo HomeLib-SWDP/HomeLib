@@ -56,41 +56,16 @@
                                 <th scope = "column-name">Borrow Date</th>
                                 <th scope = "column-name">Return Date</th>
                                 <th scope = "column-name">Loanee Name</th>
-                                <th scope = "column-name"> Actions</th>
+                                <th scope = "column-name">Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                              <tr>
-                                <td id = "loanid"> 5</td>
-                                <td id = "bookname">The Hunger Games </td>
-                                <td id = "borrowdate">20/3/26</td>
-                                <td id = "returndate">1/4/26</td>
-                                <td id = "loaneename">Michael</td>
-                                <td> <button class = "editbutton"> Edit </button> </td>
-                            </tr>
-                             <tr>
-                                <td id = "loanid"> 5</td>
-                                <td id = "bookname">The Hunger Games </td>
-                                <td id = "borrowdate">20/3/26</td>
-                                <td id = "returndate">1/4/26</td>
-                                <td id = "loaneename">Michael</td>
-                                <td> <button class = "editbutton"> Edit </button> </td>
-                            </tr>
-                             <tr>
-                                <td id = "loanid"> 5</td>
-                                <td id = "bookname">The Hunger Games </td>
-                                <td id = "borrowdate">20/3/26</td>
-                                <td id = "returndate">1/4/26</td>
-                                <td id = "loaneename">Michael</td>
-                                <td> <button class = "editbutton"> Edit </button> </td>
-                            </tr>
-                            
+                        <tbody id = "tablebody">
                     </table>
                 </div>
             </div>
         </section>
     </main>
 
-    <script src="{{ url_for('static', filename='js/loan.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loans.js') }}"></script>
 </body>
 </html>
