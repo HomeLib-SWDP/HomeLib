@@ -22,7 +22,7 @@
 
     <div class="manual-entry-container">
 
-        <!-- ✅ NO action attribute -->
+        
         <form id="manualBookForm">
 
             <label>Title</label>
@@ -51,7 +51,7 @@
 </div>
 </main>
 
-<!-- ✅ WORKING SCRIPT -->
+
 <script>
 document.getElementById("manualBookForm").addEventListener("submit", async function(e) {
     e.preventDefault();
@@ -80,7 +80,7 @@ document.getElementById("manualBookForm").addEventListener("submit", async funct
         document.getElementById("message").innerText =
             result.message || result.error || "Something went wrong";
 
-        // ✅ Optional: clear form after success
+        // clear form after success
         if (response.ok) {
             document.getElementById("manualBookForm").reset();
         }
