@@ -1,7 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-
 
 const firebaseConfig = {
 
@@ -15,11 +13,9 @@ const firebaseConfig = {
 
 };
 
-
 // intiialzing firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 // getting required elements
 const emailId = document.getElementById('email');
@@ -29,7 +25,7 @@ const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', async (loginEvent) => {
   loginEvent.preventDefault();
 
-  //getting value and authentication
+  //getting value 
   const emailValue = emailId.value;
   const passwordValue = password.value;
 
@@ -38,37 +34,16 @@ loginForm.addEventListener('submit', async (loginEvent) => {
 
   const userId = user.uid; // gett user id from firebase
 
-//FIGURE OUT A WAY TO ENCRYPT INFORMATION BEFORE POST
-
-try {
-  const docRef = doc(db, "users", userId);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    const userName = data.userName;
-    const email = data.email;
-    const creationDate = data.creationDate;
-
-    fetch('/user_info_post', {
+  fetch('/user_info_post', {
     method: 'POST' ,
     headers: {
       'content-type' : 'application/json'
     },
-    body: JSON.stringify({userName, email, creationDate, userId})
+    body: JSON.stringify({userId})
   })
-  }
 
-  else {
-    console.log("Error retrieveing user data")
-  }
+  //console.log( userId)
 
   alert('Welcome' + ' ' +emailValue+ '!' );
   window.location.href = 'explore'; //redirect to explore page
-  }
-  catch(error) {
-    const errorMessage = error.message;
-    alert ('Error logging in: ' + errorMessage);
-  }
-});
-
-
+  });

@@ -47,12 +47,6 @@ def loan():
 def register():
     return render_template('register.html')
 
-
-@app.route('/user_id_get', methods=['GET'])
-def get_user_id():
-    user_id = session.get('user_id')
-    return jsonify({"user_id": user_id}), 200
-
 @app.route('/removesession')
 def remove_session():
     session.pop('user_id', None)
@@ -60,37 +54,21 @@ def remove_session():
 @app.route('/user_info_post', methods=['POST'])
 def store_user_info():
     data = request.json
-    userName = data.get('userName')
-    email = data.get('email')
-    accountCreationDate = data.get('creationDate')
     userId = data.get('userId')
 
     session['user_id'] = userId #storing user id in flask session
-    session ['email'] = email
-    session ['userName'] = userName
-    session ['accountCreationDate'] = accountCreationDate 
 
     #tests
-    print ("UserId:" , session['user_id'])
-    #print ("Email:" , session['email'])
-    #print ("Username:" , session['userName'])
-    #print ("Account Creation Date:" , session['accountCreationDate'])
+    #print ("UserId:" , session['user_id'])
     return jsonify({"Message": "User info stored"}) 
 
 @app.route('/user_info_get', methods = ['GET'])
 def retrive_user_info ():
-    accountCreationDate = session.get('accountCreationDate')
-    email = session.get('email')
-    userName = session.get('userName')
     userId = session.get('user_id')
 
     # tests
-    print ("UserId:") , userId
-    #print ("EMail:" , email)
-    #print ("Account creation date :", accountCreationDate)
-    #print ("Username:" , userName)
-    
-    return jsonify({"accountCreationDate": accountCreationDate, "email": email, "userName": userName, "userId": userId})
+    print ("UserId:" , userId)
+    return jsonify({"userId": userId})
    
 @app.route('/shelves')
 def shelves():

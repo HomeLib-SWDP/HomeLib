@@ -25,7 +25,6 @@ const password = document.getElementById('password');
 const registerForm = document.getElementById('registerForm');
 const confirmPassword = document.getElementById('confirmPassword');
 
-
 registerForm.addEventListener('submit', async (registerEvent) => {
   registerEvent.preventDefault();
 
@@ -35,25 +34,32 @@ registerForm.addEventListener('submit', async (registerEvent) => {
   const confirmPasswordValue = confirmPassword.value;
   const usernameValue = username.value;
 
+
   if (confirmPasswordValue != passwordValue) {
     alert("Passwords do not match");
     return;
   }
+
   const userCredential = await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
   const user = userCredential.user; //get user info
 
-  try {
-    await setDoc(doc(db,"users", user.uid), {
-      userName: usernameValue,
-      email: emailValue,
-      creationDate: new Date().toLocaleDateString()
-    });
+  try{
+  await setDoc (doc(db, "users, user,uid"), {
+    userName: usernameValue,
+    email: emailValue,
+    creationDate: new Date().toLocaleDateString()
+  });
+}
+catch (error) {
+
+  let errormes = error.message;
+  console.log(errormes)
+
+
+}
+
   
   alert('Redirecting to login page');
   window.location.href = '/'; //redirect to login page
   }
-  catch (error){
-    const errorMessage = error.message;
-    alert(errorMessage);
-  }
-});
+ );
