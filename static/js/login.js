@@ -32,27 +32,6 @@ const emailId = document.getElementById('email');
 const password = document.getElementById('password');
 const loginForm = document.getElementById('loginForm');
 
-const sendIdtoFlask = (userId) => {
-  fetch('/user_id_post', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ user_id: userId }) //converting to json format
-  })
-
-};
-
-const storeUserInfo = (userName, email, password, accountCreationDate) => {
-   fetch('/user_info_post', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ userName, email, password, accountCreationDate }) 
-  })
-}
-
 loginForm.addEventListener('submit', async (loginEvent) => {
   loginEvent.preventDefault();
 
@@ -65,7 +44,6 @@ loginForm.addEventListener('submit', async (loginEvent) => {
 
   const userId = user.uid; // gett user id from firebase
 
-  sendIdtoFlask(userId); //function to send to flask middleware
 
 try {
  
@@ -75,16 +53,19 @@ try {
     const data = docSnap.data();
     const userName = data.userName;
     const email = data.email;
-    const password = data.password;
     const creationDate = data.creationDate;
 
-    storeUserInfo(userName, email, password,  creationDate); //sending user profile info to flask sessions
+    fetch('user_info_post', {
+      method: 'POST' ,
+      headers: {'content-type' : 'application/json'
+      },
+      body: JSON.stringify({userName, userId, email, creationDate})
+    })
 
     //tests
 
     /*console.log("Username", userName);
     console.log("email", email);
-    console.log("password", password);
     console.log("Account Creation Date", creationDate);*/
   }
   else {

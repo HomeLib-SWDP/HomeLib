@@ -103,6 +103,8 @@ def displayLoans(userId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
+    expireLoansBatch()
+
     try:
         query = """
         SELECT * FROM `loans` WHERE userId = %s 
