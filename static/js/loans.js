@@ -8,6 +8,18 @@ async function displayLoanInfo() {
         const details = await response.json();
         //console.log(data)
 
+        const items =  details.length 
+
+        //console.log(items)
+
+        fetch('/loan_number', {
+            method: 'POST' ,
+            headers: {'content-type' : 'application/json'
+            },
+            body: JSON.stringify({"loans": items})
+        })
+         
+
         let table = ''
 
         details.forEach(detail => {

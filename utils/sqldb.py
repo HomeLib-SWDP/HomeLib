@@ -1,8 +1,6 @@
 import mysql.connector
 import sqldetails
 
-cert_path = 'certs/ca.pem'
-
 database_config = {
     'host': sqldetails.host,
     'user': sqldetails.user,
@@ -10,8 +8,6 @@ database_config = {
     'user': sqldetails.user,
     'password': sqldetails.password,
     'database': sqldetails.database,
-    'ssl_ca': cert_path,
-    'ssl_verify_cert': True
 }
 
 def connect_to_sql():

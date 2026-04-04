@@ -50,7 +50,6 @@ registerForm.addEventListener('submit', async (registerEvent) => {
 
   try {
     await setDoc(doc(db,"users", user.uid), {
-      password: passwordValue,
       userName: usernameValue,
       email: emailValue,
       creationDate: new Date().toLocaleDateString()

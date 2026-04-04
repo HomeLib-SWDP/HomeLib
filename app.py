@@ -47,19 +47,6 @@ def loan():
 def register():
     return render_template('register.html')
 
-@app.route('/user_id_post', methods=['POST'])
-def sent_user_id():
-    data = request.json
-    user_id = data.get('user_id')
-    session['user_id'] = user_id #storing user id in flask session
-    return jsonify({"message" : "User id stored in session"}) , 200
-    
-
-@app.route('/user_id_get', methods=['GET'])
-def get_user_id():
-    user_id = session.get('user_id')
-    return jsonify({"user_id": user_id}), 200
-
 @app.route('/removesession')
 def remove_session():
     session.pop('user_id', None)
@@ -67,35 +54,35 @@ def remove_session():
 @app.route('/user_info_post', methods=['POST'])
 def store_user_info():
     data = request.json
+    userId = data.get('userId')
     userName = data.get('userName')
     email = data.get('email')
-    password = data.get('password')
-    accountCreationDate = data.get('accountCreationDate')
+    accountCreationDate = data.get('creationDate')
 
     session ['email'] = email
     session ['userName'] = userName
-    session ['password'] = password
     session ['accountCreationDate'] = accountCreationDate
 
     #print ("Email:" , session['email'])
     #print ("Username:" , session['userName'])
-    
-    #print("password:" , session['password'])
     #print ("Account Creation Date:" , session['accountCreationDate'])
+    #print (session['userId])
+
     return jsonify({"Message": "User info stored"}) 
 
 @app.route('/user_info_get', methods = ['GET'])
 def retrive_user_info ():
+    userId = session.get('userId')
     accountCreationDate = session.get('accountCreationDate')
     email = session.get('email')
-    password = session.get('password')
     userName = session.get('userName')
+
     #print ("EMail:" , email)
     #print ("Account creation date :", accountCreationDate)
-    #print ("Password:" , password)
     #print ("Username:" , userName)
+    #print (userId)
     
-    return jsonify({"accountCreationDate": accountCreationDate, "email": email, "password": password, "userName": userName})
+    return jsonify({"accountCreationDate": accountCreationDate, "email": email, "userName": userName, "userId": userId})
    
 @app.route('/shelves')
 def shelves():
