@@ -24,9 +24,18 @@ def createProfile(userId, userName, accountDate, userDescription):
         return cursor.lastrowid
     
     except Exception as e:
-        print(e)
-        return False
-    
+        if "Duplicate entry" in str(e):
+            cursor.execute("""
+                SELECT profileId from `profile`
+                WHERE  userId = %s     
+                """, (userId))
+            result = cursor.fetchone()
+            id = result[0]
+            return id if result else None
+        else:
+            print(f"Error creating user: {e}")
+            return None
+
     finally:
         cursor.close()
         disconnect_from_sql(cnx)

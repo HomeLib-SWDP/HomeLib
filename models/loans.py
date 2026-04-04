@@ -51,8 +51,17 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
         return cursor.lastrowid
     
     except Exception as e:
-        print(e)
-        return False
+        if "Duplicate entry" in str(e):
+            cursor.execute("""
+                SELECT loanId from `loans`
+                WHERE  userId = %s  AND bookId = %s   
+                """, (userId, bookId))
+            result = cursor.fetchone()
+            id = result[0]
+            return id if result else None
+        else:
+            print(f"Error creating loan: {e}")
+            return None
     
     finally:
         cursor.close()
@@ -148,7 +157,7 @@ def test_return_loan():
         print("Return edit completed")
     
     else:
-        print("Error editing return")
+        print(f"Error editing return for id: {return_test}")
 
 def test_display_loan():
     userId= "kqA82Go1gfhhUWOnEIdCkHcglAI3"
