@@ -70,6 +70,14 @@ def retrive_user_info ():
     #print (userId)
     
     return jsonify({"userId": userId})
+
+@app.route('/loan_number', methods = ['POST'])
+def store_loan_info():
+    data = request.json
+
+    loanNum = data.get('loans')
+
+    return jsonify({"loanNum": loanNum}), 200
    
 @app.route('/shelves')
 def shelves():
@@ -99,10 +107,10 @@ def storeInfo():
     return jsonify(storeProf), 200
 
 @app.route('/display_info', methods = ['POST'])
-def storeInfo():
+def displayInfo():
     userId = session.get('user_id')
 
-    displayProf= displayProfile(userId)
+    displayProf = displayProfile(userId)
 
     return jsonify(displayProf), 200
 

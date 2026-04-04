@@ -6,7 +6,7 @@ async function displayLoanInfo() {
         const response = await fetch(fetchInfo);
         if (!response.ok) throw new Error("Network Error");
         const details = await response.json();
-        //console.log(data)
+        console.log(details)
 
         const items =  details.length 
 
@@ -19,23 +19,27 @@ async function displayLoanInfo() {
             body: JSON.stringify({"loans": items})
         })
          
+        let table = document.getElementById('tablebody');
 
-        let table = ''
+        for(i = 0; i< items; i++){
 
-        details.forEach(detail => {
-            table +=`<tr>
-            <td>${detail[0]}</td>
-            <td>${detail[5]}</td>
-            <td>${new Date(detail[2]).toLocaleDateString()}</td>
-            <td>${new Date (detail[3]).toLocaleDateString()}</td>
-            <td>${detail[4]}</td>
-            <td>${detail[6]}</td>
-            </tr>
-            `
-        });
+           let tablerow = table.insertRow(-1)
 
-        document.getElementById('tablebody').innerHTML = table
-        displayLoanInfo()
+           cell1 = tablerow.insertCell(0)
+           cell1.innerHTML = details[i][0]
+           cell2 = tablerow.insertCell(1)
+           cell2.innerHTML = details[i][5]
+           cell3 = tablerow.insertCell(2)
+           cell3.innerHTML = details[i][2]
+           cell4 = tablerow.insertCell(3)
+           cell4.innerHTML = details[i][3]
+           cell5 = tablerow.insertCell(4)
+           cell5.innerHTML = details[i][4]
+           cell6 = tablerow.insertCell(5)
+           cell6.innerHTML = details[i][6]
+
+        }
+
 
     } 
     catch (error) {

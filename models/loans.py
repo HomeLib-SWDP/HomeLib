@@ -17,13 +17,11 @@ def bookSearch(bookName, userId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
-    #userId = session["user_id"]  will add after testing
-
     try:
         query = """
         SELECT lib_id FROM `user_books` WHERE booktitle = %s AND user_id = %s 
         """
-        cursor.execute(query, (bookName, userId,)) # will change when ediiton is added 
+        cursor.execute(query, (bookName, userId,)) 
         idResult = cursor.fetchone()
         return idResult[0] if idResult else None
     
@@ -157,7 +155,7 @@ def test_return_loan():
         print("Return edit completed")
     
     else:
-        print(f"Error editing return for id: {return_test}")
+        print(f"Error editing return date for id: {return_test}")
 
 def test_display_loan():
     userId= "kqA82Go1gfhhUWOnEIdCkHcglAI3"

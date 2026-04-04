@@ -42,7 +42,7 @@ loginForm.addEventListener('submit', async (loginEvent) => {
 
   const userId = user.uid; // gett user id from firebase
 
-    fetch('user_id_post', {
+    fetch('/user_id_post', {
       method: 'POST' ,
       headers: {'content-type' : 'application/json'
       },
