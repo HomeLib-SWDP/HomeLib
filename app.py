@@ -3,6 +3,7 @@ from routes import books_bp
 import os
 import dotenv
 from models.loans import createLoan, expireLoansBatch, editReturn, displayLoans
+from models.profile import createProfile, displayProfile, editDescription
 
 dotenv.load_dotenv()
 
@@ -51,38 +52,24 @@ def register():
 def remove_session():
     session.pop('user_id', None)
 
-@app.route('/user_info_post', methods=['POST'])
+@app.route('/user_id_post', methods=['POST'])
 def store_user_info():
     data = request.json
     userId = data.get('userId')
-    userName = data.get('userName')
-    email = data.get('email')
-    accountCreationDate = data.get('creationDate')
 
-    session ['email'] = email
-    session ['userName'] = userName
-    session ['accountCreationDate'] = accountCreationDate
+    session ['user_id'] = userId
 
-    #print ("Email:" , session['email'])
-    #print ("Username:" , session['userName'])
-    #print ("Account Creation Date:" , session['accountCreationDate'])
     #print (session['userId])
 
     return jsonify({"Message": "User info stored"}) 
 
-@app.route('/user_info_get', methods = ['GET'])
+@app.route('/user_id_get', methods = ['GET'])
 def retrive_user_info ():
-    userId = session.get('userId')
-    accountCreationDate = session.get('accountCreationDate')
-    email = session.get('email')
-    userName = session.get('userName')
+    userId = session.get('user_id')
 
-    #print ("EMail:" , email)
-    #print ("Account creation date :", accountCreationDate)
-    #print ("Username:" , userName)
     #print (userId)
     
-    return jsonify({"accountCreationDate": accountCreationDate, "email": email, "userName": userName, "userId": userId})
+    return jsonify({"userId": userId})
    
 @app.route('/shelves')
 def shelves():
@@ -99,6 +86,25 @@ def display_loan():
     loandisplay = displayLoans(userId)
     return jsonify(loandisplay), 200
 
+@app.route('/store_profile_info', methods = ['POST'])
+def storeInfo():
+    data = request.json
+
+    userName = data.get('userName')
+    accountDate = data.get('accountDate')
+    userDescription = data.get('userDescription')
+    userId = data.get('userId')
+
+    storeProf = createProfile(userId, userName, accountDate, userDescription)
+    return jsonify(storeProf), 200
+
+@app.route('/display_info', methods = ['POST'])
+def storeInfo():
+    userId = session.get('user_id')
+
+    displayProf= displayProfile(userId)
+
+    return jsonify(displayProf), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
