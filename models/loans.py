@@ -1,29 +1,14 @@
 from utils.sqldb import connect_to_sql, disconnect_from_sql   
-from flask import session
-from models import books
-
-# loan class to store info
-class Loan:
-
-    def __init__(self, borrowedDate= None, returningDate = None, loanId = None, borrowerName = None, bookName = None , edition = None, userId = None):
-        self.borrowedDate= borrowedDate
-        self.returningDate = returningDate
-        self. loanId =loanId
-        self.borrowerName = borrowerName
-        self.bookName = bookName
-        self.userId = userId
 
 def bookSearch(bookName, userId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
-    #userId = session["user_id"]  will add after testing
-
     try:
         query = """
         SELECT lib_id FROM `user_books` WHERE booktitle = %s AND user_id = %s 
         """
-        cursor.execute(query, (bookName, userId,)) # will change when ediiton is added 
+        cursor.execute(query, (bookName, userId,)) 
         idResult = cursor.fetchone()
         return idResult[0] if idResult else None
     
@@ -42,6 +27,9 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
 
     bookId = bookSearch (bookName, userId)
 
+    if(borrowedDate > returningDate):
+        return False
+
     try:
         query = """
         INSERT INTO `loans` (bookId, userId, borrowedDate, returningDate,borrowerName, bookName) VALUES (%s, %s, %s, %s, %s, %s)
@@ -51,9 +39,19 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
         return cursor.lastrowid
     
     except Exception as e:
-        print(e)
-        return False
-    
+        if "Duplicate Entry" in str(e):
+            cursor.execute("""
+                SELECT loanId from `loans` 
+                    WHERE userId = %s AND bookId = %s
+            """, (userId, bookId,))
+            result = cursor.fetchone()
+            duplicateId = result[0]
+            return duplicateId if result else None
+        
+        else:
+            print(f"Error creating loan: {e}")
+            return False
+
     finally:
         cursor.close()
         disconnect_from_sql(cnx)
@@ -78,9 +76,12 @@ def expireLoansBatch():
         disconnect_from_sql(cnx)
         
 
-def editReturn(returningDate, loanId):
+def editReturn(returningDate, loanId, borrowedDate):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
+
+    if(borrowedDate > returningDate):
+        return False
 
     try:
         query = """
@@ -101,13 +102,15 @@ def editReturn(returningDate, loanId):
 
 def displayLoans(userId):
     cnx = connect_to_sql()
-    cursor = cnx.cursor()
+    cursor = cnx.cursor(dictionary= True)
 
     expireLoansBatch()
 
     try:
         query = """
-        SELECT * FROM `loans` WHERE userId = %s 
+        SELECT 
+         loanId, DATE_FORMAT(borrowedDate, '%Y-%m-%d') AS borrowedDate, DATE_FORMAT(returningDate, '%Y-%m-%d') AS returningDate, borrowerName, bookName, expired
+         FROM `loans` WHERE userId = %s 
         """
         cursor.execute(query, ( userId,))
         result = cursor.fetchall()
@@ -116,7 +119,7 @@ def displayLoans(userId):
     
     except Exception as e:
         print(e)
-        return False
+        return None
     
     finally:
         cursor.close()
@@ -155,14 +158,14 @@ def test_display_loan():
 
     load = displayLoans(userId)
     if load:
-        #print(f"Loans displayed: {load}")
+        print(f"Loans displayed: {load}")
         return load
     else:
         ("Error creating loan")
 
 
 if __name__ == "__main__":
-    test_create_loan()
+    #test_create_loan()
     #expireLoansBatch()
     # test_return_loan()
     test_display_loan()

@@ -51,38 +51,24 @@ def register():
 def remove_session():
     session.pop('user_id', None)
 
-@app.route('/user_info_post', methods=['POST'])
+@app.route('/user_id_post', methods=['POST'])
 def store_user_info():
     data = request.json
     userId = data.get('userId')
-    userName = data.get('userName')
-    email = data.get('email')
-    accountCreationDate = data.get('creationDate')
 
-    session ['email'] = email
-    session ['userName'] = userName
-    session ['accountCreationDate'] = accountCreationDate
-
-    #print ("Email:" , session['email'])
-    #print ("Username:" , session['userName'])
-    #print ("Account Creation Date:" , session['accountCreationDate'])
-    #print (session['userId])
+    session['user_id'] = userId
+  
+    #print (session['user_id])
 
     return jsonify({"Message": "User info stored"}) 
 
-@app.route('/user_info_get', methods = ['GET'])
+@app.route('/user_id_get', methods = ['GET'])
 def retrive_user_info ():
-    userId = session.get('userId')
-    accountCreationDate = session.get('accountCreationDate')
-    email = session.get('email')
-    userName = session.get('userName')
-
-    #print ("EMail:" , email)
-    #print ("Account creation date :", accountCreationDate)
-    #print ("Username:" , userName)
+    userId = session.get('user_id')
+  
     #print (userId)
     
-    return jsonify({"accountCreationDate": accountCreationDate, "email": email, "userName": userName, "userId": userId})
+    return jsonify({"userId": userId})
    
 @app.route('/shelves')
 def shelves():
@@ -92,12 +78,49 @@ def shelves():
 def manualentry():
     return render_template('manualentry.html')
     
-@app.route('/displayLoan' , methods = ['GET'])
+@app.route('/display_Loan' , methods = ['GET'])
 def display_loan():
     userId = session.get('user_id')
     #print (userId)
     loandisplay = displayLoans(userId)
-    return jsonify(loandisplay), 200
+    #print(loandisplay)
+    if loandisplay is None:
+        return jsonify({"Message": "No loans exist"})
+    else:
+        return jsonify(loandisplay), 200
+
+@app.route('/create_Loan' , methods = ['POST'])
+def make_loan():
+    data = request.json
+
+    bookId =  data.get('bookId')
+    userId =  session.get('user_id')
+    borrowedDate =  data.get('borrowedDate')
+    returningDate =  data.get('returningDate')
+    borrowerName =  data.get('borrowerName')
+    returningDate =  data.get('returningDate')
+    bookName =  data.get('bookName')
+
+    loanMade = createLoan(bookId, userId, borrowedDate,returningDate,borrowerName, bookName)
+
+    if loanMade is None:
+        return jsonify({"Duplicate Loan": loanMade})
+    if loanMade is False:
+        return jsonify({"Message": "Error creating loan"})
+    return jsonify(loanMade), 200
+
+'''
+@app.route('edit_return')
+def edit_date():
+'''
+   
+@app.route('/loan_number', methods = ['POST'] )
+def store_loan_num():
+    data = request.json
+
+    loanNum =  data.get('loans')
+
+    return jsonify({"loanNum": loanNum})
 
 
 if __name__ == '__main__':
