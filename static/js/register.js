@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 const firebaseConfig = {
 
@@ -23,7 +22,6 @@ const firebaseConfig = {
 // intiialzing firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 const emailId = document.getElementById('email');
 const username = document.getElementById('username');
@@ -47,19 +45,19 @@ registerForm.addEventListener('submit', async (registerEvent) => {
   }
   const userCredential = await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
   const user = userCredential.user; //get user info
+  const userId = user.uid
 
-  try {
-    await setDoc(doc(db,"users", user.uid), {
-      userName: usernameValue,
-      email: emailValue,
-      creationDate: new Date().toLocaleDateString()
-    });
-  
+  const accountDate = new Date().toLocaleDateString
+
+  fetch ('/store_profile', {
+    method: 'POST' , 
+    headers: {'Content-type' : 'application/json'
+    },
+    body:JSON.stringify({userId, accountDate, emaiValue, usernameValue})
+  })
+
   alert('Redirecting to login page');
   window.location.href = '/'; //redirect to login page
+
   }
-  catch (error){
-    const errorMessage = error.message;
-    alert(errorMessage);
-  }
-});
+);
