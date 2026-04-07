@@ -1,4 +1,4 @@
-const fetchInfo = "/displayLoan";
+const fetchInfo = "/display_Loan";
 
 async function displayLoanInfo() {
     try{
@@ -6,8 +6,8 @@ async function displayLoanInfo() {
         const response = await fetch(fetchInfo);
         if (!response.ok) throw new Error("Network Error");
         const details = await response.json();
-        //console.log(data)
-
+        //console.log(details)
+        
         const items =  details.length 
 
         //console.log(items)
@@ -20,27 +20,35 @@ async function displayLoanInfo() {
         })
          
 
-        let table = ''
+        let table = document.getElementById('tablebody');
 
-        details.forEach(detail => {
-            table +=`<tr>
-            <td>${detail[0]}</td>
-            <td>${detail[5]}</td>
-            <td>${new Date(detail[2]).toLocaleDateString()}</td>
-            <td>${new Date (detail[3]).toLocaleDateString()}</td>
-            <td>${detail[4]}</td>
-            <td>${detail[6]}</td>
-            </tr>
-            `
-        });
+        for (i=0; i<items; i++){
+            
+            let tablerow =  table.insertRow(-1)
 
-        document.getElementById('tablebody').innerHTML = table
-        displayLoanInfo()
-
+            cell1 = tablerow.insertCell(0)
+            cell1.innerHTML = details[i].loanId
+            cell2 = tablerow.insertCell(1)
+            cell2.innerHTML = details[i].bookName
+            cell3 = tablerow.insertCell(2)
+            cell3.innerHTML = details[i].borrowedDate
+            cell4 = tablerow.insertCell(3)
+            cell4.innerHTML = details[i].returningDate
+            cell5 = tablerow.insertCell(4)
+            cell5.innerHTML = details[i].borrowerName
+            cell6 = tablerow.insertCell(5)
+            if(details[i].expired == 0){ // toggling active/expired status
+                cell6.innerHTML = "Active"
+            }
+            else {
+                cell6.innerHTML = "Expired"
+            }
+            
+        }
     } 
     catch (error) {
         const errorMes = error.message;
-        console.log(errorMes);
+        console.log("Error : ", errorMes);
     }
 }
 

@@ -58,7 +58,7 @@ def store_user_info():
 
     session['user_id'] = userId
   
-    #print (session['userId])
+    #print (session['user_id])
 
     return jsonify({"Message": "User info stored"}) 
 
@@ -78,13 +78,42 @@ def shelves():
 def manualentry():
     return render_template('manualentry.html')
     
-@app.route('/displayLoan' , methods = ['GET'])
+@app.route('/display_Loan' , methods = ['GET'])
 def display_loan():
     userId = session.get('user_id')
     #print (userId)
     loandisplay = displayLoans(userId)
-    return jsonify(loandisplay), 200
+    #print(loandisplay)
+    if loandisplay is None:
+        return jsonify({"Message": "No loans exist"})
+    else:
+        return jsonify(loandisplay), 200
 
+@app.route('/create_Loan' , methods = ['POST'])
+def make_loan():
+    data = request.json
+
+    bookId =  data.get('bookId')
+    userId =  session.get('user_id')
+    borrowedDate =  data.get('borrowedDate')
+    returningDate =  data.get('returningDate')
+    borrowerName =  data.get('borrowerName')
+    returningDate =  data.get('returningDate')
+    bookName =  data.get('bookName')
+
+    loanMade = createLoan(bookId, userId, borrowedDate,returningDate,borrowerName, bookName)
+
+    if loanMade is None:
+        return jsonify({"Duplicate Loan": loanMade})
+    if loanMade is False:
+        return jsonify({"Message": "Error creating loan"})
+    return jsonify(loanMade), 200
+
+'''
+@app.route('edit_return')
+def edit_date():
+'''
+   
 @app.route('/loan_number', methods = ['POST'] )
 def store_loan_num():
     data = request.json
