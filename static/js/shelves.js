@@ -80,3 +80,20 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+const modal = document.getElementById("modal");
+const addBtn = document.getElementById("addBookBtn");
+const closeBtn = document.querySelector(".close");
+
+addBtn.onclick = () => {
+  modal.style.display = "flex";
+};
+
+closeBtn.onclick = () => {
+  modal.style.display = "none";
+};
+
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = "none";
+};
