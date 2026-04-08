@@ -161,3 +161,58 @@ tr:nth-child(even){
 .editbutton:hover{
     cursor: pointer;
 }
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  width: 400px;
+  height: 380px;
+  border-radius: 8px;
+}
+.modal-content h2{
+    padding-bottom: 1em;
+}
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.add-btn, .submit-btn {
+    padding: .4em 1em;
+    font-size: 1.1em;
+    border: none;
+    background-color: rgba(195, 209, 241, 0.404);
+    color: rgb(95, 109, 155);
+    border-radius: 5px;
+    transition: .1s ease-in;
+    margin-right: 2em;
+    cursor: pointer;
+    margin-top: 1em;
+    margin-left: .4em;
+}
+.add-btn, .submit-btn:hover{
+    background-color: rgb(195, 209, 241);
+}
+.add-btn, .submit-btn:active{
+    background-color: rgba(195, 209, 241, 0.404);
+}
+#loanForm input{
+    width: 20em;
+    padding: .4em;
+    margin: .4em;
+    font-size: 1.1em;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid rgb(204, 204, 204);
+    padding-left: 1em;
+    color: rgb(160, 160, 160);
+}
