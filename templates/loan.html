@@ -41,9 +41,25 @@
                 <div class="search-books-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input placeholder="Search loans..."> 
-                    <button class="create-btn"><i class="fa-solid fa-plus"></i> Add New Loan</button>
+                    <button id="addLoanBtn" class="create-btn"><i class="fa-solid fa-plus"></i> Add New Loan</button>
                 </div>
                 <hr>
+            </div>
+
+            <div id="loanModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Add New Loan</h2>
+
+                    <form id="loanForm">
+                    <input name="book" placeholder="Book Name" required />
+                    <input name="borrow" placeholder="Borrow Date" onfocus="(this.type='date')" onblur="(this.type='text')" type="text"  required />
+                    <input name="return" placeholder="Return Date" onfocus="(this.type='date')" onblur="(this.type='text')" type="text"  required />
+                    <input name="loanee" placeholder="Loanee Name" required />
+
+                    <button type="submit" class="submit-btn"> <i class="fa-solid fa-plus"></i> Add Loan</button>
+                    </form>
+                </div>
             </div>
 
             <div class = "loan-table-section">
