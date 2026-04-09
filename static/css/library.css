@@ -225,3 +225,34 @@ hr{
     margin-right: 4em;
     cursor: pointer;
 }
+
+/* Styles for the pop-up card */
+
+.hidden {
+  display: none;
+}
+
+.details-card {
+  position: fixed;      /* floats relative to screen */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* perfect centering */
+
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+  z-index: 9999;        /* sits above everything */
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+}

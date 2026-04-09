@@ -1,5 +1,6 @@
 let allBooks = []; 
 let currentShelfId = null;
+const card = document.getElementById("popup");
 
 async function loadLibrary(shelfId = null) {
     currentShelfId = shelfId;
@@ -125,6 +126,10 @@ function renderBook(booksArray, container) {
                 <div class="shelf-tag">My Library</div>
             </div>
         `;
+        div.addEventListener('click', (e) =>{
+            e.stopPropagation();
+            displayPopUp(book);
+        })
         container.appendChild(div);
     });
 }
@@ -179,3 +184,42 @@ addShelfBtn.addEventListener("click", () => {
     shelvesContainer.insertBefore(newShelf, addShelfBtn);
   }
 });
+
+function displayPopUp(book)
+{
+    console.log(book);
+    
+    const overlay = document.getElementById("popup");
+
+    overlay.innerHTML = `
+    <div style="display: flex">
+        <h2 style="padding-top: 1em">${book.title}</h2>
+        <button id=closeBtn class="close-btn">&times;</button>
+    </div>
+    <div style="display: flex">
+        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
+        <div style="padding-left: 1rem; min-width: 20rem">
+            <h4>Author: ${book.author ? book.author : "Unknown Author"}</h4>
+            <h4>Published: ${book.publishdate}</h4>
+            <h4>ISBN: ${book.isbn ? book.isbn : "Unknown ISBN"}</h4>
+            <button id="removeBtn">Remove &times;</button>
+        </div>
+    </div>
+    `
+    overlay.classList.toggle("hidden");
+
+    const closeBtn = document.getElementById("closeBtn");
+    closeBtn.addEventListener("click", (e) =>{
+        e.stopPropagation();
+        overlay.classList.add("hidden");
+    })
+}
+
+card.addEventListener("click", (e) => {
+    e.stopPropagation();
+})
+
+document.addEventListener("click", () =>
+{
+    card.classList.add("hidden");
+})
