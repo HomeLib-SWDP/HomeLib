@@ -218,6 +218,39 @@ function displayPopUp(book)
     removeBtn.addEventListener("click", (e) =>{
         e.stopPropagation();
         overlay.classList.add("hidden");
+        confirmDelete(book);
+    })
+}
+
+function confirmDelete(book)
+{
+    console.log("Confirm Prompt");
+    const overlay = document.getElementById("confirm-delete");
+    const modal = document.getElementById("modal");
+    overlay.classList.toggle("hidden");
+    modal.classList.toggle("hidden");
+
+    overlay.innerHTML = `
+    <p>Are you sure you want to delete <b>${book.title}</b> from your library?</p>
+    <div>
+        <button id="no">No &times;</button>
+        <button id="yes">Yes &check;</button>
+    </div>
+    
+    `
+
+    const noBtn = document.getElementById("no");
+    noBtn.addEventListener("click", (e) =>{
+        e.stopPropagation();
+        overlay.classList.add("hidden");
+        modal.classList.add("hidden");
+    })
+
+    const yesBtn = document.getElementById("yes");
+    yesBtn.addEventListener("click", (e) =>{
+        e.stopPropagation();
+        overlay.classList.add("hidden");
+        modal.classList.add("hidden");
         removeBookFromLib(book);
     })
 }
@@ -238,6 +271,13 @@ async function removeBookFromLib(book)
     });
         const data = await response.json();
         alert(data.message);
+        var index = allBooks.findIndex(libBook => libBook.lib_id == book.lib_id)
+        console.log(index);
+        if(index > -1)
+        {
+            allBooks.splice(index, 1);
+            filterAndSortBooks();
+        }
     } catch (err) {
         alert('Delete Failed.');
     }
