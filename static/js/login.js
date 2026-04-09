@@ -33,7 +33,7 @@ const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', async (loginEvent) => {
   loginEvent.preventDefault();
 
-  //getting value and authentication
+  //getting value 
   const emailValue = emailId.value;
   const passwordValue = password.value;
 
@@ -42,7 +42,7 @@ loginForm.addEventListener('submit', async (loginEvent) => {
 
   const userId = user.uid; // gett user id from firebase
 
-
+  // sending id to flask sessions
     fetch('/user_id_post', {
       method: 'POST' ,
       headers: {'content-type' : 'application/json'
@@ -50,8 +50,6 @@ loginForm.addEventListener('submit', async (loginEvent) => {
       body: JSON.stringify({userId})
     })
 
- 
-  alert('Welcome' + ' ' +emailValue+ '!' );
   window.location.href = 'explore'; //redirect to explore page
   }
 );
