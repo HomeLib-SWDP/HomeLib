@@ -60,7 +60,7 @@ def store_user_info():
 
     session['user_id'] = userId
   
-    #print (session['user_id])
+    print (session['user_id'])
 
     return jsonify({"Message": "User info stored"}) 
 
@@ -97,7 +97,7 @@ def store_user_profile ():
     #print(userId)
 
     # converting date to yyyy-mm-dd format so it can be accepted and stored in sql (date conversion was not working in js)
-    accountDate = datetime.strptime(date, '%Y-%m-%d')
+    accountDate = datetime.strptime(date[:10], '%Y-%m-%d')
 
     #print(accountDate)
   

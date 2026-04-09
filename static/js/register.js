@@ -50,19 +50,14 @@ registerForm.addEventListener('submit', async (registerEvent) => {
   const accountDate = new Date()
   console.log(accountDate)
 
-  fetch ('/user_id_post', { //sending userid to sessions
-    method: 'POST' , 
-    headers: {'Content-type' : 'application/json'
-    },
-    body:JSON.stringify({userId})
-  })
-
   fetch ('/store_profile', { //sending info to backend to store in sql
     method: 'POST' , 
     headers: {'Content-type' : 'application/json'
     },
     body:JSON.stringify({accountDate, emailValue, usernameValue, userId})
   })
+
+  //alert(userId)
 
   alert('Redirecting to login page');
   window.location.href = '/'; //redirect to login page

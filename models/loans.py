@@ -132,7 +132,7 @@ def test_create_loan():
     returningDate = "2026-05-21"
     bookName = "Fourth Wing"
     borrowerName = "John"
-    userId= "kqA82Go1gfhhUWOnEIdCkHcglAI3"
+    userId= "qop96nEXHGSDFzKA8l9upHqUL943"
 
     loan_test = createLoan(borrowedDate, returningDate, borrowerName, bookName, userId)
     if loan_test:
@@ -166,7 +166,7 @@ def test_display_loan():
 
 if __name__ == "__main__":
     print("Testing loan functions...")
-    #test_create_loan()
+    test_create_loan()
     #expireLoansBatch()
     # test_return_loan()
     test_display_loan()
