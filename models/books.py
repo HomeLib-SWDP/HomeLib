@@ -189,5 +189,17 @@ def remove_book_from_shelf(user_book_id, shelf_id):
         cursor.close()
         disconnect_from_sql(cnx)
 
+def remove_book_from_library(lib_id, user_id):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    try: # Deletes from database using the lib_id and user_id
+        query = "DELETE FROM `user_books` WHERE lib_id = %s and user_id = %s"
+        cursor.execute(query, (lib_id, user_id))
+        cnx.commit()
+        return cursor.rowcount > 0
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+
 if __name__ == "__main__":
     test_add_book()

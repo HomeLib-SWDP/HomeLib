@@ -213,6 +213,34 @@ function displayPopUp(book)
         e.stopPropagation();
         overlay.classList.add("hidden");
     })
+
+    const removeBtn = document.getElementById("removeBtn");
+    removeBtn.addEventListener("click", (e) =>{
+        e.stopPropagation();
+        overlay.classList.add("hidden");
+        removeBookFromLib(book);
+    })
+}
+
+async function removeBookFromLib(book)
+{
+    console.log("remove");
+
+    const removedBook = {
+        lib_id: book.lib_id
+    };
+
+    try {
+    const response = await fetch('/api/books/remove_book', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(removedBook)
+    });
+        const data = await response.json();
+        alert(data.message);
+    } catch (err) {
+        alert('Delete Failed.');
+    }
 }
 
 card.addEventListener("click", (e) => {

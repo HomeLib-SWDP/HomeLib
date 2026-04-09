@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 import requests, random
-from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf
+from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf, remove_book_from_library
 
 books_bp = Blueprint('books', __name__)
 
@@ -27,6 +27,21 @@ def add_manual_book():
             return jsonify({"message": "Book added successfully!"}), 200
         else:
             return jsonify({"message": "Book already exists in your library"}), 200
+    else:
+        return jsonify({"Error": "Failed to add book"}), 400
+    
+@books_bp.route('/remove_book', methods=['POST'])
+def remove_from_library():
+    current_user = session.get('user_id')
+    data = request.json
+
+    result = remove_book_from_library(data.get('lib_id'), current_user)
+
+    if result:
+        if result:
+            return jsonify({"message": "Book removed successfully"}), 200
+        else:
+            return jsonify({"message": "Failed to remove Book from Library"}), 200
     else:
         return jsonify({"Error": "Failed to add book"}), 400
 
