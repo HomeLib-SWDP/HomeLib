@@ -202,7 +202,7 @@ function displayPopUp(book)
             <h4>Author: ${book.author ? book.author : "Unknown Author"}</h4>
             <h4>Published: ${book.publishdate}</h4>
             <h4>ISBN: ${book.isbn ? book.isbn : "Unknown ISBN"}</h4>
-            <button id="removeBtn">Remove &times;</button>
+            <button id="removeBtn" class="confirm-btn">Remove &times;</button>
         </div>
     </div>
     `
@@ -231,10 +231,10 @@ function confirmDelete(book)
     modal.classList.toggle("hidden");
 
     overlay.innerHTML = `
-    <p>Are you sure you want to delete <b>${book.title}</b> from your library?</p>
-    <div>
-        <button id="no">No &times;</button>
-        <button id="yes">Yes &check;</button>
+    <p>Are you sure you want to delete <b><u>${book.title}</u></b> from your library?</p>
+    <div style="display: flex; justify-content: center; padding-top: 2em">
+        <button id="no" class="confirm-btn" style="color: red;">No &times;</button>
+        <button id="yes" class="confirm-btn" style="color: green;">Yes &check;</button>
     </div>
     
     `
