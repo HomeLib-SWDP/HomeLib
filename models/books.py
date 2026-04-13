@@ -62,17 +62,18 @@ def get_books(user_id, shelf_id=None):
     try:
         if shelf_id:
             query = """
-                SELECT b.user_id, b.booktitle, b.isbn, b.author, b.publishdate, b.cover_id 
+                SELECT b.lib_id, b.user_id, b.booktitle, b.isbn, b.author, b.publishdate, b.cover_id 
                 FROM user_books b
                 JOIN shelf_books sb ON b.lib_id = sb.user_book_id
                 WHERE b.user_id = %s AND sb.shelf_id = %s
             """
             cursor.execute(query, (user_id, shelf_id))
         else:
-            query = "SELECT user_id, booktitle, isbn, author, publishdate, cover_id FROM user_books WHERE user_id = %s"
+            query = "SELECT lib_id, user_id, booktitle, isbn, author, publishdate, cover_id FROM user_books WHERE user_id = %s"
             cursor.execute(query, (user_id,))
         rows=cursor.fetchall()
         return [{
+            'lib_id' : row['lib_id'],
             'title' : row['booktitle'],
             'author' : row['author'],
             'cover_i' : row['cover_id'],
@@ -182,6 +183,18 @@ def remove_book_from_shelf(user_book_id, shelf_id):
     try:
         query = "DELETE FROM `shelf_books` WHERE user_book_id = %s AND shelf_id = %s"
         cursor.execute(query, (user_book_id, shelf_id))
+        cnx.commit()
+        return cursor.rowcount > 0
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+
+def remove_book_from_library(lib_id, user_id):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    try: # Deletes from database using the lib_id and user_id
+        query = "DELETE FROM `user_books` WHERE lib_id = %s and user_id = %s"
+        cursor.execute(query, (lib_id, user_id))
         cnx.commit()
         return cursor.rowcount > 0
     finally:
