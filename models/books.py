@@ -223,5 +223,6 @@ def remove_book_from_library(lib_id, user_id):
         cursor.close()
         disconnect_from_sql(cnx)
 
+        
 if __name__ == "__main__":
     test_add_book()
