@@ -31,6 +31,3 @@ const profileImg = document.getElementById('profileImg');
       profileImg.src = URL.createObjectURL(file);
     }
   });
-
-
-  

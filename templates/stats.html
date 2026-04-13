@@ -24,7 +24,6 @@
                     <a class="explore-item" href="{{ url_for('profile') }}"><li> <i class="fa-regular fa-circle-user"></i> Profile</li></a>
                     <a class="explore-item" href="{{ url_for('explore') }}"><li> <i class="fa-solid fa-magnifying-glass"></i> Explore</li></a>
                     <a class="library-item" href="{{ url_for('library') }}"><li> <i class="fa-solid fa-book"></i> Library</li></a>
-                    <a class="shelves-item" href="{{url_for('shelves') }}"><li> <i class="fa-solid fa-layer-group"></i> Shelves</li></a>
                     <a class="lists-item" href="{{ url_for('stats') }}"><li><i class="fa-solid fa-list"></i> Stats</li></a>
                     <a class="loans-item" href="{{ url_for('loan') }}"><li><i class="fa-regular fa-clipboard"></i> Loans</li></a>
                 </ul>
@@ -33,27 +32,10 @@
 
         
         <section class="main-content">
-            <div class="profile-container">
-                <div class="title">
-                    <p class="title-text">My Stats</p>
-                    <div class="profile-wrapper">
-                        <img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
-                    
+            <div class="title">
+                <p class="title-text">My Stats</p>
+                <a href="{{ url_for('profile') }}"><img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}"></a>
                 
-
-                        <div class="profile-dropdown">
-                            
-                            <div class="dropdown-content">
-                                <a href="{{ url_for('profile') }}"><i class="fa-regular fa-circle-user"></i> Profile</a>
-                                <a href="{{ url_for('shelves') }}"><i class="fa-solid fa-layer-group"></i> Shelves</a>
-                                <a href="{{ url_for('stats') }}"><i class="fa-solid fa-list"></i> Stats</a>
-                                <a href="{{ url_for('loan') }}"><i class="fa-regular fa-clipboard"></i> Loans</a>
-
-                                <a href="{{ url_for('login') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <hr>
             <div class="stats-container">
