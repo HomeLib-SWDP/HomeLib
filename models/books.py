@@ -62,22 +62,24 @@ def get_books(user_id, shelf_id=None):
     try:
         if shelf_id:
             query = """
-                SELECT b.user_id, b.booktitle, b.isbn, b.author, b.publishdate, b.cover_id 
+                SELECT b.user_id, b.booktitle, b.isbn, b.author, b.publishdate, b.cover_id , b.lib_id
                 FROM user_books b
                 JOIN shelf_books sb ON b.lib_id = sb.user_book_id
                 WHERE b.user_id = %s AND sb.shelf_id = %s
             """
             cursor.execute(query, (user_id, shelf_id))
         else:
-            query = "SELECT user_id, booktitle, isbn, author, publishdate, cover_id FROM user_books WHERE user_id = %s"
+            query = "SELECT user_id, booktitle, isbn, author, publishdate, cover_id, lib_id FROM user_books WHERE user_id = %s"
             cursor.execute(query, (user_id,))
         rows=cursor.fetchall()
         return [{
+            'lib_id' : row['lib_id'],
             'title' : row['booktitle'],
             'author' : row['author'],
             'cover_i' : row['cover_id'],
             'isbn' : row['isbn'],
-            'publishdate': str(row['publishdate'])
+            'publishdate': str(row['publishdate']),
+            'lib_id': row['lib_id']
         } for row in rows]
     finally:
         cursor.close()
@@ -125,6 +127,11 @@ def create_shelf(user_id, name, description=None):
     finally:
         cursor.close()
         disconnect_from_sql(cnx)
+
+def ensure_read_shelf(user_id):
+    shelves = get_user_shelves(user_id)
+    if not any(s.get('name') == 'Read' for s in shelves):
+        create_shelf(user_id, 'Read', 'Default shelf for books you have read')
 
 def add_book_to_shelf(user_book_id, shelf_id):
     cnx = connect_to_sql()
@@ -176,12 +183,40 @@ def update_shelf(shelf_id, user_id, name=None, description=None):
         cursor.close()
         disconnect_from_sql(cnx)
 
+def delete_shelf(shelf_id, user_id):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    try:
+        current_shelves = get_user_shelves(user_id)
+        for shelf in current_shelves:
+            if shelf['id'] == shelf_id and shelf['name'] == 'Read':
+                raise ValueError("Cannot delete the protected 'Read' shelf")
+        query = "DELETE FROM `shelves` WHERE id = %s AND user_id = %s"
+        cursor.execute(query, (shelf_id, user_id))
+        cnx.commit()
+        return cursor.rowcount > 0
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+        
 def remove_book_from_shelf(user_book_id, shelf_id):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
     try:
         query = "DELETE FROM `shelf_books` WHERE user_book_id = %s AND shelf_id = %s"
         cursor.execute(query, (user_book_id, shelf_id))
+        cnx.commit()
+        return cursor.rowcount > 0
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+
+def remove_book_from_library(lib_id, user_id):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    try: # Deletes from database using the lib_id and user_id
+        query = "DELETE FROM `user_books` WHERE lib_id = %s and user_id = %s"
+        cursor.execute(query, (lib_id, user_id))
         cnx.commit()
         return cursor.rowcount > 0
     finally:

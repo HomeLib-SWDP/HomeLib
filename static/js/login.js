@@ -36,11 +36,21 @@ loginForm.addEventListener('submit', async (loginEvent) => {
   //getting value 
   const emailValue = emailId.value;
   const passwordValue = password.value;
-
-  const userCredential = await signInWithEmailAndPassword(auth, emailValue, passwordValue);
+  var userCredential
+  try
+  {
+    userCredential = await signInWithEmailAndPassword(auth, emailValue, passwordValue);
+    incorrect.textContent = "";
+  }
+  catch(err)
+  {
+    const incorrect = document.getElementById("incorrect");
+    incorrect.textContent = "Incorrect username or password, please try again.";
+  }
+  
   const user = userCredential.user; //get user info 
 
-  const userId = user.uid; // gett user id from firebase
+  const userId = user.uid; // get user id from firebase
 
   // sending id to flask sessions
     fetch('/user_id_post', {
@@ -53,5 +63,3 @@ loginForm.addEventListener('submit', async (loginEvent) => {
   window.location.href = 'explore'; //redirect to explore page
   }
 );
-
-
