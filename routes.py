@@ -29,6 +29,21 @@ def add_manual_book():
             return jsonify({"message": "Book already exists in your library"}), 200
     else:
         return jsonify({"Error": "Failed to add book"}), 400
+    
+@books_bp.route('/remove_book', methods=['POST'])
+def remove_from_library():
+    current_user = session.get('user_id')
+    data = request.json
+
+    result = remove_book_from_library(data.get('lib_id'), current_user)
+
+    if result:
+        if result:
+            return jsonify({"message": "Book removed successfully"}), 200
+        else:
+            return jsonify({"message": "Failed to remove Book from Library"}), 200
+    else:
+        return jsonify({"Error": "Failed to add book"}), 400
 
 @books_bp.route('/get_library', methods=['GET'])
 def get_library():
