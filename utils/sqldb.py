@@ -1,5 +1,5 @@
 import mysql.connector
-import sqldetails
+from config import sqldetails
 
 database_config = {
     'host': sqldetails.host,

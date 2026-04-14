@@ -33,7 +33,7 @@ const confirmPassword = document.getElementById('confirmPassword');
 registerForm.addEventListener('submit', async (registerEvent) => {
   registerEvent.preventDefault();
 
-  //getting valuu
+  //getting value
   const emailValue = emailId.value;
   const passwordValue = password.value;
   const confirmPasswordValue = confirmPassword.value;
@@ -45,16 +45,19 @@ registerForm.addEventListener('submit', async (registerEvent) => {
   }
   const userCredential = await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
   const user = userCredential.user; //get user info
-  const userId = user.uid
+  const userId = user.uid //get user id
 
-  const accountDate = new Date().toLocaleDateString
+  const accountDate = new Date()
+  console.log(accountDate)
 
-  fetch ('/store_profile', {
+  fetch ('/store_profile', { //sending info to backend to store in sql
     method: 'POST' , 
     headers: {'Content-type' : 'application/json'
     },
-    body:JSON.stringify({userId, accountDate, emaiValue, usernameValue})
+    body:JSON.stringify({accountDate, emailValue, usernameValue, userId})
   })
+
+  //alert(userId)
 
   alert('Redirecting to login page');
   window.location.href = '/'; //redirect to login page

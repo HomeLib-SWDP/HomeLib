@@ -1,8 +1,10 @@
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify
 from routes import books_bp
 import os
+from datetime import datetime
 import dotenv
 from models.loans import createLoan, expireLoansBatch, editReturn, displayLoans
+from models.profile import createProfile, editProfile, displayProfile
 
 dotenv.load_dotenv()
 
@@ -58,10 +60,11 @@ def store_user_info():
 
     session['user_id'] = userId
   
-    #print (session['user_id])
+    print (session['user_id'])
 
     return jsonify({"Message": "User info stored"}) 
 
+# to retrieve user id
 @app.route('/user_id_get', methods = ['GET'])
 def retrive_user_info ():
     userId = session.get('user_id')
@@ -77,22 +80,67 @@ def shelves():
 @app.route('/manualentry')
 def manualentry():
     return render_template('manualentry.html')
-    
+
+#retrieving user id
+@app.route('/store_profile', methods = ['POST'])
+def store_user_profile ():
+
+    data = request.json
+
+    #print(data)
+
+    usernameValue =  data.get('usernameValue')
+    emailValue =  data.get('emailValue')
+    date =  data.get('accountDate')
+    userId =  data.get('userId') 
+
+    #print(userId)
+
+    # converting date to yyyy-mm-dd format so it can be accepted and stored in sql (date conversion was not working in js)
+    accountDate = datetime.strptime(date[:10], '%Y-%m-%d')
+
+    #print(accountDate)
+  
+    userProfile = createProfile(emailValue, accountDate, usernameValue, userId) #getting sql table insertion result
+
+    if userProfile is None:
+        return jsonify({"Duplicate Profile": userProfile})
+    if userProfile is False:
+        return jsonify({"Message": "Error creating profile"})
+    return jsonify({"Message": "Successfully stored profile information"})
+
+# To display user profile information
+@app.route('/display_profile' , methods = ['GET'])
+def display_profile():
+    userId = session.get('user_id')
+    #print (userId)
+
+    profileDisplay = displayProfile(userId) #getting sql table details
+
+    #print(loandisplay)
+    if profileDisplay is None:
+        return jsonify({"Message": "No profile yet"})
+    else:
+        return jsonify(profileDisplay)
+
+# To display loans from the backend
 @app.route('/display_Loan' , methods = ['GET'])
 def display_loan():
     userId = session.get('user_id')
     #print (userId)
-    loandisplay = displayLoans(userId)
+    loandisplay = displayLoans(userId) # getting sql table results
     #print(loandisplay)
     if loandisplay is None:
         return jsonify({"Message": "No loans exist"})
     else:
         return jsonify(loandisplay), 200
 
+#sending info to loan backend
 @app.route('/create_Loan' , methods = ['POST'])
 def make_loan():
     data = request.json
 
+    #might have to replace userId 
     bookId =  data.get('bookId')
     userId =  session.get('user_id')
     borrowedDate =  data.get('borrowedDate')
@@ -107,7 +155,7 @@ def make_loan():
         return jsonify({"Duplicate Loan": loanMade})
     if loanMade is False:
         return jsonify({"Message": "Error creating loan"})
-    return jsonify(loanMade), 200
+    return jsonify({"Message": "Successfully created Loan"})
 
 '''
 @app.route('edit_return')

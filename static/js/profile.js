@@ -1,5 +1,5 @@
 
-const fetchInfo = "/user_info_get";
+const fetchInfo = "/display_profile";
 
 async function displayProfileInfo() {
     try{
@@ -7,11 +7,14 @@ async function displayProfileInfo() {
         const response = await fetch(fetchInfo);
         if (!response.ok) throw new Error("Network Error");
         const data = await response.json();
+
+        //console.log(data)
     
         // displaying info
-        document.querySelector(".profile-name").textContent = data.userName;
-        document.querySelector(".profile-username").textContent= data.userName;
-        document.querySelector(".profile-date-joined").textContent=data.accountCreationDate;
+        document.querySelector(".profile-name").textContent = data[0].userName;
+        document.querySelector(".profile-username").textContent= data[0].userName;
+        document.querySelector(".profile-date-joined").textContent=data[0].accountDate; 
+
     } 
     catch (error) {
         const errorMes = error.message;
@@ -20,7 +23,6 @@ async function displayProfileInfo() {
 }
 
 displayProfileInfo();
-
 
 const profileImg = document.getElementById('profileImg');
   const uploadImg = document.getElementById('uploadImg');
