@@ -80,3 +80,97 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+const modal = document.getElementById("modal");
+const addBtn = document.querySelectorAll(".addBookBtn");
+const closeBtn = document.querySelector(".close");
+
+addBtn.forEach(btn => {
+  btn.onclick = () => {
+    modal.style.display = "flex";
+  };
+});
+
+closeBtn.onclick = () => {
+  modal.style.display = "none";
+};
+
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = "none";
+};
+
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("delete-btn")) {
+    const shelf = e.target.closest(".shelf");
+    shelf.remove();
+  }
+});
+
+
+
+const createBtn = document.querySelector(".create-btn");
+const mainContent = document.querySelector(".main-content");
+
+createBtn.addEventListener("click", () => {
+
+  const newShelf = document.createElement("section");
+  newShelf.classList.add("shelf");
+
+  newShelf.innerHTML = `
+    <div class="shelf-header">
+      <h3>Fiction Shelves <i class="fa-solid fa-pen" style="color: rgb(80, 80, 80);"></i></h3>
+      <div class="actions">
+        <button class="delete-btn">Delete</button>
+      </div>
+    </div>
+
+    <div class="books">
+      <div class="book">
+        <img src="/static/images/hunger.jpg" />
+        <div class="book-details">
+          <p class="book-title">The Hunger Games</p>
+          <p class="book-author">Suzanne Collins</p>
+          <button class="remove-btn">Remove</button>
+          <button class="add-btn addBookBtn">Add Book</button>
+        </div>
+      </div>
+
+      <hr class="shelf-hr">
+
+      <div class="book">
+        <img src="/static/images/pride.jpg" />
+        <div class="book-details">
+          <p class="book-title">Pride and Prejudice</p>
+          <p class="book-author">Jane Austen</p>
+          <button class="remove-btn">Remove</button>
+          <button class="add-btn addBookBtn">Add Book</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+
+  mainContent.appendChild(newShelf);
+});
+
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-btn")) {
+    const shelf = e.target.closest(".shelf");
+    shelf.remove();
+  }
+});
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest("i.fa-pen")) {
+    const h3 = e.target.closest(".shelf-header").querySelector("h3");
+    const currentText = h3.childNodes[0].nodeValue.trim();
+    const newName = prompt("Enter new shelf name:", currentText);
+
+    if (newName !== null && newName.trim() !== "") {
+      
+      h3.childNodes[0].nodeValue = newName + " ";
+    }
+  }
+});
