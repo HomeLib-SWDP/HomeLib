@@ -53,3 +53,20 @@ async function displayLoanInfo() {
 }
 
 displayLoanInfo();
+
+
+const modal = document.getElementById("loanModal");
+const addBtn = document.getElementById("addLoanBtn");
+const closeBtn = document.querySelector(".close");
+
+addBtn.onclick = () => {
+  modal.style.display = "flex";
+};
+
+closeBtn.onclick = () => {
+  modal.style.display = "none";
+};
+
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = "none";
+};

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shelves | HOMELIB</title>   
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/library.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shelves.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,13 +29,139 @@
             </div>
         </section>
         <section class="main-content">
-            <div class="title">
-                <p class="title-text">My Shelves</p>
-                <a href="{{ url_for('profile') }}"><img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}"></a>
+            <div class="profile-container">
+                <div class="title">
+                    <p class="title-text">My Shelves</p>
+                    <div class="profile-wrapper">
+                        <img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
+                    
+                
+
+                        <div class="profile-dropdown">
+                            
+                            <div class="dropdown-content">
+                                <a href="{{ url_for('profile') }}"><i class="fa-regular fa-circle-user"></i> Profile</a>
+                                <a href="{{ url_for('shelves') }}"><i class="fa-solid fa-layer-group"></i> Shelves</a>
+                                <a href="{{ url_for('stats') }}"><i class="fa-solid fa-list"></i> Stats</a>
+                                <a href="{{ url_for('loan') }}"><i class="fa-regular fa-clipboard"></i> Loans</a>
+
+                                <a href="{{ url_for('login') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <hr>
-            <button id="addShelfBtn" class="btn-primary">Create New Shelf</button>
-            <div id="shelves-container" class="shelves-grid"></div>
+            
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Add Book to Shelf</h2>
+
+                    <form id="loanForm">
+                        <p>Select Book</p>
+                        <select>
+                            <option>Test Book 1</option>
+                            <option>Test Book 2</option>
+                            <option>Test Book 3</option>
+                        </select>
+
+                        <button type="submit" class="submit-btn"> <i class="fa-solid fa-plus"></i> Add Book</button>
+                    </form>
+                </div>
+            </div>
+            
+
+            <div class="header">
+
+                <button class="create-btn"> <i class="fa-solid fa-plus"></i>Create New Shelf</button>
+
+            </div>
+            
+            <section class="shelf">
+                <div class="shelf-header">
+
+                    <h3>Fiction Shelves <i class="fa-solid fa-pen" style="color: rgb(80, 80, 80);"></i></h3>
+
+                    <div class="actions">
+                        <button class="delete-btn">Delete</button>
+                    </div>
+
+                </div>
+
+                <div class="books">
+
+                    <div class="book">
+                        <img src="{{ url_for('static', filename='images/hunger.jpg') }}" />
+                        <div class="book-details">
+                            <p class="book-title">The Hunger Games</p>
+                            <p class="book-author">Suzanne Collins</p>
+                            <button class="remove-btn">Remove</button>
+                            <button class="add-btn addBookBtn">Add Book</button>
+                        </div>
+                        
+                    </div>
+                    
+                    <hr class="shelf-hr">
+                    <div class="book">
+                        <img src="{{ url_for('static', filename='images/pride.jpg') }}" />
+                        <div class="book-details">
+                            <p class="book-title">Pride and Prejudice</p>
+                            <p class="book-author">Jane Austen</p>
+                            <button class="remove-btn">Remove</button>
+                            <button class="add-btn addBookBtn">Add Book</button>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                
+                
+            </section>
+            
+            
+            <section class="shelf">
+                <div class="shelf-header">
+
+                    <h3>Fiction Shelves <i class="fa-solid fa-pen" style="color: rgb(80, 80, 80);"></i></h3>
+
+                    <div class="actions">
+                        <button class="delete-btn">Delete</button>
+                    </div>
+
+                </div>
+
+                <div class="books">
+
+                    <div class="book">
+                        <img src="{{ url_for('static', filename='images/hunger.jpg') }}" />
+                        <div class="book-details">
+                            <p class="book-title">The Hunger Games</p>
+                            <p class="book-author">Suzanne Collins</p>
+                            <button class="remove-btn">Remove</button>
+                            <button class="add-btn addBookBtn">Add Book</button>
+                        </div>
+                        
+                    </div>
+                    
+                    <hr class="shelf-hr">
+                    <div class="book">
+                        <img src="{{ url_for('static', filename='images/pride.jpg') }}" />
+                        <div class="book-details">
+                            <p class="book-title">Pride and Prejudice</p>
+                            <p class="book-author">Jane Austen</p>
+                            <button class="remove-btn">Remove</button>
+                            <button class="add-btn addBookBtn">Add Book</button>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                
+                
+            </section>
+            
+            
         </section>
     </main>
     <script src ="{{ url_for('static', filename='js/shelves.js') }}"></script>
