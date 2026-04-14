@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 import requests, random
-from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf, remove_book_from_library
+from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, delete_shelf, remove_book_from_shelf,remove_book_from_library, ensure_read_shelf
 
 books_bp = Blueprint('books', __name__)
 
