@@ -32,7 +32,7 @@ async function renderBooks(booksArray, container) {
                 </div>
 
                 <button type="button" class="add-btn" style="margin-top: 8px; width: fit-content;">
-                    Add tfo library
+                    Add to library
                 </button>
             </div>
         `;

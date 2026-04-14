@@ -1,6 +1,5 @@
 let allBooks = []; 
 let currentShelfId = null;
-const card = document.getElementById("popup");
 
 async function loadLibrary(shelfId = null) {
     currentShelfId = shelfId;
@@ -126,10 +125,6 @@ function renderBook(booksArray, container) {
                 <div class="shelf-tag">My Library</div>
             </div>
         `;
-        div.addEventListener('click', (e) =>{
-            e.stopPropagation();
-            displayPopUp(book);
-        })
         container.appendChild(div);
     });
 }
@@ -184,110 +179,3 @@ addShelfBtn.addEventListener("click", () => {
     shelvesContainer.insertBefore(newShelf, addShelfBtn);
   }
 });
-
-function displayPopUp(book)
-{
-    console.log(book);
-    
-    const overlay = document.getElementById("popup");
-
-    overlay.innerHTML = `
-    <div style="display: flex">
-        <h2 style="padding-top: 1em">${book.title}</h2>
-        <button id=closeBtn class="close-btn">&times;</button>
-    </div>
-    <div style="display: flex">
-        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
-        <div style="padding-left: 1rem; min-width: 20rem">
-            <h4>Author: ${book.author ? book.author : "Unknown Author"}</h4>
-            <h4>Published: ${book.publishdate}</h4>
-            <h4>ISBN: ${book.isbn ? book.isbn : "Unknown ISBN"}</h4>
-            <button id="removeBtn" class="confirm-btn">Remove &times;</button>
-        </div>
-    </div>
-    `
-    overlay.classList.toggle("hidden");
-
-    const closeBtn = document.getElementById("closeBtn");
-    closeBtn.addEventListener("click", (e) =>{
-        e.stopPropagation();
-        overlay.classList.add("hidden");
-    })
-
-    const removeBtn = document.getElementById("removeBtn");
-    removeBtn.addEventListener("click", (e) =>{
-        e.stopPropagation();
-        overlay.classList.add("hidden");
-        confirmDelete(book);
-    })
-}
-
-function confirmDelete(book)
-{
-    console.log("Confirm Prompt");
-    const overlay = document.getElementById("confirm-delete");
-    const modal = document.getElementById("modal");
-    overlay.classList.toggle("hidden");
-    modal.classList.toggle("hidden");
-
-    overlay.innerHTML = `
-    <p>Are you sure you want to delete <b><u>${book.title}</u></b> from your library?</p>
-    <div style="display: flex; justify-content: center; padding-top: 2em">
-        <button id="no" class="confirm-btn" style="color: red;">No &times;</button>
-        <button id="yes" class="confirm-btn" style="color: green;">Yes &check;</button>
-    </div>
-    
-    `
-
-    const noBtn = document.getElementById("no");
-    noBtn.addEventListener("click", (e) =>{
-        e.stopPropagation();
-        overlay.classList.add("hidden");
-        modal.classList.add("hidden");
-    })
-
-    const yesBtn = document.getElementById("yes");
-    yesBtn.addEventListener("click", (e) =>{
-        e.stopPropagation();
-        overlay.classList.add("hidden");
-        modal.classList.add("hidden");
-        removeBookFromLib(book);
-    })
-}
-
-async function removeBookFromLib(book)
-{
-    console.log("remove");
-
-    const removedBook = {
-        lib_id: book.lib_id
-    };
-
-    try {
-    const response = await fetch('/api/books/remove_book', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(removedBook)
-    });
-        const data = await response.json();
-        alert(data.message);
-        var index = allBooks.findIndex(libBook => libBook.lib_id == book.lib_id)
-        console.log(index);
-        if(index > -1)
-        {
-            allBooks.splice(index, 1);
-            filterAndSortBooks();
-        }
-    } catch (err) {
-        alert('Delete Failed.');
-    }
-}
-
-card.addEventListener("click", (e) => {
-    e.stopPropagation();
-})
-
-document.addEventListener("click", () =>
-{
-    card.classList.add("hidden");
-})

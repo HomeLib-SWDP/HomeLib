@@ -62,18 +62,17 @@ def get_books(user_id, shelf_id=None):
     try:
         if shelf_id:
             query = """
-                SELECT b.lib_id, b.user_id, b.booktitle, b.isbn, b.author, b.publishdate, b.cover_id 
+                SELECT b.user_id, b.booktitle, b.isbn, b.author, b.publishdate, b.cover_id 
                 FROM user_books b
                 JOIN shelf_books sb ON b.lib_id = sb.user_book_id
                 WHERE b.user_id = %s AND sb.shelf_id = %s
             """
             cursor.execute(query, (user_id, shelf_id))
         else:
-            query = "SELECT lib_id, user_id, booktitle, isbn, author, publishdate, cover_id FROM user_books WHERE user_id = %s"
+            query = "SELECT user_id, booktitle, isbn, author, publishdate, cover_id FROM user_books WHERE user_id = %s"
             cursor.execute(query, (user_id,))
         rows=cursor.fetchall()
         return [{
-            'lib_id' : row['lib_id'],
             'title' : row['booktitle'],
             'author' : row['author'],
             'cover_i' : row['cover_id'],
