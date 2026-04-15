@@ -1,7 +1,7 @@
 from utils.sqldb import connect_to_sql, disconnect_from_sql
 
 class Book:
-    def __init__(self, booktitle, author, isbn = None, cover_id = None, publishdate = None, user_id = None, cover_edition_key = None, ratings_average = None):
+    def __init__(self, booktitle, author, isbn = None, cover_id = None, publishdate = None, user_id = None, cover_edition_key = None, ratings_average = None, genre = None, num_pages = None):
         self.user_id = user_id
         self.cover_id = cover_id
         self.publishdate = publishdate
@@ -10,6 +10,8 @@ class Book:
         self.isbn = isbn
         self.cover_edition_key = cover_edition_key
         self.ratings_average = ratings_average
+        self.genre = genre
+        self.num_pages = num_pages
 
     def to_dict(self):
         return {
@@ -20,7 +22,10 @@ class Book:
             "author": self.author,
             "user_id": self.user_id,
             "cover_edition_key": "",
-            "ratings_average": self.ratings_average
+            "ratings_average": self.ratings_average,
+            "genre": self.genre,
+            "num_pages": self.num_pages
+
         }
 
 def add_book(book):
@@ -40,10 +45,10 @@ def add_book(book):
             return {'id': existing_id, 'new': False}
 
         query = """
-            INSERT INTO `user_books` (user_id, booktitle, isbn, author, publishdate, cover_id)
-            VALUES(%s, %s, %s, %s, %s, %s)
+            INSERT INTO `user_books` (user_id, booktitle, isbn, author, publishdate, cover_id, genre, num_pages)
+            VALUES(%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        values = (book.user_id, book.booktitle, book.isbn, book.author, book.publishdate, book.cover_id)
+        values = (book.user_id, book.booktitle, book.isbn, book.author, book.publishdate, book.cover_id, book.genre, book.num_pages)
         cursor.execute(query, values)
         cnx.commit()
         
@@ -133,12 +138,12 @@ def ensure_read_shelf(user_id):
     if not any(s.get('name') == 'Read' for s in shelves):
         create_shelf(user_id, 'Read', 'Default shelf for books you have read')
 
-def add_book_to_shelf(user_book_id, shelf_id):
+def add_book_to_shelf(user_book_id, shelf_id, date_added):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
     try:
-        query = "INSERT INTO `shelf_books` (user_book_id, shelf_id) VALUES (%s, %s)"
-        cursor.execute(query, (user_book_id, shelf_id))
+        query = "INSERT INTO `shelf_books` (user_book_id, shelf_id, date_added) VALUES (%s, %s, %s)"
+        cursor.execute(query, (user_book_id, shelf_id, date_added))
         cnx.commit()
         return True
     except Exception as e:
@@ -211,6 +216,60 @@ def remove_book_from_shelf(user_book_id, shelf_id):
         cursor.close()
         disconnect_from_sql(cnx)
 
+
+def get_user_stats(user_id):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor(dictionary=True)
+    try:
+        cursor.execute("""
+            SELECT 
+                COUNT(*) as total,
+                COUNT(CASE WHEN YEAR(sb.added_at) = YEAR(CURDATE()) THEN 1 END) as year,
+                COUNT(CASE WHEN MONTH(sb.added_at) = MONTH(CURDATE()) AND YEAR(sb.added_at) = YEAR(CURDATE()) THEN 1 END) as month
+            FROM user_books AS ub
+            JOIN shelf_books AS sb ON ub.lib_id = sb.user_book_id
+            JOIN shelves AS s ON sb.shelf_id = s.id
+            WHERE ub.user_id = %s AND s.name = 'Read'
+        """, (user_id,))
+        read_counts = cursor.fetchone()
+
+        cursor.execute("""
+            SELECT author, COUNT(*) as count FROM user_books 
+            WHERE user_id = %s GROUP BY author ORDER BY count DESC LIMIT 1
+        """, (user_id,))
+        top_author = cursor.fetchone()
+
+        cursor.execute("""
+            SELECT genre, COUNT(*) as count FROM user_books 
+            WHERE user_id = %s GROUP BY genre ORDER BY count DESC LIMIT 1
+        """, (user_id,))
+        top_genre = cursor.fetchone()
+
+    
+        cursor.execute("""
+            SELECT 
+                booktitle, num_pages,
+                (SELECT SUM(IFNULL(num_pages, 0)) FROM user_books WHERE user_id = %s) as total_pages
+            FROM user_books 
+            WHERE user_id = %s AND num_pages IS NOT NULL
+            ORDER BY num_pages DESC LIMIT 1
+        """, (user_id, user_id))
+        page_stats = cursor.fetchone()
+
+        return {
+            "read_shelf_counts": read_counts if read_counts else {"total": 0, "year": 0, "month": 0},
+            "top_author": top_author['author'] if top_author else "None",
+            "top_genre": top_genre['genre'] if top_genre else "None",
+            "longest_book": page_stats['booktitle'] if page_stats else "None",
+            "total_pages": int(page_stats['total_pages']) if page_stats and page_stats['total_pages'] else 0
+        }
+    except Exception as e:
+        print(f"SQL Error in get_user_stats: {e}")
+        return None
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+        disconnect_from_sql(cnx)
 def remove_book_from_library(lib_id, user_id):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
