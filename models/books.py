@@ -198,5 +198,64 @@ def remove_book_from_shelf(user_book_id, shelf_id):
         cursor.close()
         disconnect_from_sql(cnx)
 
+
+def get_user_stats(user_id):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor(dictionary=True)
+    try:
+        # --- 1. READ SHELF STATS ---
+        # Joining shelf_books (sb) to shelves (s) on the verified foreign key
+        cursor.execute("""
+            SELECT 
+                COUNT(*) as total,
+                COUNT(CASE WHEN YEAR(sb.added_at) = YEAR(CURDATE()) THEN 1 END) as year,
+                COUNT(CASE WHEN MONTH(sb.added_at) = MONTH(CURDATE()) AND YEAR(sb.added_at) = YEAR(CURDATE()) THEN 1 END) as month
+            FROM user_books AS ub
+            JOIN shelf_books AS sb ON ub.lib_id = sb.user_book_id
+            JOIN shelves AS s ON sb.shelf_id = s.id
+            WHERE ub.user_id = %s AND s.name = 'Read'
+        """, (user_id,))
+        read_counts = cursor.fetchone()
+
+        # --- 2. TOP AUTHOR ---
+        cursor.execute("""
+            SELECT author, COUNT(*) as count FROM user_books 
+            WHERE user_id = %s GROUP BY author ORDER BY count DESC LIMIT 1
+        """, (user_id,))
+        top_author = cursor.fetchone()
+
+        # --- 3. TOP GENRE ---
+        cursor.execute("""
+            SELECT genre, COUNT(*) as count FROM user_books 
+            WHERE user_id = %s GROUP BY genre ORDER BY count DESC LIMIT 1
+        """, (user_id,))
+        top_genre = cursor.fetchone()
+
+        # --- 4. LONGEST BOOK & TOTAL PAGES ---
+        cursor.execute("""
+            SELECT 
+                booktitle, num_pages,
+                (SELECT SUM(IFNULL(num_pages, 0)) FROM user_books WHERE user_id = %s) as total_pages
+            FROM user_books 
+            WHERE user_id = %s AND num_pages IS NOT NULL
+            ORDER BY num_pages DESC LIMIT 1
+        """, (user_id, user_id))
+        page_stats = cursor.fetchone()
+
+        # Formatting the response to match your stats.js requirements
+        return {
+            "read_shelf_counts": read_counts if read_counts else {"total": 0, "year": 0, "month": 0},
+            "top_author": top_author['author'] if top_author else "None",
+            "top_genre": top_genre['genre'] if top_genre else "None",
+            "longest_book": page_stats['booktitle'] if page_stats else "None",
+            "total_pages": int(page_stats['total_pages']) if page_stats and page_stats['total_pages'] else 0
+        }
+    except Exception as e:
+        print(f"SQL Error in get_user_stats: {e}")
+        return None
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+        disconnect_from_sql(cnx)
 if __name__ == "__main__":
     test_add_book()
