@@ -206,7 +206,9 @@ async function handleSaveBook(book){
         author: (book.author_name && book.author_name.length > 0) ? book.author_name[0] : 'Unknown',
         isbn: book.isbn ? book.isbn[0] : 'Unknown', 
         cover_id: book.cover_i,
-        publish_date: book.first_publish_year || 'Unknown'
+        publish_date: book.first_publish_year || 'Unknown',
+        cleaned_genre: book.cleaned_genre, 
+        pages: book.pages
     };
 
     //console.table(savedBook);

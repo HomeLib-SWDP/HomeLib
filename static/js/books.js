@@ -8,6 +8,7 @@ document.getElementById("manualBookForm").addEventListener("submit", async funct
     const data = Object.fromEntries(formData.entries());
 
 
+
     const targetUrl = this.getAttribute('action');
     
     const response = await fetch( targetUrl, {
