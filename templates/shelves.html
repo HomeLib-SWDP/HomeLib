@@ -29,9 +29,27 @@
             </div>
         </section>
         <section class="main-content">
-            <div class="title">
-                <p class="title-text">My Shelves</p>
-                <a href="{{ url_for('profile') }}"><img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}"></a>
+            <div class="profile-container">
+                <div class="title">
+                    <p class="title-text">My Shelves</p>
+                    <div class="profile-wrapper">
+                        <img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
+                    
+                
+
+                        <div class="profile-dropdown">
+                            
+                            <div class="dropdown-content">
+                                <a href="{{ url_for('profile') }}"><i class="fa-regular fa-circle-user"></i> Profile</a>
+                                <a href="{{ url_for('shelves') }}"><i class="fa-solid fa-layer-group"></i> Shelves</a>
+                                <a href="{{ url_for('stats') }}"><i class="fa-solid fa-list"></i> Stats</a>
+                                <a href="{{ url_for('loan') }}"><i class="fa-regular fa-clipboard"></i> Loans</a>
+
+                                <a href="{{ url_for('login') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <hr>
             
@@ -59,7 +77,7 @@
                 <button class="create-btn"> <i class="fa-solid fa-plus"></i>Create New Shelf</button>
 
             </div>
-
+            
             <section class="shelf">
                 <div class="shelf-header">
 
@@ -79,7 +97,7 @@
                             <p class="book-title">The Hunger Games</p>
                             <p class="book-author">Suzanne Collins</p>
                             <button class="remove-btn">Remove</button>
-                            <button id="addBookBtn" class="add-btn">Add Book</button>
+                            <button class="add-btn addBookBtn">Add Book</button>
                         </div>
                         
                     </div>
@@ -91,7 +109,7 @@
                             <p class="book-title">Pride and Prejudice</p>
                             <p class="book-author">Jane Austen</p>
                             <button class="remove-btn">Remove</button>
-                            <button id="addBookBtn" class="add-btn">Add Book</button>
+                            <button class="add-btn addBookBtn">Add Book</button>
                         </div>
                     </div>
                     
@@ -100,6 +118,8 @@
                 
                 
             </section>
+            
+            
             <section class="shelf">
                 <div class="shelf-header">
 
@@ -119,7 +139,7 @@
                             <p class="book-title">The Hunger Games</p>
                             <p class="book-author">Suzanne Collins</p>
                             <button class="remove-btn">Remove</button>
-                            <button class="add-btn">Add Book</button>
+                            <button class="add-btn addBookBtn">Add Book</button>
                         </div>
                         
                     </div>
@@ -131,7 +151,7 @@
                             <p class="book-title">Pride and Prejudice</p>
                             <p class="book-author">Jane Austen</p>
                             <button class="remove-btn">Remove</button>
-                            <button class="add-btn">Add Book</button>
+                            <button class="add-btn addBookBtn">Add Book</button>
                         </div>
                     </div>
                     
@@ -140,6 +160,8 @@
                 
                 
             </section>
+            
+            
         </section>
     </main>
     <script src ="{{ url_for('static', filename='js/shelves.js') }}"></script>

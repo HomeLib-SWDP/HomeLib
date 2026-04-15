@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 import requests, random
-from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf, get_user_stats
+from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, delete_shelf, remove_book_from_library, remove_book_from_shelf, ensure_read_shelf
 
 books_bp = Blueprint('books', __name__)
 
@@ -29,6 +29,21 @@ def add_manual_book():
             return jsonify({"message": "Book added successfully!"}), 200
         else:
             return jsonify({"message": "Book already exists in your library"}), 200
+    else:
+        return jsonify({"Error": "Failed to add book"}), 400
+    
+@books_bp.route('/remove_book', methods=['POST'])
+def remove_from_library():
+    current_user = session.get('user_id')
+    data = request.json
+
+    result = remove_book_from_library(data.get('lib_id'), current_user)
+
+    if result:
+        if result:
+            return jsonify({"message": "Book removed successfully"}), 200
+        else:
+            return jsonify({"message": "Failed to remove Book from Library"}), 200
     else:
         return jsonify({"Error": "Failed to add book"}), 400
 
@@ -71,7 +86,7 @@ def get_my_shelves():
     user_id = session.get('user_id')
     if not user_id:
         return jsonify({"success": False, "message": "Not logged in"}), 401
-    
+    ensure_read_shelf(user_id)
     shelves = get_user_shelves(user_id)
     return jsonify({"success": True, "shelves": shelves})
 
@@ -83,7 +98,16 @@ def edit_shelf(shelf_id):
     data = request.get_json()
     if update_shelf(shelf_id, user_id, data.get('name'), data.get('description')):
         return jsonify({"success": True, "message": "Shelf updated"})
-    return jsonify({"success": False, "message": "Failed or unauthorized"}), 400
+    return jsonify({"success": False, "message": "Failed to edit shelf"}), 400
+
+@books_bp.route('/shelves/<int:shelf_id>', methods=['DELETE'])
+def delete_shelf_route(shelf_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"success": False, "message": "Not logged in"}), 401
+    if delete_shelf(shelf_id, user_id):
+        return jsonify({"success": True, "message": "Shelf deleted"})
+    return jsonify({"success": False, "message": "Failed to delete shelf"}), 400
 
 @books_bp.route('/shelves/remove-book', methods=['POST'])
 def remove_from_shelf():

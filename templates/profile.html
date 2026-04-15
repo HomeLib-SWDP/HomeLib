@@ -31,11 +31,31 @@
         </section>
 
         <section class="main-content">
-            <div class="title">
-                <p class="title-text">My Profile</p>
-                <img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
+            <div class="profile-container">
+                <div class="title">
+                    <p class="title-text">My Profile</p>
+                    <div class="profile-wrapper">
+                        <img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
+                    
                 
+
+                        <div class="profile-dropdown">
+                            
+                            <div class="dropdown-content">
+                                <a href="{{ url_for('profile') }}"><i class="fa-regular fa-circle-user"></i> Profile</a>
+                                <a href="{{ url_for('shelves') }}"><i class="fa-solid fa-layer-group"></i> Shelves</a>
+                                <a href="{{ url_for('stats') }}"><i class="fa-solid fa-list"></i> Stats</a>
+                                <a href="{{ url_for('loan') }}"><i class="fa-regular fa-clipboard"></i> Loans</a>
+
+                                <a href="{{ url_for('login') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+           
+
+
             <hr>
             <div class="profile-main">
                 <div class="profile-top">

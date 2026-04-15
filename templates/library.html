@@ -29,30 +29,37 @@
             </div>
         </section>
         <section class="main-content">
-            <div class="title">
-                <p class="title-text">My Library</p>
-                <a href="{{ url_for('profile') }}"><img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}"></a>
+            <div class="profile-container">
+                <div class="title">
+                    <p class="title-text">My Library</p>
+                    <div class="profile-wrapper">
+                        <img class="profile-img" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
+                    
                 
+
+                        <div class="profile-dropdown">
+                            
+                            <div class="dropdown-content">
+                                <a href="{{ url_for('profile') }}"><i class="fa-regular fa-circle-user"></i> Profile</a>
+                                <a href="{{ url_for('shelves') }}"><i class="fa-solid fa-layer-group"></i> Shelves</a>
+                                <a href="{{ url_for('stats') }}"><i class="fa-solid fa-list"></i> Stats</a>
+                                <a href="{{ url_for('loan') }}"><i class="fa-regular fa-clipboard"></i> Loans</a>
+
+                                <a href="{{ url_for('login') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <hr>
             
-            <div class="shelves">
-                <div id="shelves-container" class="shelves-container">
-                    <button><span class="read-value shelf">10</span> Read</button>
-                    <button><span class="reading-value shelf">10</span> Reading</button>
-                    <button><span class="want-to-read-value shelf">10</span> Want to Read</button>
-                    <button id="addShelfBtn">Add Shelf</button>
-                </div>
-                <hr>
-            </div>
+            
             <div class="search-books">
                 <div class="search-books-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input placeholder="Search books..." id="search">
                     <div id="suggestions" class="suggestions"></div>
-                    <select class="shelves-sort">
-                        <option value="all">All Shelves</option>
-                    </select>
+                    
 
                     <select class="sort-by">
                         <option> Sort by</option>
@@ -86,7 +93,12 @@
                 </div>
             </div>
         </section>
-            </section>
+        </section>
+        <div id="popup" class="details-card hidden">
+        </div>
+
+        <div id="modal" class="modal-overlay hidden"></div>
+        <div id="confirm-delete" class="delete-card hidden"></div>
     </main>
     <script src="{{ url_for('static', filename='js/library.js') }}" ></script>
 </body>
