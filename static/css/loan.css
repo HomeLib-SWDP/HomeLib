@@ -253,3 +253,8 @@ tr:nth-child(even){
 .profile-dropdown:hover {
     display: block;
 }
+.fa-calendar{
+    cursor: pointer;
+    color: #333;
+    padding-left: .1em;
+}
