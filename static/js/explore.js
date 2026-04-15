@@ -1,3 +1,4 @@
+
 let currentOffset = 0;
 let currentQuery = '';
 let currentLang = '';
@@ -121,7 +122,7 @@ async function searchBooks(searchInput, suggestions)
             return;
         }
 
-        const url = `https://openlibrary.org/search.json?q=${query}`;
+        const url = `https://openlibrary.org/search.json?q=${query}&fields=title,author_name,cover_i,first_publish_year,subject,number_of_pages_median,key,isbn,ratings_average`;
         const container = document.getElementById('results');
 
         const response = await fetch(url);
@@ -129,11 +130,20 @@ async function searchBooks(searchInput, suggestions)
 
         const data = await response.json();
 
-        bookSuggestions = data.docs.map(book => ({
-            book, score: scoreBook(book, query)
-        })).filter((item => item.score > 0))
-        .sort((a, b) => b.score - a.score)
-        .map(item => item.book);
+        bookSuggestions = data.docs.map(doc => {
+            return {
+                ...doc,
+                pages: doc.number_of_pages_median || 0,
+                cleaned_genre: doc.subject || [], // Send raw list to routes
+                };
+            })
+            .map(book => ({
+                book, 
+                score: scoreBook(book, query)
+            }))
+            .filter(item => item.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .map(item => item.book);
 
         bookSuggestions = bookSuggestions.filter(book => book.cover_i != null)
 

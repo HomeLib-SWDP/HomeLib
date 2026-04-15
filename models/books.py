@@ -84,7 +84,7 @@ def get_books(user_id, shelf_id=None):
             'cover_i' : row['cover_id'],
             'isbn' : row['isbn'],
             'publishdate': str(row['publishdate']),
-            'lib_id': row['lib_id']
+            'lib_id': row['lib_id']           
         } for row in rows]
     finally:
         cursor.close()
@@ -138,12 +138,12 @@ def ensure_read_shelf(user_id):
     if not any(s.get('name') == 'Read' for s in shelves):
         create_shelf(user_id, 'Read', 'Default shelf for books you have read')
 
-def add_book_to_shelf(user_book_id, shelf_id, date_added):
+def add_book_to_shelf(user_book_id, shelf_id):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
     try:
-        query = "INSERT INTO `shelf_books` (user_book_id, shelf_id, date_added) VALUES (%s, %s, %s)"
-        cursor.execute(query, (user_book_id, shelf_id, date_added))
+        query = "INSERT INTO `shelf_books` (user_book_id, shelf_id) VALUES (%s, %s)"
+        cursor.execute(query, (user_book_id, shelf_id))
         cnx.commit()
         return True
     except Exception as e:
@@ -248,11 +248,18 @@ def get_user_stats(user_id):
     
         cursor.execute("""
             SELECT 
-                booktitle, num_pages,
-                (SELECT SUM(IFNULL(num_pages, 0)) FROM user_books WHERE user_id = %s) as total_pages
-            FROM user_books 
-            WHERE user_id = %s AND num_pages IS NOT NULL
-            ORDER BY num_pages DESC LIMIT 1
+                ub.booktitle, 
+                ub.num_pages,
+                (SELECT SUM(IFNULL(ub2.num_pages, 0)) 
+                 FROM user_books ub2
+                 JOIN shelf_books sb2 ON ub2.lib_id = sb2.user_book_id
+                 JOIN shelves s2 ON sb2.shelf_id = s2.id
+                 WHERE ub2.user_id = %s AND s2.name = 'Read') as total_pages
+            FROM user_books ub
+            JOIN shelf_books sb ON ub.lib_id = sb.user_book_id
+            JOIN shelves s ON sb.shelf_id = s.id
+            WHERE ub.user_id = %s AND s.name = 'Read' AND ub.num_pages IS NOT NULL
+            ORDER BY ub.num_pages DESC LIMIT 1
         """, (user_id, user_id))
         page_stats = cursor.fetchone()
 
@@ -270,6 +277,8 @@ def get_user_stats(user_id):
         cursor.close()
         disconnect_from_sql(cnx)
         disconnect_from_sql(cnx)
+
+
 def remove_book_from_library(lib_id, user_id):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
@@ -282,5 +291,8 @@ def remove_book_from_library(lib_id, user_id):
         cursor.close()
         disconnect_from_sql(cnx)
 
+
+
+    return "Other"
 if __name__ == "__main__":
     test_add_book()

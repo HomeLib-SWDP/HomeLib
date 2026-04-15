@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 import requests, random
-from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, delete_shelf, remove_book_from_library, remove_book_from_shelf, ensure_read_shelf
+from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, delete_shelf, remove_book_from_library, remove_book_from_shelf, ensure_read_shelf, get_user_stats
 
 books_bp = Blueprint('books', __name__)
 
@@ -10,6 +10,8 @@ books_bp = Blueprint('books', __name__)
 def add_manual_book():
     current_user = session.get('user_id')
     data = request.json
+    raw_genre = data.get('cleaned_genre')
+    final_genre = get_clean_genre(raw_genre)
 
     new_book = Book(
         booktitle = data.get('title'),
@@ -18,7 +20,7 @@ def add_manual_book():
         cover_id = data.get('cover_id'),
         publishdate = data.get('publish_date'),
         user_id = current_user,
-        genre = data.get('cleaned_genre') or "Other", 
+        genre = final_genre, 
         num_pages = data.get('pages') or 0
     )
 
@@ -77,7 +79,7 @@ def add_to_shelf():
     data = request.get_json()
     if not data.get('user_book_id') or not data.get('shelf_id'):
         return jsonify({"success": False, "message": "Missing book ID or shelf ID"}), 400
-    if add_book_to_shelf(data['user_book_id'], data['shelf_id'], data['date_added']):
+    if add_book_to_shelf(data['user_book_id'], data['shelf_id']):
         return jsonify({"success": True, "message": "Book added to shelf"}), 201
     return jsonify({"success": False, "message": "Failed to add book to shelf"}), 500
 
@@ -119,26 +121,6 @@ def remove_from_shelf():
         return jsonify({"success": True, "message": "Book removed from shelf"})
     return jsonify({"success": False, "message": "Failed to remove the book"}), 400
 
-
-def get_clean_genre(subjects):
-
-    if not subjects:
-        return "Other"
-    
-    core_genres = ["Fiction", "Mystery", "Fantasy", "Nonfiction", "Sci-Fi", "Thriller", "History", "Biography"]
-
-    for s in subjects:
-        s_lower = s.lower()
-        for core in core_genres:
-            if core.lower() in s_lower:
-                return core
-            
-    for s in subjects:
-        s_lower = s.lower()
-        if "nyt:" not in s_lower and "bestseller" not in s_lower and "collection" not in s_lower:
-            return s.split(',')[-1].strip().title()
-
-    return "Other"
 
 
 @books_bp.route('/<category>', methods=['GET'])
@@ -195,3 +177,16 @@ def stats_route():
         return jsonify(stats_data), 200
     else:
         return jsonify({"error": "Could not retrieve stats"}), 500
+    
+def get_clean_genre(subjects):
+    if not subjects:
+        return "Other"
+    
+    core_genres = ["Fantasy", "Mystery", "Non-fiction", "Science Fiction", "History"]
+
+    for s in subjects:
+        for pg in core_genres:
+            if pg.lower() in s.lower():
+                return pg
+                
+    return subjects[0] if subjects else "Other"
