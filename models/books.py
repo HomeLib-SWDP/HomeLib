@@ -203,8 +203,6 @@ def get_user_stats(user_id):
     cnx = connect_to_sql()
     cursor = cnx.cursor(dictionary=True)
     try:
-        # --- 1. READ SHELF STATS ---
-        # Joining shelf_books (sb) to shelves (s) on the verified foreign key
         cursor.execute("""
             SELECT 
                 COUNT(*) as total,
@@ -217,21 +215,19 @@ def get_user_stats(user_id):
         """, (user_id,))
         read_counts = cursor.fetchone()
 
-        # --- 2. TOP AUTHOR ---
         cursor.execute("""
             SELECT author, COUNT(*) as count FROM user_books 
             WHERE user_id = %s GROUP BY author ORDER BY count DESC LIMIT 1
         """, (user_id,))
         top_author = cursor.fetchone()
 
-        # --- 3. TOP GENRE ---
         cursor.execute("""
             SELECT genre, COUNT(*) as count FROM user_books 
             WHERE user_id = %s GROUP BY genre ORDER BY count DESC LIMIT 1
         """, (user_id,))
         top_genre = cursor.fetchone()
 
-        # --- 4. LONGEST BOOK & TOTAL PAGES ---
+    
         cursor.execute("""
             SELECT 
                 booktitle, num_pages,
@@ -242,7 +238,6 @@ def get_user_stats(user_id):
         """, (user_id, user_id))
         page_stats = cursor.fetchone()
 
-        # Formatting the response to match your stats.js requirements
         return {
             "read_shelf_counts": read_counts if read_counts else {"total": 0, "year": 0, "month": 0},
             "top_author": top_author['author'] if top_author else "None",
