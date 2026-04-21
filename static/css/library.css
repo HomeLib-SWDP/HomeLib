@@ -172,6 +172,13 @@ hr{
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+.popup-cover {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
 .book-card:hover {
     transform: translateY(-5px);
 }
@@ -268,6 +275,15 @@ hr{
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 
   z-index: 9999;        /* sits above everything */
+}
+
+.select-shelf{
+    width: 15em;
+    padding: .36em;
+    font-size: 1.1em;
+    border-radius: 5px;
+    border: 1px solid rgb(204, 204, 204);
+    color: rgb(160, 160, 160);
 }
 
 .modal-overlay {

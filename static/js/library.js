@@ -173,14 +173,17 @@ function displayPopUp(book)
         <button id=closeBtn class="close-btn">&times;</button>
     </div>
     <div style="display: flex">
-        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
+        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="popup-cover">
         <div style="padding-left: 1rem; min-width: 20rem">
             <h4>Author: ${book.author ? book.author : "Unknown Author"}</h4>
             <h4>Published: ${book.publishdate}</h4>
             <h4>ISBN: ${book.isbn ? book.isbn : "Unknown ISBN"}</h4>
-            <select id='shelf_list' class='sort-by'>
-            </select>
-            <button id="removeBtn" class="confirm-btn">Remove &times;</button>
+            <div style="padding-top: 1em; display: flex; flex-direction: column">
+                <select id='shelf_list' class='add-to-shelf select-shelf'>
+                </select>
+                <button id="addToShelf" class="confirm-btn" style="margin-top: .5em">Add to Shelf</button>
+                <button id="removeBtn" class="confirm-btn" style="margin-top: 6em; color: red">Remove &times;</button>
+            </div>    
         </div>
     </div>
     `
@@ -208,6 +211,12 @@ function displayPopUp(book)
         overlay.classList.add("hidden");
         confirmDelete(book);
     })
+
+    const addToShelfBtn = document.getElementById("addToShelf");
+    addToShelfBtn.addEventListener("click", (e) =>{
+        e.stopPropagation();
+        addToShelf(book)
+    })
 }
 
 function confirmDelete(book)
@@ -224,7 +233,6 @@ function confirmDelete(book)
         <button id="no" class="confirm-btn" style="color: red;">No &times;</button>
         <button id="yes" class="confirm-btn" style="color: green;">Yes &check;</button>
     </div>
-    
     `
 
     const noBtn = document.getElementById("no");
@@ -269,6 +277,29 @@ async function removeBookFromLib(book)
     } catch (err) {
         alert('Delete Failed.');
     }
+}
+
+async function addToShelf(book)
+{
+    const shelf = document.querySelector(".add-to-shelf").value;
+
+    if(!shelf || !book.lib_id) return; // If no lib_id or shelf_id, then return
+    try {
+          const response = await fetch('/api/books/shelves/add-book', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify ({
+              user_book_id: parseInt(book.lib_id),
+              shelf_id: shelf
+            })
+          });
+          const data = await response.json();
+          if (data.success) {
+            alert("Book added to shelf successfully");
+          }
+        } catch (error) {
+            console.error(error);
+        }
 }
 
 card.addEventListener("click", (e) => {
