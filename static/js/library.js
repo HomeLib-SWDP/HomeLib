@@ -1,6 +1,7 @@
 let allBooks = []; 
 let currentShelfId = null;
 const card = document.getElementById("popup");
+let shelfList = [];
 
 async function loadLibrary(shelfId = null) {
     currentShelfId = shelfId;
@@ -27,24 +28,22 @@ async function loadLibrary(shelfId = null) {
     }
 }
 
-async function populateShelvesDropdown() {
-    const select = document.querySelector('.shelves-sort');
+async function populateShelves() {
     try {
         const response = await fetch('/api/books/shelves/my');
         if (!response.ok) throw new Error('Fetch failed');
 
         const res = await response.json();
 
-        select.innerHTML = '<option value="all">All Shelves</option>';
-
         const shelvesList = res.shelves || res || [];
+
+        shelfList = shelvesList;
 
         if (Array.isArray(shelvesList)) {
             shelvesList.forEach(shelf => {
                 const opt = document.createElement('option');
                 opt.value = shelf.id;
                 opt.textContent = shelf.name;
-                select.appendChild(opt);
             });
         }
     } catch (err) {
@@ -136,16 +135,10 @@ function renderBook(booksArray, container) {
 
 window.addEventListener('DOMContentLoaded', () => {
     loadLibrary();
-    populateShelvesDropdown();
+    populateShelves();
 
     document.getElementById('search').addEventListener('input', filterAndSortBooks);
     document.querySelector('.sort-by').addEventListener('change', filterAndSortBooks);
-
-    const shelfSelect = document.querySelector('.shelves-sort');
-    shelfSelect.addEventListener('change', () => {
-        const val = shelfSelect.value;
-        loadLibrary(val === 'all' ? null : val);
-    });
 });
 
 async function loadSection(apiUrl, containerId) {
@@ -168,23 +161,6 @@ async function loadSection(apiUrl, containerId) {
     }
 }
 
-
-
-const addShelfBtn = document.getElementById("addShelfBtn");
-const shelvesContainer = document.getElementById("shelves-container");
-
-addShelfBtn.addEventListener("click", () => {
-  const shelfName = prompt("Enter new shelf name:");
-
-  if (shelfName && shelfName.trim() !== "") {
-    const newShelf = document.createElement("button");
-
-    newShelf.innerHTML = `<span class="shelf">0</span> ${shelfName}`;
-
-    shelvesContainer.insertBefore(newShelf, addShelfBtn);
-  }
-});
-
 function displayPopUp(book)
 {
     console.log(book);
@@ -202,11 +178,23 @@ function displayPopUp(book)
             <h4>Author: ${book.author ? book.author : "Unknown Author"}</h4>
             <h4>Published: ${book.publishdate}</h4>
             <h4>ISBN: ${book.isbn ? book.isbn : "Unknown ISBN"}</h4>
+            <select id='shelf_list' class='sort-by'>
+            </select>
             <button id="removeBtn" class="confirm-btn">Remove &times;</button>
         </div>
     </div>
     `
     overlay.classList.toggle("hidden");
+
+    const shelves = document.getElementById("shelf_list");
+    for(const shelf of shelfList)
+    {
+        console.log(shelf.name);
+        shelfOption = document.createElement("option");
+        shelfOption.value = shelf.id;
+        shelfOption.innerHTML = `${shelf.name}`;
+        shelves.appendChild(shelfOption);
+    }
 
     const closeBtn = document.getElementById("closeBtn");
     closeBtn.addEventListener("click", (e) =>{
