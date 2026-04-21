@@ -59,8 +59,7 @@ def store_user_info():
     userId = data.get('userId')
 
     session['user_id'] = userId
-  
-    print (session['user_id'])
+    #print (session['user_id'])
 
     return jsonify({"Message": "User info stored"}) 
 
@@ -68,7 +67,7 @@ def store_user_info():
 @app.route('/user_id_get', methods = ['GET'])
 def retrive_user_info ():
     userId = session.get('user_id')
-  
+
     #print (userId)
     
     return jsonify({"userId": userId})
@@ -93,12 +92,10 @@ def store_user_profile ():
     emailValue =  data.get('emailValue')
     date =  data.get('accountDate')
     userId =  data.get('userId') 
-
     #print(userId)
 
     # converting date to yyyy-mm-dd format so it can be accepted and stored in sql (date conversion was not working in js)
     accountDate = datetime.strptime(date[:10], '%Y-%m-%d')
-
     #print(accountDate)
   
     userProfile = createProfile(emailValue, accountDate, usernameValue, userId) #getting sql table insertion result
@@ -117,7 +114,7 @@ def display_profile():
 
     profileDisplay = displayProfile(userId) #getting sql table details
 
-    #print(loandisplay)
+    
     if profileDisplay is None:
         return jsonify({"Message": "No profile yet"})
     else:
@@ -126,10 +123,12 @@ def display_profile():
 # To display loans from the backend
 @app.route('/display_Loan' , methods = ['GET'])
 def display_loan():
+
     userId = session.get('user_id')
     #print (userId)
     loandisplay = displayLoans(userId) # getting sql table results
     #print(loandisplay)
+    
     if loandisplay is None:
         return jsonify({"Message": "No loans exist"})
     else:
@@ -157,10 +156,17 @@ def make_loan():
         return jsonify({"Message": "Error creating loan"})
     return jsonify({"Message": "Successfully created Loan"})
 
-'''
-@app.route('edit_return')
+@app.route('/edit_return')
 def edit_date():
-'''
+    data = request.json
+
+    returnDate = data.get('returnDate')
+    userId =  session.get('user_id')
+
+    returned = editReturn(userId, returnDate)
+
+    if returned is False:
+        return jsonify({"Message": "Error editing return date"})
    
 @app.route('/loan_number', methods = ['POST'] )
 def store_loan_num():

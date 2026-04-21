@@ -16,10 +16,10 @@ def createProfile(emailValue, accountDate, userName, userId):
         return cursor.lastrowid
     
     except Exception as e:
-        if "Duplicate Entry" in str(e):
+        if "duplicate entry" in str(e):
             cursor.execute("""
-                SELECT loanId from `loans` 
-                    WHERE userId = %s AND bookId = %s
+                SELECT profileId from `profile` 
+                    WHERE userId = %s 
             """, (userId,))
             result = cursor.fetchone()
             duplicateId = result[0]
@@ -34,7 +34,7 @@ def createProfile(emailValue, accountDate, userName, userId):
         disconnect_from_sql(cnx)
         
 
-def editProfile(userId, userDescription, emailValue, accountDate, userName):
+def editProfile(userId, userDescription, emailValue, userName):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
@@ -42,7 +42,7 @@ def editProfile(userId, userDescription, emailValue, accountDate, userName):
         query = """
         UPDATE `profiles` SET userDescription = %s WHERE userId = %s
         """
-        cursor.execute(query, (userDescription, userId,)) 
+        cursor.execute(query, (userDescription,emailValue, userName, userId,)) 
         cnx.commit()
         return True
     
@@ -80,13 +80,12 @@ def displayProfile(userId):
 
 #TESTS    
 def test_create_profile():
-    userDescription = ""
     accountDate = "2026-05-21"
-    userName = ""
-    emailValue = ""
-    userId= "kqA82Go1gfhhUWOnEIdCkHcglAI3"
+    userName = "amitha"
+    emailValue = "ami@gmail.com"
+    userId= "qop96nEXHGSDFzKA8l9upHqUL943"
 
-    profile_test = createProfile(emailValue, accountDate, userName, userId, userDescription)
+    profile_test = createProfile(emailValue, accountDate, userName, userId)
     if profile_test:
         print(f"Profile made with ID: {profile_test}")
         return profile_test
@@ -117,7 +116,7 @@ def test_display_user():
 
 
 if __name__ == "__main__":
-    #test_create_profile()
+    test_create_profile()
     test_display_user()
     # test_edit_desc()
  

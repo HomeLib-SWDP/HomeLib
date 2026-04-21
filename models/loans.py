@@ -27,6 +27,9 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
 
     bookId = bookSearch (bookName, userId) #look for loan in user library using userid and name of the book
 
+    if bookId is None:
+        return False
+
     if(borrowedDate > returningDate):
         return False
 
@@ -76,18 +79,15 @@ def expireLoansBatch(): # a batch process mimic to expire loans if returning dat
         disconnect_from_sql(cnx)
         
 # allowing user to edit loan
-def editReturn(returningDate, loanId, borrowedDate):
+def editReturn(returningDate, userId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
-    if(borrowedDate > returningDate): # check if details entered is correct
-        return False
-
     try:
         query = """
-        UPDATE `loans` SET returningDate = %s WHERE loanId = %s
+        UPDATE `loans` SET returningDate = %s WHERE userId = %s
         """
-        cursor.execute(query, (returningDate, loanId,))  #update the return date from new edit
+        cursor.execute(query, (returningDate, userId,))  #update the return date from new edit
         cnx.commit()
         return True
     
