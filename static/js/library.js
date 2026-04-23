@@ -161,10 +161,9 @@ async function loadSection(apiUrl, containerId) {
     }
 }
 
-function displayPopUp(book)
+async function displayPopUp(book)
 {
-    console.log(book);
-    
+    console.log(book); 
     const overlay = document.getElementById("popup");
 
     overlay.innerHTML = `
@@ -188,8 +187,14 @@ function displayPopUp(book)
     </div>
     `
     overlay.classList.toggle("hidden");
-
+    
     const shelves = document.getElementById("shelf_list");
+    if(!shelfList || shelfList.length === 0)
+    {
+        shelves.innerHTML = `<option>Loading...</option>`
+        await populateShelves();
+    }
+    shelves.innerHTML = "";
     for(const shelf of shelfList)
     {
         console.log(shelf.name);
