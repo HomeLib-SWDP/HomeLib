@@ -167,12 +167,36 @@ def edit_date():
 
     if returned is False:
         return jsonify({"Message": "Error editing return date"})
+    
+@app.route('/edit_profile')
+def edit_profile():
+    data = request.json
+
+    userId =  session.get('user_id')
+
+    email = data.get('email')
+    username = data.get('username')
+    description = data.get('description')
+
+    edited = editProfile(email, username, description, userId)
+
+    if edited is False:
+        return jsonify({"Message": "Error editing profile"})
+    return jsonify({"Message": "Profile edited successfully "})
    
 @app.route('/loan_number', methods = ['POST'] )
 def store_loan_num():
     data = request.json
 
     loanNum =  data.get('loans')
+
+    session['loanNum'] = loanNum
+
+    return jsonify({"Message": "Stored loan number"})
+
+@app.route('/loan_get', methods = ['GET'])
+def send_loan_num():
+    loanNum = session.get('loanNum')
 
     return jsonify({"loanNum": loanNum})
 

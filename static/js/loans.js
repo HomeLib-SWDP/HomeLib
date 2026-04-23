@@ -79,7 +79,9 @@ async function displayLoanInfo() {
 
 displayLoanInfo();
 
-
+const emailId = document.getElementById('email');
+const username = document.getElementById('username');
+const description = document.getElementById('description');
 const modal = document.getElementById("loanModal");
 const addBtn = document.getElementById("addLoanBtn");
 const closeBtn = document.querySelector(".close");

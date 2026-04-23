@@ -125,7 +125,6 @@ def displayLoans(userId):
         cursor.close()
         disconnect_from_sql(cnx)   
 
-
 #TESTS    
 def test_create_loan():
     borrowedDate = "2026-02-19"

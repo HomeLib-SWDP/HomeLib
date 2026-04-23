@@ -5,8 +5,6 @@ def createProfile(emailValue, accountDate, userName, userId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
-    print()
-
     try:
         query = """
         INSERT INTO `profiles` (emailValue, accountDate, userName, userId) VALUES (%s, %s, %s, %s)
@@ -40,7 +38,7 @@ def editProfile(userId, userDescription, emailValue, userName):
 
     try:
         query = """
-        UPDATE `profiles` SET userDescription = %s WHERE userId = %s
+        UPDATE `profiles` SET userDescription = %s, emailValue =%s, userName = %s WHERE userId = %s
         """
         cursor.execute(query, (userDescription,emailValue, userName, userId,)) 
         cnx.commit()
@@ -62,7 +60,7 @@ def displayProfile(userId):
     try:
         query = """
         SELECT 
-        emailValue, DATE_FORMAT(accountDate, '%Y-%m-%d') AS accountDate, userName,  userId
+        emailValue, DATE_FORMAT(accountDate, '%Y-%m-%d') AS accountDate, userName,  userId, userDescription
          FROM `profiles` WHERE userId = %s 
         """
         cursor.execute(query, ( userId,))
@@ -92,11 +90,13 @@ def test_create_profile():
     else:
         print("Error creating profile")
 
-def test_edit_desc():
-    userDescription = ""
-    userId = 7
+def test_user_info():
+    userDescription = "blah blah blah"
+    userId = "qop96nEXHGSDFzKA8l9upHqUL943"
+    emailValue = "ami@gmail.com"
+    userName = "amitha123"
 
-    edit_test = editProfile(userId, userDescription)
+    edit_test = editProfile(userId, userDescription, emailValue, userName)
 
     if edit_test:
         print("Return edit completed")
@@ -116,7 +116,7 @@ def test_display_user():
 
 
 if __name__ == "__main__":
-    test_create_profile()
+    #test_create_profile()
     test_display_user()
-    # test_edit_desc()
+    test_user_info()
  
