@@ -33,7 +33,7 @@ async function renderBooks(booksArray, container) {
                 </div>
 
                 <button type="button" class="add-btn" style="margin-top: 8px; width: fit-content;">
-                    Add tfo library
+                    Add to library
                 </button>
             </div>
         `;
@@ -291,8 +291,8 @@ async function DisplayBookInfo(book)
     const overlay = document.getElementById("details");
     overlay.innerHTML = `
     <div style="display: flex">
-        <h2 style="padding-top: 1em">${book.title}</h2>
-        <button id=closeBtn class="close-btn">&times;</button>
+        <h2>${book.title}</h2>
+        <button id=closeBtn class="close-btn" style="margin-left: 1rem">&times;</button>
     </div>
     <div style="display: flex">
         <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
