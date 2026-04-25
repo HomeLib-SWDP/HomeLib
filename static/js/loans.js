@@ -23,3 +23,30 @@ async function displayProfileInfo() {
 
 displayProfileInfo();
 */
+
+const fetchInfo = "/api/books/loan_get";
+
+async function loadLoans() {
+    const response = await fetch(fetchInfo);
+    const data = await response.json();
+
+    const tableBody = document.getElementById("loan-table-body");
+    tableBody.innerHTML = "";
+
+    data.forEach(loan => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${loan.loanId}</td>
+            <td>${loan.bookName}</td>
+            <td>${loan.borrowedDate}</td>
+            <td>${loan.returningDate}</td>
+            <td>${loan.borrowerName}</td>
+            <td><button>Edit</button></td>
+        `;
+
+        tableBody.appendChild(row);
+    });
+}
+
+loadLoans();

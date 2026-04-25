@@ -3,6 +3,7 @@ import requests, random
 from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf
 from models.loans import createLoan, expireLoansBatch, editReturn
 from models.users import get_user_profile
+from models.loans import get_loans
 
 books_bp = Blueprint('books', __name__)
 
@@ -151,3 +152,9 @@ def get_user_info():
     if data:
         return jsonify(data)
     return jsonify({"error": "Failed"}), 500
+
+@books_bp.route('/get_loans', methods=['GET'])
+def fetch_loans():
+    user_id = session.get('user_id')
+    data = get_loans(user_id)
+    return jsonify(data)

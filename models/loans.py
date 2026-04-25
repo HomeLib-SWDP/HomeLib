@@ -128,6 +128,21 @@ def test_return_loan():
     else:
         print("Error editing return")
 
+def get_loans(user_id):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            SELECT loanId, bookName, borrowedDate, returningDate, borrowerName
+            FROM loans
+        """)
+        return cursor.fetchall()
+
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+
 
 if __name__ == "__main__":
     #test_create_loan()
