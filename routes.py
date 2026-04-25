@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, session
 import requests, random
 from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, remove_book_from_shelf
 from models.loans import createLoan, expireLoansBatch, editReturn
+from models.users import get_user_profile
 
 books_bp = Blueprint('books', __name__)
 
@@ -41,6 +42,7 @@ def add_manual_book():
 @books_bp.route('/get_library', methods=['GET'])
 def get_library():
     user_id = session.get('user_id')
+
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401
     
@@ -84,6 +86,7 @@ def get_my_shelves():
 @books_bp.route('/shelves/<int:shelf_id>', methods=['PUT'])
 def edit_shelf(shelf_id):
     user_id = session.get('user_id')
+
     if not user_id:
         return jsonify({"success": False, "message": "Not logged in"}), 401
     data = request.get_json()
@@ -139,3 +142,12 @@ def get_books_by_cat(category):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@books_bp.route('/user_info_get', methods=['GET'])
+def get_user_info():
+    user_id = session.get('user_id')
+    data = get_user_profile(user_id)
+
+    if data:
+        return jsonify(data)
+    return jsonify({"error": "Failed"}), 500
