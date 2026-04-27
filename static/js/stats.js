@@ -16,7 +16,7 @@ async function loadLibraryStats() {
         document.querySelector('.stat-genre').innerText = data.top_genre ?? "None";
         document.querySelector('.stat-book').innerText = data.longest_book ?? "None";
         document.querySelector('.stat-pages').innerText = (data.total_pages ?? 0).toLocaleString();
-        document.querySelector('.stat-days').innerText = (data.streak ?? 0) + " days";
+        document.querySelector('.stat-num-books').innerText = (data.num_books_lib ?? 0) + " books";
 
     } catch (err) {
         console.error("Error loading stats:", err);
