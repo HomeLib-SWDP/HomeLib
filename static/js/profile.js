@@ -12,21 +12,31 @@ async function displayProfileInfo() {
         if (!response.ok) throw new Error("Network Error");
         const data = await response.json();
 
-        const statResponse = await fetch(fetchStats);
-        if(!statResponse.ok) throw new Error("stat network error");
-        const statData = await statResponse.json()
+    
 
-        console.log("state data" ,statData)
+        console.log("data", data)
+    
     
         // displaying info
         document.querySelector(".profile-name").textContent = data[0].userName;
         document.querySelector(".profile-username").textContent= data[0].userName;
         document.querySelector(".profile-date-joined").textContent=data[0].accountDate; 
-        document.querySelector(".profile-desc").textContent=data[0].userDescription; 
-        document.querySelector(".profile-loan").textContent=loandata.loanNum; 
-        document.querySelector(".profile-book-count").textContent= (statData.num_books_lib ?? 0) + " books";
-        document.querySelector(".profile-shelves-count").textContent = (statData.shelf_count ?? 0) + " shelves";
+        document.querySelector(".profile-desc").textContent=(data[0].userDescription || "profile description here"); 
 
+        const loanresponse = await fetch(fetchInfo);
+        if (!response.ok) throw new Error("Network Error");
+        const loandata = await loanresponse.json();
+
+        const statResponse = await fetch(fetchStats);
+        if(!statResponse.ok) throw new Error("stat network error");
+        const statData = await statResponse.json()
+
+
+        document.querySelector(".profile-loan").textContent=(loandata.loanNum || 0) + " loans"; 
+        document.querySelector(".profile-book-count").textContent= (statData.num_books_lib || 0) + " books";
+        document.querySelector(".profile-shelves-count").textContent = (statData.shelf_count || 0) + " shelves";
+
+        console.log("state data" ,statData)
 
     } 
     catch (error) {
