@@ -162,7 +162,8 @@ hr{
 .stat-genre,
 .stat-days,
 .stat-book,
-.stat-pages{
+.stat-pages,
+.stat-num-books{
     padding: 0.9em 2em 1em 1.6em;
     color: rgb(92, 92, 92);
 }

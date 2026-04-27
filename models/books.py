@@ -263,12 +263,18 @@ def get_user_stats(user_id):
         """, (user_id, user_id))
         page_stats = cursor.fetchone()
 
+        cursor.execute(""" 
+            SELECT COUNT(*) as num_books FROM user_books
+            WHERE user_id = %s """, (user_id,))
+        num_books_lib = cursor.fetchone()
+
         return {
             "read_shelf_counts": read_counts if read_counts else {"total": 0, "year": 0, "month": 0},
             "top_author": top_author['author'] if top_author else "None",
             "top_genre": top_genre['genre'] if top_genre else "None",
             "longest_book": page_stats['booktitle'] if page_stats else "None",
-            "total_pages": int(page_stats['total_pages']) if page_stats and page_stats['total_pages'] else 0
+            "total_pages": int(page_stats['total_pages']) if page_stats and page_stats['total_pages'] else 0,
+            "num_books_lib": int(num_books_lib['num_books'] ) if num_books_lib and num_books_lib['num_books'] else 0
         }
     except Exception as e:
         print(f"SQL Error in get_user_stats: {e}")
