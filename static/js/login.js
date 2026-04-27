@@ -53,7 +53,7 @@ loginForm.addEventListener('submit', async (loginEvent) => {
   const userId = user.uid; // get user id from firebase
 
   // sending id to flask sessions
-    fetch('/user_id_post', {
+    await fetch('/user_id_post', {
       method: 'POST' ,
       headers: {'content-type' : 'application/json'
       },

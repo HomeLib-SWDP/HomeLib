@@ -1,6 +1,7 @@
 let allBooks = []; 
 let currentShelfId = null;
 const card = document.getElementById("popup");
+let shelfList = [];
 
 async function loadLibrary(shelfId = null) {
     currentShelfId = shelfId;
@@ -27,24 +28,22 @@ async function loadLibrary(shelfId = null) {
     }
 }
 
-async function populateShelvesDropdown() {
-    const select = document.querySelector('.shelves-sort');
+async function populateShelves() {
     try {
         const response = await fetch('/api/books/shelves/my');
         if (!response.ok) throw new Error('Fetch failed');
 
         const res = await response.json();
 
-        select.innerHTML = '<option value="all">All Shelves</option>';
-
         const shelvesList = res.shelves || res || [];
+
+        shelfList = shelvesList;
 
         if (Array.isArray(shelvesList)) {
             shelvesList.forEach(shelf => {
                 const opt = document.createElement('option');
                 opt.value = shelf.id;
                 opt.textContent = shelf.name;
-                select.appendChild(opt);
             });
         }
     } catch (err) {
@@ -136,16 +135,10 @@ function renderBook(booksArray, container) {
 
 window.addEventListener('DOMContentLoaded', () => {
     loadLibrary();
-    populateShelvesDropdown();
+    populateShelves();
 
     document.getElementById('search').addEventListener('input', filterAndSortBooks);
     document.querySelector('.sort-by').addEventListener('change', filterAndSortBooks);
-
-    const shelfSelect = document.querySelector('.shelves-sort');
-    shelfSelect.addEventListener('change', () => {
-        const val = shelfSelect.value;
-        loadLibrary(val === 'all' ? null : val);
-    });
 });
 
 async function loadSection(apiUrl, containerId) {
@@ -168,27 +161,9 @@ async function loadSection(apiUrl, containerId) {
     }
 }
 
-
-
-const addShelfBtn = document.getElementById("addShelfBtn");
-const shelvesContainer = document.getElementById("shelves-container");
-
-addShelfBtn.addEventListener("click", () => {
-  const shelfName = prompt("Enter new shelf name:");
-
-  if (shelfName && shelfName.trim() !== "") {
-    const newShelf = document.createElement("button");
-
-    newShelf.innerHTML = `<span class="shelf">0</span> ${shelfName}`;
-
-    shelvesContainer.insertBefore(newShelf, addShelfBtn);
-  }
-});
-
-function displayPopUp(book)
+async function displayPopUp(book)
 {
-    console.log(book);
-    
+    console.log(book); 
     const overlay = document.getElementById("popup");
 
     overlay.innerHTML = `
@@ -197,16 +172,37 @@ function displayPopUp(book)
         <button id=closeBtn class="close-btn">&times;</button>
     </div>
     <div style="display: flex">
-        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
+        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="popup-cover">
         <div style="padding-left: 1rem; min-width: 20rem">
             <h4>Author: ${book.author ? book.author : "Unknown Author"}</h4>
             <h4>Published: ${book.publishdate}</h4>
             <h4>ISBN: ${book.isbn ? book.isbn : "Unknown ISBN"}</h4>
-            <button id="removeBtn" class="confirm-btn">Remove &times;</button>
+            <div style="padding-top: 1em; display: flex; flex-direction: column">
+                <select id='shelf_list' class='add-to-shelf select-shelf'>
+                </select>
+                <button id="addToShelf" class="confirm-btn" style="margin-top: .5em">Add to Shelf</button>
+                <button id="removeBtn" class="confirm-btn" style="margin-top: 6em; color: red">Remove &times;</button>
+            </div>    
         </div>
     </div>
     `
     overlay.classList.toggle("hidden");
+    
+    const shelves = document.getElementById("shelf_list");
+    if(!shelfList || shelfList.length === 0)
+    {
+        shelves.innerHTML = `<option>Loading...</option>`
+        await populateShelves();
+    }
+    shelves.innerHTML = "";
+    for(const shelf of shelfList)
+    {
+        console.log(shelf.name);
+        shelfOption = document.createElement("option");
+        shelfOption.value = shelf.id;
+        shelfOption.innerHTML = `${shelf.name}`;
+        shelves.appendChild(shelfOption);
+    }
 
     const closeBtn = document.getElementById("closeBtn");
     closeBtn.addEventListener("click", (e) =>{
@@ -219,6 +215,12 @@ function displayPopUp(book)
         e.stopPropagation();
         overlay.classList.add("hidden");
         confirmDelete(book);
+    })
+
+    const addToShelfBtn = document.getElementById("addToShelf");
+    addToShelfBtn.addEventListener("click", (e) =>{
+        e.stopPropagation();
+        addToShelf(book)
     })
 }
 
@@ -236,7 +238,6 @@ function confirmDelete(book)
         <button id="no" class="confirm-btn" style="color: red;">No &times;</button>
         <button id="yes" class="confirm-btn" style="color: green;">Yes &check;</button>
     </div>
-    
     `
 
     const noBtn = document.getElementById("no");
@@ -281,6 +282,29 @@ async function removeBookFromLib(book)
     } catch (err) {
         alert('Delete Failed.');
     }
+}
+
+async function addToShelf(book)
+{
+    const shelf = document.querySelector(".add-to-shelf").value;
+
+    if(!shelf || !book.lib_id) return; // If no lib_id or shelf_id, then return
+    try {
+          const response = await fetch('/api/books/shelves/add-book', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify ({
+              user_book_id: parseInt(book.lib_id),
+              shelf_id: shelf
+            })
+          });
+          const data = await response.json();
+          if (data.success) {
+            alert("Book added to shelf successfully");
+          }
+        } catch (error) {
+            console.error(error);
+        }
 }
 
 card.addEventListener("click", (e) => {

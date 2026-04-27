@@ -89,8 +89,29 @@ async function createShelf() {
             body: JSON.stringify({ name: name.trim() })
         });
         const data = await response.json();
-        if (data.success) loadShelves();
-        else alert(data.message || 'Failed to create the requested shelf');
+        if (data.success) {
+          const mainContent = document.querySelector('.main-content');
+          const shelfSection = document.createElement('section');
+          shelfSection.className = 'shelf';
+          shelfSection.dataset.id = data.shelf_id;
+          shelfSection.innerHTML = `
+            <div class = "shelf-header">
+              <h3>${name} <i class="fa-solid fa-pen"></i></h3>
+              <div class="actions">
+                <button class="delete-btn">Delete</button>
+              </div>
+            </div>
+            <div class="books">
+              <div class="book">
+                <div class="book-details">
+                  <button class="add-btn addBookBtn" data-shelf-id="${data.shelf_id}">Add Book</button>
+                </div>
+              </div>
+            </div>
+          `;
+          mainContent.appendChild(shelfSection);
+          currentShelves.push({id: data.shelf_id, name: name});
+        } else alert(data.message || 'Failed to create the requested shelf');
     } catch (error) {
         console.error(error);
         alert('Error creating the new shelf');
@@ -107,7 +128,15 @@ async function editShelf(shelfId) {
             body: JSON.stringify({ name: newName.trim() })
         });
         const data = await response.json();
-        if (data.success) loadShelves();
+        if (data.success) {
+          const shelfSection = document.querySelector(`.shelf[data-id="${shelfId}"]`);
+          if (shelfSection) {
+            const h3 = shelfSection.querySelector('h3');
+            if (h3) {
+              h3.innerHTML = `${newName.trim()} <i class="fa-solid fa-pen"></i>`;
+            }
+          }
+        }
         else alert(data.message || 'Failed to update the selected shelf');
     } catch (error) {
         console.error(error);
@@ -122,7 +151,12 @@ async function deleteShelf(shelfId) {
       method: 'DELETE'
     });
     const data = await response.json();
-    if (data.success) loadShelves();
+    if (data.success) {
+      const shelfSection = document.querySelector(`.shelf[data-id="${shelfId}"]`);
+      if (shelfSection) {
+        shelfSection.remove();
+      }
+    }
     else alert(data.message || 'Failed to delete shelf');
   } catch (error) {
     console.error(error);
@@ -196,7 +230,40 @@ window.addEventListener('DOMContentLoaded', () => {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ user_book_id: parseInt(userBookId), shelf_id: shelfId })
             })
-            .then(() => loadShelves());
+            .then(async () => {
+              const shelfSection = document.querySelector(`.shelf[data-id="${shelfId}"]`);
+              if (shelfSection) {
+                const booksContainer = shelfSection.querySelector('.books');
+                const resp = await fetch(`/api/books/get_library?shelf_id=${shelfId}`);
+                const books = await resp.json();
+                booksContainer.innerHTML = '';
+                if (books.length === 0) {
+                  booksContainer.innerHTML = `
+                    <div class="book">
+                      <div class="book-details">
+                        <button class="add-btn addBookBtn" data-shelf-id=${shelfId}">Add Book</button>
+                      </div>
+                    </div>
+                  `;
+                } else {
+                  books.forEach(book => {
+                    const bookHTML = `
+                      <div class="book">
+                        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="${book.title}" onerror="this.src='/static/images/default-cover.jpg';"/>
+                        <div class="book-details">
+                          <p class="book-title">${book.title}</p>
+                          <p class="book-author">${book.author}</p>
+                          <button class="remove-btn" data-user-book-id="${book.lib_id || ''}" data-shelf-id="${shelfId}">Remove</button>
+                          <button class="add-btn addBookBtn" data-shelf-id="${shelfId}">Add Book</button>
+                        </div>
+                      </div>
+                      <hr class="shelf-hr">
+                      `;
+                      booksContainer.innerHTML += bookHTML;
+                  });
+                }
+              }
+            });
           }
         }
       }
@@ -235,12 +302,44 @@ window.addEventListener('DOMContentLoaded', () => {
           const data = await response.json();
           if (data.success) {
             modal.style.display = "none";
+            const shelfIdForUpdate = currentShelfIdForAdd;
             currentShelfIdForAdd = null;
-            loadShelves();
+            const shelfSection = document.querySelector(`.shelf[data-id="${shelfIdForUpdate}"]`);
+            if (shelfSection) {
+              const booksContainer = shelfSection.querySelector('.books');
+              const resp = await fetch(`/api/books/get_library?shelf_id=${shelfIdForUpdate}`);
+              const books = await resp.json();
+              booksContainer.innerHTML = '';
+              if (books.length === 0) {
+                booksContainer.innerHTML = `
+                  <div class="book">
+                    <div class="book-details">
+                      <button class="add-btn addBookBtn" data-shelf-id="${shelfIdForUpdate}">Add Book</button>
+                    </div>
+                  </div>
+                `;
+              } else {
+                books.forEach(book => {
+                    const bookHTML = `
+                      <div class="book">
+                        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="${book.title}" onerror="this.src='/static/images/default-cover.jpg';"/>
+                        <div class="book-details">
+                          <p class="book-title">${book.title}</p>
+                          <p class="book-author">${book.author}</p>
+                          <button class="remove-btn" data-user-book-id="${book.lib_id || ''}" data-shelf-id="${shelfIdForUpdate}">Remove</button>
+                          <button class="add-btn addBookBtn" data-shelf-id="${shelfIdForUpdate}">Add Book</button>
+                        </div>
+                      </div>
+                      <hr class="shelf-hr">
+                      `;
+                      booksContainer.innerHTML += bookHTML;
+                  });
+              }
+            }
           }
         } catch (error) {
             console.error(error);
         }
       });
     }
-});
+  });
