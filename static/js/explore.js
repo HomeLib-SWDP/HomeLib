@@ -311,7 +311,7 @@ async function DisplayBookInfo(book)
             </div>
         </div>
     </div>
-    <p style="padding-top: 1rem; height: 100px; overflow-y: auto">${summary}</p>`;
+    <p style="padding-top: 1rem; height: 200px; overflow-y: auto">${summary}</p>`;
     overlay.classList.toggle("hidden");
 
     const closeBtn = document.getElementById("closeBtn");
