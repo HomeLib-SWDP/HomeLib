@@ -271,7 +271,7 @@ async function removeBookFromLib(book)
         body: JSON.stringify(removedBook)
     });
         const data = await response.json();
-        alert(data.message);
+         showSuccessPopup(data.message);
         var index = allBooks.findIndex(libBook => libBook.lib_id == book.lib_id)
         console.log(index);
         if(index > -1)
@@ -280,7 +280,7 @@ async function removeBookFromLib(book)
             filterAndSortBooks();
         }
     } catch (err) {
-        alert('Delete Failed.');
+        showSuccessPopup('Delete Failed.');
     }
 }
 
@@ -300,7 +300,7 @@ async function addToShelf(book)
           });
           const data = await response.json();
           if (data.success) {
-            alert("Book added to shelf successfully");
+            showSuccessPopup("Book added to shelf successfully");
           }
         } catch (error) {
             console.error(error);
@@ -315,3 +315,16 @@ document.addEventListener("click", () =>
 {
     card.classList.add("hidden");
 })
+
+
+
+function showSuccessPopup(message = "Book added to library ✔") {
+  const popup = document.getElementById("successPopup");
+  popup.textContent = message;
+
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 2000); 
+}

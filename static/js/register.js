@@ -40,7 +40,7 @@ registerForm.addEventListener('submit', async (registerEvent) => {
   const usernameValue = username.value;
 
   if (confirmPasswordValue != passwordValue) {
-    alert("Passwords do not match");
+    showPopupError("Passwords do not match");
     return;
   }
   const userCredential = await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
@@ -59,8 +59,33 @@ registerForm.addEventListener('submit', async (registerEvent) => {
 
   //alert(userId)
 
-  alert('Redirecting to login page');
+  showPopup('Redirecting to login page');
   window.location.href = '/'; //redirect to login page
 
   }
 );
+
+
+function showPopup(message, type = "success") {
+  const popup = document.getElementById("popup");
+
+  popup.textContent = message;
+  popup.className = "popup show " + type;
+
+  setTimeout(() => {
+    popup.className = "popup " + type;
+  }, 2000);
+}
+
+
+
+function showPopupError(message, type = "error") {
+  const popup = document.getElementById("popup");
+
+  popup.textContent = message;
+  popup.className = "popup show " + type;
+
+  setTimeout(() => {
+    popup.className = "popup " + type;
+  }, 2000);
+}

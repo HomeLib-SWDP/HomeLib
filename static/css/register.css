@@ -127,3 +127,41 @@ form button:hover{
     margin-left: .4em;
 }
 
+
+
+
+
+.popup {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+
+  padding: 14px 22px;
+  border-radius: 8px;
+
+  color: white;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+
+  z-index: 9999;
+}
+
+
+.popup.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.popup.success {
+  background: #28a745;
+}
+
+
+.popup.error {
+  background: #dc3545;
+}

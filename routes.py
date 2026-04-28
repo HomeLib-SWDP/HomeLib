@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, session
 import requests, random
 from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, delete_shelf, remove_book_from_library, remove_book_from_shelf, ensure_read_shelf, get_user_stats
+from models.profile import displayProfile
 
 books_bp = Blueprint('books', __name__)
 
@@ -67,6 +68,7 @@ def get_library():
 def create_new_shelf():
     data = request.get_json()
     user_id = session.get('user_id') or data.get('user_id')
+
     if not user_id or not data.get('name'):
         return jsonify({"success": False, "message": "Missing user_id or shelf name"}), 400
     shelf_id = create_shelf(user_id, data['name'], data.get('description'))
@@ -177,7 +179,26 @@ def stats_route():
         return jsonify(stats_data), 200
     else:
         return jsonify({"error": "Could not retrieve stats"}), 500
-    
+@books_bp.route('/display_profile', methods=['GET'])
+def get_profile():
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = displayProfile(user_id)
+
+    if data:
+        return jsonify(data), 200
+    return jsonify({"error": "No profile found"}), 404
+
+@books_bp.route('/save-profile', methods=['POST'])
+def save_profile():
+    data = request.json
+    print(data)
+
+    return {"message": "saved"}, 200
+
 def get_clean_genre(subjects):
     if not subjects:
         return "Other"
@@ -190,3 +211,4 @@ def get_clean_genre(subjects):
                 return pg
                 
     return subjects[0] if subjects else "Other"
+

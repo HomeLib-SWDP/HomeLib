@@ -59,5 +59,32 @@ displayProfileInfo();
     });
   }
 
+document.getElementById("editProfileForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  
+    const form = e.target;
+
+    const data = {
+        firstName: form.firstName.value,
+        lastName: form.lastName.value,
+        email: form.email.value,
+        username: form.username.value,
+        description: form.description.value,
+        city: form.city.value,
+        country: form.country.value
+    };
+
+    const res = await fetch("/api/books/save-profile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+        window.location.href = "/profile";
+    } else {
+        console.log("Save failed");
+    }
+});
