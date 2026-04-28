@@ -200,6 +200,24 @@ def send_loan_num():
 
     return jsonify({"loanNum": loanNum})
 
+@app.route('/save-profile', methods=['POST'])
+def save_profile():
+    data = request.json
+
+    user_id = session.get('user_id')
+
+    result = editProfile(
+        user_id,                        
+        data.get('description'),        
+        data.get('email'),              
+        data.get('username')            
+    )
+
+    if result is False:
+        return {"message": "Failed to update profile"}, 400
+
+    return {"message": "Profile updated successfully"}, 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)
