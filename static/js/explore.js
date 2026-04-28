@@ -292,7 +292,7 @@ async function DisplayBookInfo(book)
     overlay.innerHTML = `
     <div style="display: flex">
         <h2>${book.title}</h2>
-        <button id=closeBtn class="close-btn" style="margin-left: 1rem">&times;</button>
+        <button id=closeBtn class="close-btn" style="padding-left: 1rem">&times;</button>
     </div>
     <div style="display: flex">
         <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="cover" class="book-cover">
@@ -311,7 +311,7 @@ async function DisplayBookInfo(book)
             </div>
         </div>
     </div>
-    <p style="padding-top: 1rem">${summary}</p>`;
+    <p style="padding-top: 1rem; height: 100px; overflow-y: auto">${summary}</p>`;
     overlay.classList.toggle("hidden");
 
     const closeBtn = document.getElementById("closeBtn");
