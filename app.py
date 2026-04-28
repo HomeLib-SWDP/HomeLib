@@ -3,8 +3,8 @@ from routes import books_bp
 import os
 from datetime import datetime
 import dotenv
-from models.loans import createLoan, expireLoansBatch, editReturn, displayLoans
-from models.profile import createProfile, editProfile, displayProfile
+from models.loans import createLoan, editReturn, displayLoans
+from models.profile import createProfile, changeProfile, displayProfile
 
 dotenv.load_dotenv()
 
@@ -137,10 +137,9 @@ def display_loan():
 #sending info to loan backend
 @app.route('/create_Loan' , methods = ['POST'])
 def make_loan():
+
     data = request.json
 
-    #might have to replace userId 
-    bookId =  data.get('bookId')
     userId =  session.get('user_id')
     borrowedDate =  data.get('borrowedDate')
     returningDate =  data.get('returningDate')
@@ -148,7 +147,8 @@ def make_loan():
     returningDate =  data.get('returningDate')
     bookName =  data.get('bookName')
 
-    loanMade = createLoan(bookId, userId, borrowedDate,returningDate,borrowerName, bookName)
+    loanMade = createLoan(borrowedDate, returningDate, borrowerName, bookName, userId)
+
 
     if loanMade is None:
         return jsonify({"Duplicate Loan": loanMade})
@@ -168,17 +168,20 @@ def edit_date():
     if returned is False:
         return jsonify({"Message": "Error editing return date"})
     
-@app.route('/edit_profile')
-def edit_profile():
-    data = request.json
+@app.route('/profile_change', methods = ['POST'])
+def profile_changes():
+
+    data = request.get_json()
 
     userId =  session.get('user_id')
 
-    email = data.get('email')
-    username = data.get('username')
-    description = data.get('description')
+    emailValue = data.get('email')
+    userName = data.get('username')
+    userDescription = data.get('description')
 
-    edited = editProfile(email, username, description, userId)
+    print(userDescription, emailValue, userName)
+
+    edited = changeProfile(userId, userDescription, emailValue, userName)
 
     if edited is False:
         return jsonify({"Message": "Error editing profile"})

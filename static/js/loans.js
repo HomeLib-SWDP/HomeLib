@@ -97,3 +97,31 @@ closeBtn.onclick = () => {
 window.onclick = (e) => {
     if (e.target === modal) modal.style.display = "none";
 };
+
+
+const loanform = document.getElementById('loanForm');
+loanform.addEventListener('submit', async (loan) =>{
+    loan.preventDefault();
+    const borrowedDate = document.getElementById('borrow').value;
+    const returningDate = document.getElementById('return').value;
+    const borrowerName = document.getElementById('loanee').value;
+    const bookName = document.getElementById('book').value;
+
+    //console.log(email, description, username)
+
+    try{
+    const response = await fetch ('/create_Loan', { //sending info to backend to store in sql
+    method: 'POST' , 
+    headers: {'Content-Type' : 'application/json'
+    },
+    body:JSON.stringify({borrowedDate, returningDate, borrowerName, bookName})
+  })
+      alert("Loan created!");
+      displayLoanInfo()
+ 
+}
+catch (error){
+    errormes = error.message;
+    alert(errormes)
+}
+});
