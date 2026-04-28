@@ -168,7 +168,7 @@ async function displayPopUp(book)
 
     overlay.innerHTML = `
     <div style="display: flex">
-        <h2 style="padding-top: 1em">${book.title}</h2>
+        <h2 style="padding-bottom: 0.7em">${book.title}</h2>
         <button id=closeBtn class="close-btn">&times;</button>
     </div>
     <div style="display: flex">

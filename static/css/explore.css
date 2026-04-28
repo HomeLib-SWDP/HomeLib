@@ -347,6 +347,7 @@ h2{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); /* perfect centering */
+  min-width: 50%;
 
   background: white;
   padding: 20px;
