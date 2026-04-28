@@ -23,7 +23,7 @@ async function displayProfileInfo() {
         document.querySelector(".profile-date-joined").textContent=data[0].accountDate; 
         document.querySelector(".profile-desc").textContent=(data[0].userDescription || "profile description here"); 
 
-        const loanresponse = await fetch(fetchInfo);
+        const loanresponse = await fetch(fetchLoan);
         if (!response.ok) throw new Error("Network Error");
         const loandata = await loanresponse.json();
 

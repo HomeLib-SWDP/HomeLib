@@ -32,7 +32,7 @@ def createProfile(emailValue, accountDate, userName, userId):
         disconnect_from_sql(cnx)
         
 
-def editProfile(userId, userDescription, emailValue, userName):
+def changeProfile(userId, userDescription, emailValue, userName):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
@@ -96,7 +96,7 @@ def test_user_info():
     emailValue = "ami@gmail.com"
     userName = "amitha123"
 
-    edit_test = editProfile(userId, userDescription, emailValue, userName)
+    edit_test = changeProfile(userId, userDescription, emailValue, userName)
 
     if edit_test:
         print("Return edit completed")

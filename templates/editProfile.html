@@ -59,7 +59,7 @@
                         <img class="profile-img-change" id="profileImg" src="{{ url_for('static', filename='images/meldin.jpeg') }}">
                         <input type="file" id="uploadImg" accept="image/*">
                     </div>
-                   <form class="profile-form" id="editProfileForm">
+                   <form class="profile-form">
                         <div class="profile-top-content">
                             
                             <div class="first-name-div div-inputs">
@@ -74,17 +74,17 @@
 
                             <div class="email-div div-inputs">
                             <p>Email</p>
-                            <input type="email" name="email" required>
+                            <input type="email" name="email" id ="email" required>
                             </div>
 
                             <div class="username-div div-inputs">
                             <p>Username</p>
-                            <input type="text" name="username" required>
+                            <input type="text" name="username" id ="username" required>
                             </div>
 
                             <div class="desc-div div-inputs">
                             <p>Description</p>
-                            <textarea name="description"></textarea>
+                            <textarea name="description" id ="description"> </textarea>
                             </div>
 
                             <div class="city-div div-inputs">
@@ -121,6 +121,6 @@
         </section>
     </main>
 
-    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/editProfile.js') }}"></script>
 </body>
 </html>
