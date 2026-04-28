@@ -240,6 +240,7 @@ async function handleSaveBook(book){
 
 async function DisplayBookInfo(book)
 {
+    console.log(book);
     // API call to get the description and other info
     const url = `https://openlibrary.org${book.key}.json`
 
