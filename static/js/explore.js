@@ -33,7 +33,7 @@ async function renderBooks(booksArray, container) {
                 </div>
 
                 <button type="button" class="add-btn" style="margin-top: 8px; width: fit-content;">
-                    Add tfo library
+                    Add to library
                 </button>
             </div>
         `;
@@ -231,9 +231,9 @@ async function handleSaveBook(book){
         body: JSON.stringify(savedBook)
     });
         const data = await response.json();
-        alert(data.message);
+        showSuccessPopup(data.message);
     } catch (err) {
-        alert('Save failed.');
+       showSuccessPopup('Save failed.');
     }
 
 };
@@ -329,3 +329,18 @@ document.addEventListener("click", () =>
 {
     card.classList.add("hidden");
 })
+
+
+
+
+
+function showSuccessPopup(message = "Book added to library ✔") {
+  const popup = document.getElementById("successPopup");
+  popup.textContent = message;
+
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 2000); 
+}

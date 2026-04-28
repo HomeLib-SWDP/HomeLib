@@ -372,3 +372,25 @@ hr{
 .profile-dropdown:hover {
     display: block;
 }
+
+
+
+.success-popup {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 9999;
+}
+
+.success-popup.show {
+  opacity: 1;
+  transform: translateY(0);
+}
