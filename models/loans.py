@@ -48,8 +48,8 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
                     WHERE userId = %s AND bookId = %s
             """, (userId, bookId,))
             result = cursor.fetchone()
-            duplicateId = result[0]
-            return duplicateId if result else None
+            duplicateId = result[0] #will fix
+            return None
         
         else:
             print(f"Error creating loan: {e}")
@@ -79,15 +79,15 @@ def expireLoansBatch(): # a batch process mimic to expire loans if returning dat
         disconnect_from_sql(cnx)
         
 # allowing user to edit loan
-def editReturn(returningDate, userId):
+def editReturn(returningDate, userId, loanId):
     cnx = connect_to_sql()
     cursor = cnx.cursor()
 
     try:
         query = """
-        UPDATE `loans` SET returningDate = %s WHERE userId = %s
+        UPDATE `loans` SET returningDate = %s WHERE userId = %s AND loanId = %s
         """
-        cursor.execute(query, (returningDate, userId,))  #update the return date from new edit
+        cursor.execute(query, (returningDate, userId, loanId))  #update the return date from new edit
         cnx.commit()
         return True
     

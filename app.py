@@ -3,7 +3,7 @@ from routes import books_bp
 import os
 from datetime import datetime
 import dotenv
-from models.loans import createLoan, editReturn, displayLoans
+from models.loans import createLoan, editReturn, displayLoans,  editReturn
 from models.profile import createProfile, changeProfile, displayProfile
 
 dotenv.load_dotenv()
@@ -151,7 +151,7 @@ def make_loan():
 
 
     if loanMade is None:
-        return jsonify({"Duplicate Loan": loanMade})
+        return jsonify({"Message": "Duplicate Loan"})
     if loanMade is False:
         return jsonify({"Message": "Error creating loan"})
     return jsonify({"Message": "Successfully created Loan"})
@@ -203,6 +203,25 @@ def send_loan_num():
 
     return jsonify({"loanNum": loanNum})
 
+@app.route('/returnDate', methods = ['POST'])
+def sendDate():
+    data = request.json
+
+    returningDate =  data.get('newDate')
+    loanId =  data.get('loanIdentity')
+    userId =  session.get('user_id')
+
+    returnId = editReturn(returningDate, userId, loanId)
+
+    #print(returnId)
+
+    if returnId is False:
+        return jsonify({"Message": "Error editing return date"})
+    return jsonify({"Message": "Added date "})
+
+
+'''
+
 @app.route('/save-profile', methods=['POST'])
 def save_profile():
     data = request.json
@@ -220,7 +239,7 @@ def save_profile():
         return {"message": "Failed to update profile"}, 400
 
     return {"message": "Profile updated successfully"}, 200
-
+'''
 
 if __name__ == '__main__':
     app.run(debug=True)

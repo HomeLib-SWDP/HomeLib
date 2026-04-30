@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 import requests, random
 from models.books import Book, add_book, get_books, create_shelf, add_book_to_shelf, get_user_shelves, update_shelf, delete_shelf, remove_book_from_library, remove_book_from_shelf, ensure_read_shelf, get_user_stats
-from models.profile import displayProfile
 
 books_bp = Blueprint('books', __name__)
 
@@ -179,6 +178,7 @@ def stats_route():
         return jsonify(stats_data), 200
     else:
         return jsonify({"error": "Could not retrieve stats"}), 500
+'''
 @books_bp.route('/display_profile', methods=['GET'])
 def get_profile():
     user_id = session.get('user_id')
@@ -198,6 +198,7 @@ def save_profile():
     print(data)
 
     return {"message": "saved"}, 200
+'''
 
 def get_clean_genre(subjects):
     if not subjects:

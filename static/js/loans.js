@@ -25,6 +25,7 @@ async function displayLoanInfo() {
             tablerow.insertCell(1).innerHTML = details[i].bookName;
             tablerow.insertCell(2).innerHTML = details[i].borrowedDate;
 
+            const loanIdentity = details[i].loanId;
             
             let cell4 = tablerow.insertCell(3);
 
@@ -47,7 +48,7 @@ async function displayLoanInfo() {
 
                 input.focus();
 
-                input.addEventListener("change", function () {
+                input.addEventListener("change", async function () {
 
                     details[index].returningDate = this.value;
 
@@ -55,6 +56,15 @@ async function displayLoanInfo() {
                         <span>${this.value}</span>
                         <i class="fa fa-calendar" style="cursor:pointer; margin-left:8px;"></i>
                     `;
+
+                    newDate = details[index].returningDate = this.value;
+                
+                     await fetch('/returnDate', {
+                        method: 'POST' ,
+                        headers: {'content-type' : 'application/json'
+                        },
+                        body: JSON.stringify({newDate, loanIdentity})
+                    })
 
                     
                     let newIcon = cell4.querySelector("i");
@@ -116,8 +126,22 @@ loanform.addEventListener('submit', async (loan) =>{
     },
     body:JSON.stringify({borrowedDate, returningDate, borrowerName, bookName})
   })
-      alert("Loan created!");
-      displayLoanInfo()
+    
+    retstatus =  await response.json()
+
+    if (retstatus.message == "Error creating loan" ){
+      alert("Error creating loan");
+      return;
+    }
+    else if (retstatus.message == "Successfully created Loan"){
+         alert("Loan created!");
+         displayLoanInfo();
+    }
+    else{
+        alert("Error creating loan")
+        return
+    }
+      
  
 }
 catch (error){

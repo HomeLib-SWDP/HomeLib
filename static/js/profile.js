@@ -20,7 +20,7 @@ async function displayProfileInfo() {
         // displaying info
         document.querySelector(".profile-name").textContent = data[0].userName;
         document.querySelector(".profile-username").textContent= data[0].emailValue;
-        document.querySelector(".profile-date-joined").textContent=data[0].accountDate; 
+        document.querySelector(".profile-date-joined").textContent="Joined: " +(data[0].accountDate); 
         document.querySelector(".profile-desc").textContent=(data[0].userDescription || "profile description here"); 
 
         const loanresponse = await fetch(fetchLoan);
@@ -59,6 +59,7 @@ displayProfileInfo();
     });
   }
 
+  /*
 document.getElementById("editProfileForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -88,3 +89,4 @@ document.getElementById("editProfileForm").addEventListener("submit", async (e) 
         console.log("Save failed");
     }
 });
+*/
