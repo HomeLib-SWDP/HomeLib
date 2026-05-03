@@ -19,6 +19,26 @@ def bookSearch(bookName, userId):
     finally:
         cursor.close()
         disconnect_from_sql(cnx)
+
+def loanSearch(bookId, userId):
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+
+    try:
+        query = """
+        SELECT loanId FROM `loans` WHERE bookId = %s AND userId = %s
+        """
+        cursor.execute(query, (bookId, userId,)) 
+        idResult = cursor.fetchone()
+        return idResult[0] if idResult else None 
+    
+    except Exception as e:
+        print(e)
+        return False
+    
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
     
 # function to create loan
 def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
@@ -26,9 +46,13 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
     cursor = cnx.cursor()
 
     bookId = bookSearch (bookName, userId) #look for loan in user library using userid and name of the book
+    #print(bookId)
 
-    if bookId is None:
-        return False
+    existingLoan = loanSearch(bookId, userId)
+    print(existingLoan)
+
+    if existingLoan is not None or bookId is None:
+        return None
 
     if(borrowedDate > returningDate):
         return False
@@ -42,16 +66,6 @@ def createLoan(borrowedDate, returningDate, borrowerName, bookName, userId):
         return cursor.lastrowid
     
     except Exception as e:
-        if "Duplicate Entry" in str(e): #if loan exists return the existing loan id
-            cursor.execute("""
-                SELECT loanId from `loans` 
-                    WHERE userId = %s AND bookId = %s
-            """, (userId, bookId,))
-            result = cursor.fetchone()
-            duplicateId = result[0] #will fix
-            return None
-        
-        else:
             print(f"Error creating loan: {e}")
             return False
 
@@ -66,6 +80,25 @@ def expireLoansBatch(): # a batch process mimic to expire loans if returning dat
     try:
         query = """
         UPDATE `loans` SET expired = 1 WHERE (CURDATE() > returningDate)
+        """
+        cursor.execute(query)
+        cnx.commit()
+
+    except Exception as e:
+        print(e)
+        return False
+    
+    finally:
+        cursor.close()
+        disconnect_from_sql(cnx)
+
+
+def modifyLoansBatch(): # a batch process mimic to expire loans if returning date is past today's date
+    cnx = connect_to_sql()
+    cursor = cnx.cursor()
+    try:
+        query = """
+        UPDATE `loans` SET expired = 0 WHERE (CURDATE() < returningDate)
         """
         cursor.execute(query)
         cnx.commit()
@@ -105,6 +138,7 @@ def displayLoans(userId):
     cursor = cnx.cursor(dictionary= True)
 
     expireLoansBatch() #setting expired status before displaying
+    modifyLoansBatch()
 
     try: # fetching all relevant data for the userId. Switching date format from datetime so it can conveniently be converted to json
         query = """
@@ -129,9 +163,9 @@ def displayLoans(userId):
 def test_create_loan():
     borrowedDate = "2026-02-19"
     returningDate = "2026-05-21"
-    bookName = "Fourth Wing"
+    bookName = "The Safekeep"
     borrowerName = "John"
-    userId= "qop96nEXHGSDFzKA8l9upHqUL943"
+    userId= "3sGMNArtUVQnWjQHft4r6hY8FcV2"
 
     loan_test = createLoan(borrowedDate, returningDate, borrowerName, bookName, userId)
     if loan_test:

@@ -48,11 +48,11 @@ registerForm.addEventListener('submit', async (registerEvent) => {
   const userId = user.uid //get user id
 
   const accountDate = new Date()
-  console.log(accountDate)
-
-  fetch ('/store_profile', { //sending info to backend to store in sql
+  //alert(usernameValue)
+  
+  await fetch ('/store_profile', { //sending info to backend to store in sql
     method: 'POST' , 
-    headers: {'Content-type' : 'application/json'
+    headers: {'Content-Type' : 'application/json'
     },
     body:JSON.stringify({accountDate, emailValue, usernameValue, userId})
   })
