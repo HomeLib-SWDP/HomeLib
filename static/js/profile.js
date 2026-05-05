@@ -18,10 +18,10 @@ async function displayProfileInfo() {
     
     
         // displaying info
-        document.querySelector(".profile-name").textContent = data[0].userName;
-        document.querySelector(".profile-username").textContent= data[0].emailValue;
-        document.querySelector(".profile-date-joined").textContent="Joined: " +(data[0].accountDate); 
-        document.querySelector(".profile-desc").textContent=(data[0].userDescription || "profile description here"); 
+        document.querySelector(".profile-name").textContent = data.userName;
+        document.querySelector(".profile-username").textContent= data.emailValue;
+        document.querySelector(".profile-date-joined").textContent="Joined: " +(data.accountDate); 
+        document.querySelector(".profile-desc").textContent=(data.userDescription || "profile description here"); 
 
         const loanresponse = await fetch(fetchLoan);
         if (!response.ok) throw new Error("Network Error");

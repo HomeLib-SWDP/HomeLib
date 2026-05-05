@@ -3,7 +3,7 @@ from routes import books_bp
 import os
 from datetime import datetime
 import dotenv
-from models.loans import createLoan, editReturn, displayLoans,  editReturn
+from models.loans import createLoan, editReturn, displayLoans
 from models.profile import createProfile, changeProfile, displayProfile
 
 dotenv.load_dotenv()
@@ -84,7 +84,7 @@ def manualentry():
 @app.route('/store_profile', methods = ['POST'])
 def store_user_profile ():
 
-    data = request.json
+    data = request.get_json()
 
     #print(data)
 
@@ -106,6 +106,7 @@ def store_user_profile ():
         return jsonify({"Message": "Error creating profile"})
     return jsonify({"Message": "Successfully stored profile information"})
 
+
 # To display user profile information
 @app.route('/display_profile' , methods = ['GET'])
 def display_profile():
@@ -120,6 +121,7 @@ def display_profile():
     else:
         return jsonify(profileDisplay)
 
+
 # To display loans from the backend
 @app.route('/display_Loan' , methods = ['GET'])
 def display_loan():
@@ -133,6 +135,7 @@ def display_loan():
         return jsonify({"Message": "No loans exist"})
     else:
         return jsonify(loandisplay), 200
+
 
 #sending info to loan backend
 @app.route('/create_Loan' , methods = ['POST'])
@@ -149,12 +152,12 @@ def make_loan():
 
     loanMade = createLoan(borrowedDate, returningDate, borrowerName, bookName, userId)
 
-
     if loanMade is None:
         return jsonify({"Message": "Duplicate Loan"})
     if loanMade is False:
         return jsonify({"Message": "Error creating loan"})
     return jsonify({"Message": "Successfully created Loan"})
+
 
 @app.route('/edit_return')
 def edit_date():
@@ -168,6 +171,7 @@ def edit_date():
     if returned is False:
         return jsonify({"Message": "Error editing return date"})
     
+
 @app.route('/profile_change', methods = ['POST'])
 def profile_changes():
 
@@ -187,6 +191,7 @@ def profile_changes():
         return jsonify({"Message": "Error editing profile"})
     return jsonify({"Message": "Profile edited successfully "})
    
+   
 @app.route('/loan_number', methods = ['POST'] )
 def store_loan_num():
     data = request.json
@@ -197,11 +202,13 @@ def store_loan_num():
 
     return jsonify({"Message": "Stored loan number"})
 
+
 @app.route('/loan_get', methods = ['GET'])
 def send_loan_num():
     loanNum = session.get('loanNum')
 
     return jsonify({"loanNum": loanNum})
+
 
 @app.route('/returnDate', methods = ['POST'])
 def sendDate():
@@ -218,6 +225,7 @@ def sendDate():
     if returnId is False:
         return jsonify({"Message": "Error editing return date"})
     return jsonify({"Message": "Added date "})
+
 
 
 '''

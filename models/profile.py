@@ -14,9 +14,9 @@ def createProfile(emailValue, accountDate, userName, userId):
         return cursor.lastrowid
     
     except Exception as e:
-        if "duplicate entry" in str(e):
+        if "Duplicate entry" in str(e):
             cursor.execute("""
-                SELECT profileId from `profile` 
+                SELECT profileId from `profiles` 
                     WHERE userId = %s 
             """, (userId,))
             result = cursor.fetchone()
@@ -65,7 +65,7 @@ def displayProfile(userId):
         """
         cursor.execute(query, ( userId,))
         result = cursor.fetchall()
-        return result if result else None
+        return result[0] if result else None
     
     except Exception as e:
         print(e)

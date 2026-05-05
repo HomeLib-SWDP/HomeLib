@@ -25,6 +25,8 @@ async function displayLoanInfo() {
             tablerow.insertCell(1).innerHTML = details[i].bookName;
             tablerow.insertCell(2).innerHTML = details[i].borrowedDate;
 
+            const borrowDate = details[i].borrowedDate;
+
             const loanIdentity = details[i].loanId;
             
             let cell4 = tablerow.insertCell(3);
@@ -58,7 +60,8 @@ async function displayLoanInfo() {
                     `;
 
                     newDate = details[index].returningDate = this.value;
-                
+
+
                      await fetch('/returnDate', {
                         method: 'POST' ,
                         headers: {'content-type' : 'application/json'
@@ -129,17 +132,19 @@ loanform.addEventListener('submit', async (loan) =>{
     
     retstatus =  await response.json()
 
-    if (retstatus.message == "Error creating loan" ){
+    if (retstatus.Message == "Error creating loan" ){
       alert("Error creating loan");
-      return;
     }
-    else if (retstatus.message == "Successfully created Loan"){
+    else if (retstatus.Message == "Successfully created Loan"){
          alert("Loan created!");
          displayLoanInfo();
     }
+    else if (retstatus.Message == "Duplicate Loan"){
+         alert("Error creating Loan");
+         
+    }
     else{
-        alert("Error creating loan")
-        return
+        alert("Error")
     }
       
  
